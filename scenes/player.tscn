@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://b62i2slq0wiet"]
+
+[ext_resource type="Texture2D" uid="uid://6bhunprejsrr" path="res://assets/player/alienPink_swim1.png" id="1_dqkch"]
+[ext_resource type="Script" uid="uid://cem6nlo00ouxj" path="res://scripts/player.gd" id="1_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://3mvpjrt60vno" path="res://assets/player/alienPink_swim2.png" id="2_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://be2ouvq7tr1p3" path="res://assets/player/alienPink.png" id="3_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://cny6rxt4rivsk" path="res://assets/player/alienPink_jump.png" id="4_fjrip"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_smehm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_dqkch")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_qlg0r")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 2.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_tuyoq")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_fjrip")
+}, {
+"duration": 1.0,
+"texture": ExtResource("1_dqkch")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 2.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ur7pv"]
+radius = 35.0
+height = 96.0
+
+[node name="Player" type="CharacterBody2D"]
+collision_mask = 2
+script = ExtResource("1_qlg0r")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_smehm")
+animation = &"fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_ur7pv")
