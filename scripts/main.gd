@@ -33,7 +33,10 @@ var fall_threshold: float = 500.0  # Distance below camera to trigger game over
 @onready var score_label = $UILayer/ScoreLabel
 @onready var currency_label = $UILayer/CurrencyLabel
 @onready var combo_label = $UILayer/ComboLabel
-@onready var game_over_screen = $UILayer/GameOverScreen
+
+# Game Over Scene
+@export var game_over_scene: PackedScene = preload("res://scenes/GameOver.tscn")
+var game_over_instance: Control = null
 
 func _ready() -> void:
 	# Load saved currency from file
@@ -43,26 +46,10 @@ func _ready() -> void:
 	if player:
 		player.connect("platform_landed", _on_player_platform_landed)
 	
-	# Connect game over screen buttons
-	if game_over_screen:
-		var restart_button = game_over_screen.get_node("RestartButton")
-		var menu_button = game_over_screen.get_node("MenuButton")
-		
-		if restart_button:
-			restart_button.connect("pressed", _on_restart_button_pressed)
-			print("Restart button connected successfully")
-		else:
-			print("ERROR: RestartButton not found!")
-		if menu_button:
-			menu_button.connect("pressed", _on_menu_button_pressed)
-			print("Menu button connected successfully")
-		else:
-			print("ERROR: MenuButton not found!")
+	# Game over scene will be instantiated when needed
 	
 	# Initialize UI
 	update_ui()
-	if game_over_screen:
-		game_over_screen.visible = false
 	
 	print("Game Manager initialized - Currency: ", total_currency, " Score: ", current_score)
 
@@ -85,9 +72,7 @@ func trigger_game_over():
 		player.set_physics_process(false)
 	
 	# Show game over screen
-	if game_over_screen:
-		game_over_screen.visible = true
-		update_game_over_stats()
+	show_game_over_screen()
 	
 	# Save final score and currency
 	save_game_data()
@@ -209,27 +194,28 @@ func show_jump_feedback(score_earned: int, currency_earned: int):
 		tween.tween_property(combo_label, "modulate:a", 0.0, 1.0)
 		tween.tween_callback(func(): combo_label.text = "")
 
-func update_game_over_stats():
-	if game_over_screen:
-		var final_score_label = game_over_screen.get_node("FinalScoreLabel")
-		var currency_earned_label = game_over_screen.get_node("CurrencyEarnedLabel")
-		var jumps_label = game_over_screen.get_node("JumpsLabel")
-		var high_score_label = game_over_screen.get_node("HighScoreLabel")
+func show_game_over_screen():
+	"""Create and show the game over screen with current stats"""
+	if game_over_instance == null:
+		game_over_instance = game_over_scene.instantiate()
+		ui_layer.add_child(game_over_instance)
 		
-		if final_score_label:
-			final_score_label.text = "Final Score: " + str(current_score)
-		if currency_earned_label:
-			currency_earned_label.text = "Coins Earned: " + str(session_currency)
-		if jumps_label:
-			jumps_label.text = "Successful Jumps: " + str(consecutive_jumps)
-		if high_score_label:
-			var high_score = get_highest_score()
-			if current_score > high_score:
-				high_score_label.text = "NEW HIGH SCORE!"
-				high_score_label.modulate = Color.GOLD
-			else:
-				high_score_label.text = "High Score: " + str(high_score)
-				high_score_label.modulate = Color.WHITE
+		# Connect signals from game over screen
+		game_over_instance.connect("restart_requested", _on_restart_requested)
+		game_over_instance.connect("menu_requested", _on_menu_requested)
+	
+	# Calculate stats
+	var high_score = get_highest_score()
+	var is_new_high_score = current_score > high_score
+	
+	# Show the game over screen with stats
+	game_over_instance.show_game_over(
+		current_score,
+		session_currency,
+		consecutive_jumps,
+		high_score,
+		is_new_high_score
+	)
 
 func restart_game():
 	print("Restart game called!")
@@ -262,8 +248,8 @@ func restart_game():
 		print("Platform spawner reset")
 	
 	# Hide game over screen
-	if game_over_screen:
-		game_over_screen.visible = false
+	if game_over_instance:
+		game_over_instance.hide_game_over()
 		print("Game over screen hidden")
 	
 	# Update UI
@@ -271,12 +257,14 @@ func restart_game():
 	
 	print("Game restarted successfully!")
 
-func _on_restart_button_pressed():
-	print("Restart button pressed!")
+func _on_restart_requested():
+	"""Handle restart request from game over screen"""
+	print("Restart requested from GameOver scene")
 	restart_game()
 
-func _on_menu_button_pressed():
+func _on_menu_requested():
+	"""Handle menu request from game over screen"""
+	print("Menu requested from GameOver scene")
 	# For now, just restart the game
 	# In the future, this could load a main menu scene
 	restart_game()
-	print("Menu button pressed - restarting game for now")
