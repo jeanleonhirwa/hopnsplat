@@ -1,11 +1,14 @@
 extends CharacterBody2D
 
+signal platform_landed(platform_y)
+
 @export var move_speed := 100
 @export var jump_force := -750
 @export var gravity := 500
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 var touch_direction := 0
+var was_on_floor := false
 
 func _ready() -> void:
 	set_process_unhandled_input(true)
@@ -13,6 +16,13 @@ func _ready() -> void:
 
 
 func _physics_process(delta):
+	# Check if player just landed on a platform
+	var current_on_floor = is_on_floor()
+	if current_on_floor and not was_on_floor:
+		# Player just landed - emit signal with platform Y position
+		emit_signal("platform_landed", global_position.y)
+	was_on_floor = current_on_floor
+	
 	# Apply gravity
 	if not is_on_floor():
 		velocity.y += gravity * delta
@@ -61,13 +71,13 @@ func _physics_process(delta):
 
 
 func _unhandled_input(event):
-	var is_touching := false
-	var touch_position := Vector2.ZERO
+	var _is_touching := false
+	var _touch_position := Vector2.ZERO
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			is_touching = true
-			touch_position = event.position
+			_is_touching = true
+			_touch_position = event.position
 		else:
-			is_touching = false
+			_is_touching = false
 	elif event is InputEventScreenDrag:
-		touch_position = event.position
+		_touch_position = event.position
