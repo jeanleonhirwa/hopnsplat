@@ -1,6 +1,8 @@
 extends Node2D
 
 @export var platform_scene: PackedScene
+@export var moving_platform_scene: PackedScene = preload("res://scenes/moving_platform.tscn")
+@export var moving_platform_chance: float = 0.3  # 30% chance to spawn moving platform
 @export var vertical_spacing: float = 150  # Increased spacing between platforms
 @export var horizontal_range: float = 200  # Increased horizontal variation
 @export var initial_platform_count: int = 8
@@ -20,7 +22,7 @@ func _ready():
 	for i in range(initial_platform_count):
 		spawn_platform(last_platform_y - (i * vertical_spacing))
 
-func _process(delta):
+func _process(_delta):
 	if camera == null:
 		return
 	
@@ -49,7 +51,15 @@ func spawn_platform(y):
 	if platform_scene == null:
 		push_error("Platform scene not assigned!")
 		return
-	var platform = platform_scene.instantiate()
+	
+	# Decide whether to spawn moving or static platform
+	var use_moving_platform = randf() < moving_platform_chance
+	var platform
+	
+	if use_moving_platform and moving_platform_scene != null:
+		platform = moving_platform_scene.instantiate()
+	else:
+		platform = platform_scene.instantiate()
 	var screen_width = get_viewport_rect().size.x
 	var margin = 80  # Increased margin for better gameplay
 
@@ -69,5 +79,19 @@ func spawn_platform(y):
 					x = max(last_x - 120, margin)
 	
 	platform.position = Vector2(x, y)
+	
+	# Configure moving platform if it's a moving one
+	if platform.has_method("set_movement_pattern"):
+		# Randomize movement patterns
+		var movement_types = [
+			Vector2(1, 0),  # Horizontal
+			Vector2(0, 1),  # Vertical
+			Vector2(1, 0.5).normalized()  # Diagonal
+		]
+		var direction = movement_types[randi() % movement_types.size()]
+		var move_range = randf_range(80, 120)
+		var speed = randf_range(40, 60)
+		platform.set_movement_pattern(direction, move_range, speed)
+	
 	add_child(platform)
 	platforms.append(platform)

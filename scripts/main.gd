@@ -119,7 +119,7 @@ func update_ui():
 	if score_label:
 		score_label.text = "Score: " + str(current_score)
 	if currency_label:
-		currency_label.text = "Coins: " + str(total_currency)
+		currency_label.text = "Coins: " + str(session_currency)
 
 func reset_session():
 	current_score = 0
@@ -234,6 +234,7 @@ func restart_game():
 	# Reset camera
 	if camera:
 		camera.global_position = Vector2(271, 479)
+		camera.target_y = player.global_position.y  # Reset camera target to player position
 		print("Camera reset to starting position")
 	
 	# Reset platform spawner
