@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxm8lan7p2q6t"]
+
+[ext_resource type="Texture2D" uid="uid://ng83a6u76uri" path="res://assets/enemies/pngtree-corona-virus-covid-19-icon-vector-sign-and-symbol-png-image_4670855.png" id="2_e7kp4"]
+[ext_resource type="Script" uid="uid://btkoyggnxdjmi" path="res://scripts/splat_obstacle.gd" id="2_splat_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_spike"]
+size = Vector2(40, 40)
+
+[node name="SplatObstacle" type="Area2D"]
+collision_layer = 4
+script = ExtResource("2_splat_script")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.2, 0.2, 1)
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_e7kp4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_spike")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="WarningEffect" type="Node2D" parent="."]

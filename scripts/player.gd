@@ -9,6 +9,9 @@ signal platform_landed(platform_y)
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 var touch_direction := 0
 var was_on_floor := false
+var platform_velocity := Vector2.ZERO
+var last_platform_position := Vector2.ZERO
+var current_platform: Node2D = null
 
 func _ready() -> void:
 	set_process_unhandled_input(true)
@@ -22,6 +25,9 @@ func _physics_process(delta):
 		# Player just landed - emit signal with platform Y position
 		emit_signal("platform_landed", global_position.y)
 	was_on_floor = current_on_floor
+	
+	# Handle platform physics
+	handle_platform_movement()
 	
 	# Apply gravity
 	if not is_on_floor():
@@ -48,7 +54,13 @@ func _physics_process(delta):
 		direction -= 3
 	if Input.is_action_pressed("ui_right"):
 		direction += 3
-	velocity.x = direction * move_speed
+	# Apply horizontal movement with platform consideration
+	if is_on_floor() and current_platform:
+		# Add player input to platform movement
+		velocity.x = (direction * move_speed) + platform_velocity.x
+	else:
+		# Normal air movement
+		velocity.x = direction * move_speed
 
 	# Get screen width (works on all phones)
 	var screen_size = get_viewport_rect().size
@@ -69,6 +81,39 @@ func _physics_process(delta):
 
 
 
+
+func handle_platform_movement():
+	"""Handle realistic physics interaction with moving platforms"""
+	var new_platform_velocity = Vector2.ZERO
+	var found_platform = null
+	
+	if is_on_floor():
+		# Check what we're standing on
+		for i in get_slide_collision_count():
+			var collision = get_slide_collision(i)
+			var collider = collision.get_collider()
+			
+			# Check if this is a moving platform by looking for MovingPlatform script
+			if collider and collider.get_script() and "moving_platform" in str(collider.get_script().get_path()):
+				found_platform = collider
+				
+				# Calculate platform velocity by tracking position changes
+				if current_platform == collider and last_platform_position != Vector2.ZERO:
+					new_platform_velocity = (collider.global_position - last_platform_position) / get_physics_process_delta_time()
+					# Smooth the velocity to avoid jitter
+					new_platform_velocity = platform_velocity.lerp(new_platform_velocity, 0.3)
+				
+				last_platform_position = collider.global_position
+				break
+	
+	# Update platform tracking
+	current_platform = found_platform
+	if current_platform:
+		platform_velocity = new_platform_velocity
+	else:
+		# Gradually reduce platform velocity when not on platform
+		platform_velocity = platform_velocity.lerp(Vector2.ZERO, 0.1)
+		last_platform_position = Vector2.ZERO
 
 func _unhandled_input(event):
 	var _is_touching := false
