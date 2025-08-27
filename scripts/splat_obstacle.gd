@@ -95,17 +95,13 @@ func _on_body_entered(body):
 		# Trigger splat effect
 		trigger_splat(body)
 
-func trigger_splat(_player):
+func trigger_splat(player):
 	"""Trigger the splat effect and game over"""
 	print("SPLAT! Player hit obstacle of type: ", SplatType.keys()[splat_type])
 	
-	# Get the main game manager
-	var main_game = get_tree().get_first_node_in_group("game_manager")
-	if not main_game:
-		main_game = get_node("/root/Main")
-	
-	if main_game and main_game.has_method("trigger_game_over"):
-		main_game.trigger_game_over()
+	# Play danger sound through player
+	if player.has_method("_on_splat_obstacle_hit"):
+		player._on_splat_obstacle_hit(self)
 	
 	# Optional: Add splat visual effect here
 	create_splat_effect()

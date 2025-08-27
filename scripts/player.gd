@@ -7,14 +7,45 @@ signal platform_landed(platform_y)
 @export var gravity := 500
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
+# Audio nodes (optional - will be null if not present in scene)
+var jump_sound: AudioStreamPlayer
+var danger_sound: AudioStreamPlayer
+
+# Touch control variables
+var is_touching := false
+var touch_start_position := Vector2.ZERO
+var touch_current_position := Vector2.ZERO
+var swipe_threshold := 50.0  # Minimum distance for swipe detection
+var tap_max_duration := 0.3  # Maximum time for tap (vs hold)
+var touch_start_time := 0.0
+var last_jump_time := 0.0
+var jump_cooldown := 0.2  # Prevent accidental double jumps
+
+# Movement variables
 var touch_direction := 0
 var was_on_floor := false
 var platform_velocity := Vector2.ZERO
 var last_platform_position := Vector2.ZERO
 var current_platform: Node2D = null
+var target_x_position := 0.0
+var movement_smoothing := 8.0  # How smoothly player follows touch
 
 func _ready() -> void:
 	set_process_unhandled_input(true)
+	
+	# Try to get audio nodes (optional)
+	jump_sound = get_node_or_null("JumpSound")
+	danger_sound = get_node_or_null("DangerSound")
+	
+	# Load sound effects if nodes exist
+	if jump_sound:
+		jump_sound.stream = preload("res://audio/jump.mp3")
+	if danger_sound:
+		danger_sound.stream = preload("res://audio/danger-crushing.mp3")
+	
+	# Initialize touch target to current position
+	target_x_position = global_position.x
+	
 
 
 
@@ -36,8 +67,12 @@ func _physics_process(delta):
 	# Move player
 	move_and_slide()
 
+	# Handle touch-based jumping (more responsive than input actions)
+	handle_touch_jump(delta)
+	
+	# Fallback keyboard controls for testing
 	if Input.is_action_just_pressed("jump_up") and is_on_floor():
-		velocity.y = jump_force  # Jumping up
+		perform_jump()
 	
 	
 	# Animate based on state
@@ -48,19 +83,22 @@ func _physics_process(delta):
 	elif velocity.y > 0:
 		sprite.play("fly")  # falling or flying up
 
-	# Horizontal movement (air or ground)
+	# Handle touch-based horizontal movement
+	handle_touch_movement(delta)
+	
+	# Fallback keyboard controls for testing
 	var direction := 0
 	if Input.is_action_pressed("ui_left"):
-		direction -= 3
+		direction -= 1
 	if Input.is_action_pressed("ui_right"):
-		direction += 3
-	# Apply horizontal movement with platform consideration
-	if is_on_floor() and current_platform:
-		# Add player input to platform movement
-		velocity.x = (direction * move_speed) + platform_velocity.x
-	else:
-		# Normal air movement
-		velocity.x = direction * move_speed
+		direction += 1
+	
+	# Apply movement (touch takes priority over keyboard)
+	if not is_touching:
+		if is_on_floor() and current_platform:
+			velocity.x = (direction * move_speed) + platform_velocity.x
+		else:
+			velocity.x = direction * move_speed
 
 	# Get screen width (works on all phones)
 	var screen_size = get_viewport_rect().size
@@ -69,15 +107,6 @@ func _physics_process(delta):
 	
 
 	
-	var is_touching := false
-	if is_touching:
-		var touch_position := Vector2.ZERO
-		var target_x = touch_position.x
-		var current_x = global_position.x
-		var distance = target_x - current_x
-
-		# Smooth follow (you can tweak 10.0 to change how fast it follows)
-		global_position.x += distance * 10.0 * delta
 
 
 
@@ -116,13 +145,69 @@ func handle_platform_movement():
 		last_platform_position = Vector2.ZERO
 
 func _unhandled_input(event):
-	var _is_touching := false
-	var _touch_position := Vector2.ZERO
+	"""Handle all touch input events for mobile controls"""
 	if event is InputEventScreenTouch:
 		if event.pressed:
-			_is_touching = true
-			_touch_position = event.position
+			# Touch started
+			is_touching = true
+			touch_start_position = event.position
+			touch_current_position = event.position
+			touch_start_time = Time.get_unix_time_from_system()
 		else:
-			_is_touching = false
+			# Touch ended
+			is_touching = false
+			# Handle tap-to-jump logic in handle_touch_jump()
+			
 	elif event is InputEventScreenDrag:
-		_touch_position = event.position
+		# Touch moved - update current position for movement
+		if is_touching:
+			touch_current_position = event.position
+
+func perform_jump():
+	"""Perform jump action with sound effect"""
+	if is_on_floor() and Time.get_unix_time_from_system() - last_jump_time > jump_cooldown:
+		velocity.y = jump_force
+		last_jump_time = Time.get_unix_time_from_system()
+		if jump_sound:
+			jump_sound.play()
+
+func handle_touch_jump(_delta):
+	"""Handle touch-based jumping with tap detection"""
+	# Check for quick tap to jump
+	if not is_touching and touch_start_time > 0:
+		var touch_duration = Time.get_unix_time_from_system() - touch_start_time
+		if touch_duration <= tap_max_duration:
+			# This was a tap - perform jump
+			perform_jump()
+		touch_start_time = 0.0
+
+func handle_touch_movement(delta):
+	"""Handle smooth touch-based horizontal movement"""
+	if is_touching:
+		# Convert touch position to world coordinates
+		var screen_size = get_viewport_rect().size
+		target_x_position = touch_current_position.x
+		
+		# Clamp target position to screen bounds with margins
+		var margin = 50
+		target_x_position = clamp(target_x_position, margin, screen_size.x - margin)
+		
+		# Smooth movement towards touch position
+		var distance_to_target = target_x_position - global_position.x
+		var movement_speed = move_speed * movement_smoothing
+		
+		# Apply movement with platform consideration
+		if is_on_floor() and current_platform:
+			velocity.x = (distance_to_target * movement_speed * delta) + platform_velocity.x
+		else:
+			velocity.x = distance_to_target * movement_speed * delta
+		
+		# Limit maximum velocity for better control
+		velocity.x = clamp(velocity.x, -move_speed * 2, move_speed * 2)
+
+func _on_splat_obstacle_hit(_obstacle):
+	"""Handle collision with splat obstacle"""
+	if danger_sound:
+		danger_sound.play()
+	# Trigger game over or damage logic here
+	get_node("/root/Main").trigger_game_over()

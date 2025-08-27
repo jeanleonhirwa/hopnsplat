@@ -33,6 +33,8 @@ var fall_threshold: float = 500.0  # Distance below camera to trigger game over
 @onready var score_label = $UILayer/ScoreLabel
 @onready var currency_label = $UILayer/CurrencyLabel
 @onready var combo_label = $UILayer/ComboLabel
+# Audio node (optional - will be null if not present in scene)
+var falling_sound: AudioStreamPlayer
 
 # Game Over Scene
 @export var game_over_scene: PackedScene = preload("res://scenes/GameOver.tscn")
@@ -41,6 +43,13 @@ var game_over_instance: Control = null
 func _ready() -> void:
 	# Load saved currency from file
 	load_game_data()
+	
+	# Try to get audio node (optional)
+	falling_sound = get_node_or_null("FallingSound")
+	
+	# Load falling sound effect if node exists
+	if falling_sound:
+		falling_sound.stream = preload("res://audio/falling.mp3")
 	
 	# Connect to player signals
 	if player:
@@ -66,6 +75,10 @@ func check_player_fall():
 func trigger_game_over():
 	current_game_state = GameState.GAME_OVER
 	emit_signal("game_over")
+	
+	# Play falling sound effect
+	if falling_sound:
+		falling_sound.play()
 	
 	# Stop player movement
 	if player:
