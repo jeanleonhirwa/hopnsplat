@@ -36,6 +36,10 @@ var fall_threshold: float = 500.0  # Distance below camera to trigger game over
 # Audio node (optional - will be null if not present in scene)
 var falling_sound: AudioStreamPlayer
 
+# Boost system
+var boost_ui: Control
+var score_multiplier: float = 1.0
+
 # Game Over Scene
 @export var game_over_scene: PackedScene = preload("res://scenes/GameOver.tscn")
 var game_over_instance: Control = null
@@ -56,6 +60,9 @@ func _ready() -> void:
 		player.connect("platform_landed", _on_player_platform_landed)
 	
 	# Game over scene will be instantiated when needed
+	
+	# Initialize boost UI
+	setup_boost_ui()
 	
 	# Initialize UI
 	update_ui()
@@ -109,6 +116,9 @@ func add_score_and_currency():
 		score_earned += bonus_points
 		currency_earned += bonus_currency
 		show_combo_bonus()
+	
+	# Apply score multiplier from boosts
+	score_earned = int(score_earned * score_multiplier)
 	
 	# Update totals
 	current_score += score_earned
@@ -270,6 +280,28 @@ func restart_game():
 	update_ui()
 	
 	print("Game restarted successfully!")
+
+func setup_boost_ui():
+	"""Initialize the boost UI system"""
+	# Create boost UI instance
+	var boost_ui_script = preload("res://scripts/boost_ui.gd")
+	boost_ui = Control.new()
+	boost_ui.set_script(boost_ui_script)
+	ui_layer.add_child(boost_ui)
+
+func show_boost_ui(boost_type: int, duration: float):
+	"""Show boost indicator in UI"""
+	if boost_ui and boost_ui.has_method("show_boost"):
+		boost_ui.show_boost(boost_type, duration)
+
+func hide_boost_ui(boost_type: int):
+	"""Hide boost indicator in UI"""
+	if boost_ui and boost_ui.has_method("hide_boost"):
+		boost_ui.hide_boost(boost_type)
+
+func set_score_multiplier(multiplier: float):
+	"""Set score multiplier for double points boost"""
+	score_multiplier = multiplier
 
 func _on_restart_requested():
 	"""Handle restart request from game over screen"""

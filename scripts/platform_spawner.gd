@@ -3,6 +3,8 @@ extends Node2D
 @export var platform_scene: PackedScene
 @export var moving_platform_scene: PackedScene = preload("res://scenes/moving_platform.tscn")
 @export var splat_obstacle_scene: PackedScene = preload("res://scenes/splat_obstacle.tscn")
+# Boost item scene (will be loaded when scene exists)
+var boost_item_scene: PackedScene
 # Moving platform difficulty progression will be calculated dynamically
 @export var obstacle_score_threshold: int = 70  # Score when obstacles start appearing
 @export var max_obstacle_chance: float = 0.6  # Maximum obstacle chance at high scores
@@ -15,12 +17,17 @@ var last_platform_y = 800.0  # Start spawning above initial player position
 var camera: Node2D
 var platforms := []
 var obstacles := []  # Track splat obstacles
+var boosts := []  # Track boost items
 
 func _ready():
 	if camera_path != null:
 		camera = get_node(camera_path)
 	else:
 		push_error("Camera path not set in PlatformSpawner!")
+	
+	# Try to load boost item scene (will be null if scene doesn't exist yet)
+	if ResourceLoader.exists("res://scenes/boost_item.tscn"):
+		boost_item_scene = load("res://scenes/boost_item.tscn")
 	
 	# Spawn initial platforms starting from above player position
 	for i in range(initial_platform_count):
@@ -36,10 +43,11 @@ func _process(_delta):
 		last_platform_y -= vertical_spacing  # Move up (negative Y)
 		spawn_platform(last_platform_y)
 
-	# Remove platforms and obstacles way below camera (positive Y direction)
-	var remove_distance = camera.global_position.y + 600  # Remove platforms below camera
+	# Remove platforms, obstacles, and boosts way below camera (positive Y direction)
+	var remove_distance = camera.global_position.y + 600  # Remove items below camera
 	var platforms_to_remove = []
 	var obstacles_to_remove = []
+	var boosts_to_remove = []
 	
 	for platform in platforms:
 		if platform != null and is_instance_valid(platform):
@@ -51,16 +59,28 @@ func _process(_delta):
 			if obstacle.global_position.y > remove_distance:
 				obstacles_to_remove.append(obstacle)
 	
-	# Remove old platforms and obstacles
+	for boost in boosts:
+		if boost != null and is_instance_valid(boost):
+			if boost.global_position.y > remove_distance:
+				boosts_to_remove.append(boost)
+	
+	# Remove platforms
 	for platform in platforms_to_remove:
 		platforms.erase(platform)
 		if platform.get_parent():
 			platform.queue_free()
 	
+	# Remove obstacles
 	for obstacle in obstacles_to_remove:
 		obstacles.erase(obstacle)
 		if obstacle.get_parent():
 			obstacle.queue_free()
+	
+	# Remove boosts
+	for boost in boosts_to_remove:
+		boosts.erase(boost)
+		if boost.get_parent():
+			boost.queue_free()
 
 func spawn_platform(y):
 	if platform_scene == null:
@@ -124,6 +144,13 @@ func spawn_platform(y):
 	if current_obstacle_chance > 0 and randf() < current_obstacle_chance:
 		print("DEBUG: Spawning splat obstacle!")
 		spawn_splat_obstacle(y)
+	
+	# Randomly spawn boost items based on progressive difficulty
+	var boost_chance = calculate_boost_chance()
+	print("DEBUG: Boost chance calculated: ", boost_chance)
+	if boost_chance > 0 and randf() < boost_chance:
+		print("DEBUG: Spawning boost item!")
+		spawn_boost_item(y)
 
 func spawn_splat_obstacle(y):
 	"""Spawn a splat obstacle at the given Y position"""
@@ -255,3 +282,84 @@ func get_available_patterns(current_score: int) -> Array:
 		patterns.append(Vector2(-0.7, 0.7).normalized())
 	
 	return patterns
+
+func calculate_boost_chance() -> float:
+	"""Calculate boost spawn chance based on current score"""
+	# Get current score from main game
+	var main_game = get_node("/root/Main")
+	if not main_game:
+		return 0.0
+	
+	var current_score = main_game.current_score
+	print("DEBUG: Current score for boost calculation: ", current_score)
+	
+	# Progressive boost availability based on score ranges
+	if current_score < 50:
+		return 0.0  # No boosts in early learning phase
+	elif current_score < 100:
+		return 0.15  # 15% chance - only jump boost available
+	elif current_score < 250:
+		return 0.18  # 18% chance - jump + speed boosts
+	elif current_score < 400:
+		return 0.20  # 20% chance - add shield boost
+	elif current_score < 600:
+		return 0.22  # 22% chance - add coin magnet
+	else:
+		return 0.25  # 25% chance - all boosts including double points
+
+func get_available_boost_types(current_score: int) -> Array:
+	"""Get available boost types based on current score"""
+	var available_boosts = []
+	
+	# Always available after score 50: Jump Boost
+	if current_score >= 50:
+		available_boosts.append(0)  # JUMP_BOOST
+	
+	# Available from score 101+: Speed Boost
+	if current_score >= 101:
+		available_boosts.append(1)  # SPEED_BOOST
+	
+	# Available from score 251+: Shield
+	if current_score >= 251:
+		available_boosts.append(2)  # SHIELD
+	
+	# Available from score 401+: Coin Magnet
+	if current_score >= 401:
+		available_boosts.append(3)  # COIN_MAGNET
+	
+	# Available from score 601+: Double Points (rare)
+	if current_score >= 601:
+		available_boosts.append(4)  # DOUBLE_POINTS
+	
+	return available_boosts
+
+func spawn_boost_item(y):
+	"""Spawn a boost item at the given Y position"""
+	if boost_item_scene == null:
+		print("DEBUG: Boost item scene not loaded yet")
+		return
+	
+	# Get current score to determine available boost types
+	var main_game = get_node("/root/Main")
+	var current_score = 0
+	if main_game:
+		current_score = main_game.current_score
+	
+	var available_boosts = get_available_boost_types(current_score)
+	if available_boosts.is_empty():
+		return
+	
+	var boost = boost_item_scene.instantiate()
+	var screen_width = get_viewport_rect().size.x
+	var margin = 80
+	
+	# Position boost item on or near a platform
+	var x = randf_range(margin, screen_width - margin)
+	boost.position = Vector2(x, y - 60)  # Slightly above platform
+	
+	# Set random boost type from available types
+	var boost_type = available_boosts[randi() % available_boosts.size()]
+	boost.set_boost_type(boost_type)
+	
+	add_child(boost)
+	boosts.append(boost)

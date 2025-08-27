@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4xqy8r2qwqkx"]
+
+[ext_resource type="Script" path="res://scripts/boost_item.gd" id="1_0h8vx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1h2k3"]
+size = Vector2(40, 40)
+
+[node name="BoostItem" type="Area2D"]
+script = ExtResource("1_0h8vx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1h2k3")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 1, 0, 1)
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+emitting = true
+amount = 20
+lifetime = 1.5
+texture = null
+emission_shape = 1
+emission_sphere_radius = 15.0
+direction = Vector3(0, -1, 0)
+spread = 45.0
+initial_velocity_min = 20.0
+initial_velocity_max = 50.0
+gravity = Vector3(0, 98, 0)
+scale_amount_min = 0.5
+scale_amount_max = 1.5
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -2,9 +2,9 @@ extends CharacterBody2D
 
 signal platform_landed(platform_y)
 
-@export var move_speed := 100
-@export var jump_force := -750
-@export var gravity := 500
+@export var move_speed := 100.0
+@export var jump_force := -750.0
+@export var gravity := 500.0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 # Audio nodes (optional - will be null if not present in scene)
@@ -30,6 +30,14 @@ var current_platform: Node2D = null
 var target_x_position := 0.0
 var movement_smoothing := 8.0  # How smoothly player follows touch
 
+# Boost system variables
+var active_boosts := {}
+var original_jump_force: float
+var original_move_speed: float
+var shield_uses: int = 0
+var coin_magnet_radius: float = 0.0
+var score_multiplier: float = 1.0
+
 func _ready() -> void:
 	set_process_unhandled_input(true)
 	
@@ -45,6 +53,10 @@ func _ready() -> void:
 	
 	# Initialize touch target to current position
 	target_x_position = global_position.x
+	
+	# Store original values for boost system
+	original_jump_force = jump_force
+	original_move_speed = move_speed
 	
 
 
@@ -83,6 +95,13 @@ func _physics_process(delta):
 	elif velocity.y > 0:
 		sprite.play("fly")  # falling or flying up
 
+	# Update active boosts
+	update_boosts(delta)
+	
+	# Handle coin magnet effect
+	if coin_magnet_radius > 0:
+		attract_nearby_coins()
+	
 	# Handle touch-based horizontal movement
 	handle_touch_movement(delta)
 	
@@ -205,8 +224,134 @@ func handle_touch_movement(delta):
 		# Limit maximum velocity for better control
 		velocity.x = clamp(velocity.x, -move_speed * 2, move_speed * 2)
 
+func apply_boost(boost_type: int):
+	"""Apply boost effect to player"""
+	match boost_type:
+		0:  # JUMP_BOOST
+			activate_jump_boost()
+		1:  # SPEED_BOOST
+			activate_speed_boost()
+		2:  # SHIELD
+			activate_shield()
+		3:  # COIN_MAGNET
+			activate_coin_magnet()
+		4:  # DOUBLE_POINTS
+			activate_double_points()
+
+func activate_jump_boost():
+	"""Activate jump boost effect"""
+	var boost_info = {"duration": 8.0, "start_time": Time.get_unix_time_from_system()}
+	active_boosts["jump"] = boost_info
+	jump_force = original_jump_force * 1.5
+	notify_boost_ui(0, boost_info.duration)
+	print("Jump Boost activated!")
+
+func activate_speed_boost():
+	"""Activate speed boost effect"""
+	var boost_info = {"duration": 6.0, "start_time": Time.get_unix_time_from_system()}
+	active_boosts["speed"] = boost_info
+	move_speed = original_move_speed * 2.0
+	notify_boost_ui(1, boost_info.duration)
+	print("Speed Boost activated!")
+
+func activate_shield():
+	"""Activate shield effect"""
+	shield_uses = 1
+	notify_boost_ui(2, 999.0)  # Shield doesn't expire by time
+	print("Shield activated!")
+
+func activate_coin_magnet():
+	"""Activate coin magnet effect"""
+	var boost_info = {"duration": 10.0, "start_time": Time.get_unix_time_from_system()}
+	active_boosts["magnet"] = boost_info
+	coin_magnet_radius = 150.0
+	notify_boost_ui(3, boost_info.duration)
+	print("Coin Magnet activated!")
+
+func activate_double_points():
+	"""Activate double points effect"""
+	var boost_info = {"duration": 12.0, "start_time": Time.get_unix_time_from_system()}
+	active_boosts["double_points"] = boost_info
+	score_multiplier = 2.0
+	# Notify main game of score multiplier change
+	var main_game = get_node("/root/Main")
+	if main_game and main_game.has_method("set_score_multiplier"):
+		main_game.set_score_multiplier(score_multiplier)
+	notify_boost_ui(4, boost_info.duration)
+	print("Double Points activated!")
+
+func notify_boost_ui(boost_type: int, duration: float):
+	"""Notify boost UI to show boost"""
+	var main_game = get_node("/root/Main")
+	if main_game and main_game.has_method("show_boost_ui"):
+		main_game.show_boost_ui(boost_type, duration)
+
+func notify_boost_ui_hide(boost_type: int):
+	"""Notify boost UI to hide boost"""
+	var main_game = get_node("/root/Main")
+	if main_game and main_game.has_method("hide_boost_ui"):
+		main_game.hide_boost_ui(boost_type)
+
+func update_boosts(_delta):
+	"""Update and expire active boosts"""
+	var current_time = Time.get_unix_time_from_system()
+	var boosts_to_remove = []
+	
+	for boost_name in active_boosts:
+		var boost = active_boosts[boost_name]
+		var elapsed_time = current_time - boost.start_time
+		
+		if elapsed_time >= boost.duration:
+			boosts_to_remove.append(boost_name)
+	
+	# Remove expired boosts
+	for boost_name in boosts_to_remove:
+		deactivate_boost(boost_name)
+
+func deactivate_boost(boost_name: String):
+	"""Deactivate a specific boost"""
+	match boost_name:
+		"jump":
+			jump_force = original_jump_force
+			notify_boost_ui_hide(0)
+			print("Jump Boost expired")
+		"speed":
+			move_speed = original_move_speed
+			notify_boost_ui_hide(1)
+			print("Speed Boost expired")
+		"magnet":
+			coin_magnet_radius = 0.0
+			notify_boost_ui_hide(3)
+			print("Coin Magnet expired")
+		"double_points":
+			score_multiplier = 1.0
+			var main_game = get_node("/root/Main")
+			if main_game and main_game.has_method("set_score_multiplier"):
+				main_game.set_score_multiplier(score_multiplier)
+			notify_boost_ui_hide(4)
+			print("Double Points expired")
+	
+	active_boosts.erase(boost_name)
+
+func attract_nearby_coins():
+	"""Attract nearby coins when magnet is active"""
+	# This would need to be implemented based on how coins are handled in the game
+	# For now, just a placeholder
+	pass
+
 func _on_splat_obstacle_hit(_obstacle):
 	"""Handle collision with splat obstacle"""
+	# Check if shield is active
+	if shield_uses > 0:
+		shield_uses -= 1
+		print("Shield absorbed obstacle hit!")
+		if shield_uses <= 0:
+			notify_boost_ui_hide(2)  # Hide shield UI when depleted
+		if danger_sound:
+			danger_sound.play()
+		return
+	
+	# No shield - normal damage
 	if danger_sound:
 		danger_sound.play()
 	# Trigger game over or damage logic here
