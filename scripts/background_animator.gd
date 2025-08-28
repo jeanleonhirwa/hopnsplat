@@ -55,6 +55,9 @@ func _process(delta):
 	
 	# Update cloud spawning
 	update_cloud_spawning(delta)
+	
+	# Update background positioning to follow camera
+	update_background_position()
 
 func animate_clouds(delta):
 	"""Animate cloud movement"""
@@ -127,3 +130,33 @@ func add_boost_particles(boost_position: Vector2):
 	await get_tree().create_timer(2.0).timeout
 	if boost_particles and is_instance_valid(boost_particles):
 		boost_particles.queue_free()
+
+func update_background_position():
+	"""Update background layers to follow camera and extend infinitely"""
+	var camera = get_viewport().get_camera_2d()
+	if not camera:
+		return
+	
+	var camera_y = camera.global_position.y
+	var parallax_bg = get_node("../ParallaxBackground")
+	
+	if parallax_bg:
+		# Update sky layer position
+		var sky_layer = parallax_bg.get_node("SkyLayer")
+		if sky_layer:
+			var sky_rect = sky_layer.get_node("SkyRect")
+			if sky_rect:
+				# Extend sky background upward as camera moves up
+				if camera_y < sky_rect.position.y:
+					sky_rect.position.y = camera_y - 1000
+					sky_rect.size.y = 6000
+		
+		# Update mid layer position
+		var mid_layer = parallax_bg.get_node("MidLayer")
+		if mid_layer:
+			var mid_rect = mid_layer.get_node("MidRect")
+			if mid_rect:
+				# Extend mid background upward as camera moves up
+				if camera_y < mid_rect.position.y:
+					mid_rect.position.y = camera_y - 1000
+					mid_rect.size.y = 6000
