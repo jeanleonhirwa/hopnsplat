@@ -11,6 +11,10 @@ signal platform_landed(platform_y)
 var jump_sound: AudioStreamPlayer
 var danger_sound: AudioStreamPlayer
 
+# Particle effect nodes
+var jump_particles: CPUParticles2D
+var landing_particles: CPUParticles2D
+
 # Touch control variables
 var is_touching := false
 var touch_start_position := Vector2.ZERO
@@ -45,9 +49,15 @@ func _ready() -> void:
 	jump_sound = get_node_or_null("JumpSound")
 	danger_sound = get_node_or_null("DangerSound")
 	
+	# Get particle effect nodes
+	jump_particles = get_node_or_null("JumpParticles")
+	landing_particles = get_node_or_null("LandingParticles")
+	
 	# Debug audio node detection
 	print("DEBUG: Jump sound node found: ", jump_sound != null)
 	print("DEBUG: Danger sound node found: ", danger_sound != null)
+	print("DEBUG: Jump particles found: ", jump_particles != null)
+	print("DEBUG: Landing particles found: ", landing_particles != null)
 	
 	# Load sound effects if nodes exist
 	if jump_sound:
@@ -77,6 +87,13 @@ func _physics_process(delta):
 	if current_on_floor and not was_on_floor:
 		# Player just landed - emit signal with platform Y position
 		emit_signal("platform_landed", global_position.y)
+		
+		# Trigger landing particles and screen shake
+		if landing_particles:
+			landing_particles.emitting = true
+			print("DEBUG: Landing particles triggered")
+		trigger_screen_shake(3.0, 0.15)
+		
 	was_on_floor = current_on_floor
 	
 	# Handle platform physics
@@ -193,16 +210,26 @@ func _unhandled_input(event):
 			touch_current_position = event.position
 
 func perform_jump():
-	"""Perform jump action with sound effect"""
+	"""Perform jump action with sound effect and particles"""
 	if is_on_floor() and Time.get_unix_time_from_system() - last_jump_time > jump_cooldown:
 		velocity.y = jump_force
 		last_jump_time = Time.get_unix_time_from_system()
+		
+		# Play jump sound
 		print("DEBUG: Jump performed, attempting to play sound...")
 		if jump_sound:
 			jump_sound.play()
 			print("DEBUG: Jump sound play() called")
 		else:
 			print("DEBUG: No jump sound available to play")
+		
+		# Trigger jump particles
+		if jump_particles:
+			jump_particles.emitting = true
+			print("DEBUG: Jump particles triggered")
+		
+		# Add screen shake effect
+		trigger_screen_shake(2.0, 0.1)
 
 func handle_touch_jump(_delta):
 	"""Handle touch-based jumping with tap detection"""
@@ -353,6 +380,14 @@ func attract_nearby_coins():
 	# For now, just a placeholder
 	pass
 
+func trigger_screen_shake(intensity: float, duration: float):
+	"""Trigger screen shake effect via camera"""
+	var camera = get_node("/root/Main/Camera2D")
+	if camera and camera.has_method("shake"):
+		camera.shake(intensity, duration)
+	else:
+		print("DEBUG: Camera shake not available")
+
 func _on_splat_obstacle_hit(_obstacle):
 	"""Handle collision with splat obstacle"""
 	print("DEBUG: Splat obstacle hit detected!")
@@ -376,5 +411,9 @@ func _on_splat_obstacle_hit(_obstacle):
 		print("DEBUG: Danger sound played (normal hit)")
 	else:
 		print("DEBUG: No danger sound available (normal hit)")
+	
+	# Add intense screen shake for game over
+	trigger_screen_shake(8.0, 0.5)
+	
 	# Trigger game over or damage logic here
 	get_node("/root/Main").trigger_game_over()

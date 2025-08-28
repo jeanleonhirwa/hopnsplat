@@ -2,7 +2,6 @@ extends Control
 
 # Signals to communicate with main game
 signal restart_requested
-signal menu_requested
 
 # UI References
 @onready var final_score_label = $FinalScoreLabel
@@ -50,4 +49,5 @@ func _on_restart_button_pressed():
 func _on_menu_button_pressed():
 	"""Handle menu button press"""
 	print("Menu button pressed in GameOver scene")
-	emit_signal("menu_requested")
+	# Go directly to main menu
+	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")

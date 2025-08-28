@@ -311,6 +311,5 @@ func _on_restart_requested():
 func _on_menu_requested():
 	"""Handle menu request from game over screen"""
 	print("Menu requested from GameOver scene")
-	# For now, just restart the game
-	# In the future, this could load a main menu scene
-	restart_game()
+	# Go to main menu
+	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
