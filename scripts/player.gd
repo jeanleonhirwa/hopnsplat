@@ -45,11 +45,21 @@ func _ready() -> void:
 	jump_sound = get_node_or_null("JumpSound")
 	danger_sound = get_node_or_null("DangerSound")
 	
+	# Debug audio node detection
+	print("DEBUG: Jump sound node found: ", jump_sound != null)
+	print("DEBUG: Danger sound node found: ", danger_sound != null)
+	
 	# Load sound effects if nodes exist
 	if jump_sound:
 		jump_sound.stream = preload("res://audio/jump.mp3")
+		print("DEBUG: Jump sound loaded successfully")
+	else:
+		print("DEBUG: Jump sound node not found!")
 	if danger_sound:
 		danger_sound.stream = preload("res://audio/danger-crushing.mp3")
+		print("DEBUG: Danger sound loaded successfully")
+	else:
+		print("DEBUG: Danger sound node not found!")
 	
 	# Initialize touch target to current position
 	target_x_position = global_position.x
@@ -187,8 +197,12 @@ func perform_jump():
 	if is_on_floor() and Time.get_unix_time_from_system() - last_jump_time > jump_cooldown:
 		velocity.y = jump_force
 		last_jump_time = Time.get_unix_time_from_system()
+		print("DEBUG: Jump performed, attempting to play sound...")
 		if jump_sound:
 			jump_sound.play()
+			print("DEBUG: Jump sound play() called")
+		else:
+			print("DEBUG: No jump sound available to play")
 
 func handle_touch_jump(_delta):
 	"""Handle touch-based jumping with tap detection"""
@@ -341,6 +355,7 @@ func attract_nearby_coins():
 
 func _on_splat_obstacle_hit(_obstacle):
 	"""Handle collision with splat obstacle"""
+	print("DEBUG: Splat obstacle hit detected!")
 	# Check if shield is active
 	if shield_uses > 0:
 		shield_uses -= 1
@@ -349,10 +364,17 @@ func _on_splat_obstacle_hit(_obstacle):
 			notify_boost_ui_hide(2)  # Hide shield UI when depleted
 		if danger_sound:
 			danger_sound.play()
+			print("DEBUG: Danger sound played (shield)")
+		else:
+			print("DEBUG: No danger sound available (shield)")
 		return
 	
 	# No shield - normal damage
+	print("DEBUG: Playing danger sound for obstacle hit...")
 	if danger_sound:
 		danger_sound.play()
+		print("DEBUG: Danger sound played (normal hit)")
+	else:
+		print("DEBUG: No danger sound available (normal hit)")
 	# Trigger game over or damage logic here
 	get_node("/root/Main").trigger_game_over()

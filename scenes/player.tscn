@@ -53,3 +53,7 @@ animation = &"fly"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_ur7pv")
+
+[node name="JumpSound" type="AudioStreamPlayer" parent="."]
+
+[node name="DangerSound" type="AudioStreamPlayer" parent="."]
