@@ -363,3 +363,30 @@ func spawn_boost_item(y):
 	
 	add_child(boost)
 	boosts.append(boost)
+
+func clear_platforms():
+	"""Clear all platforms, obstacles, and boosts for game reset"""
+	# Clear platforms
+	for platform in platforms:
+		if platform != null and is_instance_valid(platform):
+			platform.queue_free()
+	platforms.clear()
+	
+	# Clear obstacles
+	for obstacle in obstacles:
+		if obstacle != null and is_instance_valid(obstacle):
+			obstacle.queue_free()
+	obstacles.clear()
+	
+	# Clear boosts
+	for boost in boosts:
+		if boost != null and is_instance_valid(boost):
+			boost.queue_free()
+	boosts.clear()
+	
+	# Reset spawn position
+	last_platform_y = 800.0
+	
+	# Spawn initial platforms again
+	for i in range(initial_platform_count):
+		spawn_platform(last_platform_y - (i * vertical_spacing))

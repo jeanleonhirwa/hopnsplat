@@ -182,7 +182,7 @@ func _on_resume_pressed():
 func _on_restart_pressed():
 	"""Handle restart button from pause screen"""
 	hide_pause_screen()
-	reset_game()
+	restart_game()
 
 func _on_menu_pressed():
 	"""Handle menu button from pause screen"""
@@ -380,7 +380,6 @@ func reset_game():
 	if player:
 		player.global_position = Vector2(270, 800)
 		player.velocity = Vector2.ZERO
-		player.reset_player_state()
 	
 	# Reset camera
 	if camera:
@@ -426,7 +425,7 @@ func restart_game():
 		camera.target_y = player.global_position.y  # Reset camera target to player position
 		print("Camera reset to starting position")
 	
-	# Reset platform spawner
+	# Reset platform spawner and spawn initial platforms
 	if platform_spawner:
 		# Clear existing platforms
 		for platform in platform_spawner.platforms:
@@ -434,7 +433,11 @@ func restart_game():
 				platform.queue_free()
 		platform_spawner.platforms.clear()
 		platform_spawner.last_platform_y = 800.0
-		print("Platform spawner reset")
+		
+		# Spawn initial platforms immediately
+		for i in range(platform_spawner.initial_platform_count):
+			platform_spawner.spawn_platform(platform_spawner.last_platform_y - (i * platform_spawner.vertical_spacing))
+		print("Platform spawner reset and initial platforms spawned")
 	
 	# Start rising danger after everything is reset
 	if rising_danger:
