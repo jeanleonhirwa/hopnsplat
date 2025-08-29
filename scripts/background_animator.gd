@@ -159,11 +159,14 @@ func spawn_new_cloud():
 			
 			# Calculate cloud size to ensure proper boundaries
 			var texture_size = cloud_texture.get_size()
-			var cloud_size = texture_size * 0.18 * randf_range(0.8, 1.2)  # Account for scaling
+			var base_cloud_size = texture_size * 0.18
+			var scale_factor = randf_range(0.8, 1.2)
+			var cloud_size = base_cloud_size * scale_factor
 			
-			# Spawn cloud within screen boundaries accounting for cloud size
+			# Spawn cloud across full screen width accounting for cloud size
+			var max_x = max(0, 540 - cloud_size.x)  # Ensure we don't get negative range
 			var spawn_pos = Vector2(
-				randf_range(0, 540 - cloud_size.x),  # Keep within screen width (540px)
+				randf_range(0, max_x),  # Distribute across entire screen width
 				camera_y + randf_range(-300, 100)  # Spawn above and around camera
 			)
 			spawn_cloud_at_position(cloud_layer, spawn_pos)
