@@ -15,6 +15,7 @@ signal game_over
 @onready var currency_label = $UILayer/CurrencyLabel
 @onready var combo_label = $UILayer/ComboLabel
 @onready var ui_layer = $UILayer
+@onready var pause_screen = $PauseScreen
 
 # Score and Currency System
 var current_score: int = 0
@@ -35,6 +36,8 @@ var consecutive_jumps: int = 0
 var highest_platform_reached: float = 0.0
 var game_started: bool = false
 var fall_threshold: float = 500.0  # Distance below camera to trigger game over
+var is_game_over: bool = false
+var is_paused: bool = false
 
 # Audio node (optional - will be null if not present in scene)
 var falling_sound: AudioStreamPlayer
@@ -66,6 +69,12 @@ func _ready() -> void:
 	if rising_danger:
 		rising_danger.start_game()
 	
+	# Connect pause screen signals
+	if pause_screen:
+		pause_screen.connect("resume_game", _on_resume_game)
+		pause_screen.connect("restart_game", _on_restart_game)
+		pause_screen.connect("return_to_menu", _on_return_to_menu)
+	
 	# Game over scene will be instantiated when needed
 	
 	# Initialize boost UI
@@ -75,6 +84,47 @@ func _ready() -> void:
 	update_ui()
 	
 	print("Game Manager initialized - Currency: ", total_currency, " Score: ", current_score)
+
+func _input(event):
+	"""Handle input events including pause"""
+	if event.is_action_pressed("ui_cancel") and current_game_state == GameState.PLAYING:
+		toggle_pause()
+
+func toggle_pause():
+	"""Toggle pause state"""
+	if current_game_state == GameState.PLAYING:
+		pause_game()
+	elif current_game_state == GameState.PAUSED:
+		resume_game()
+
+func pause_game():
+	"""Pause the game"""
+	current_game_state = GameState.PAUSED
+	is_paused = true
+	if pause_screen:
+		pause_screen.show_pause_screen(current_score, total_currency + session_currency)
+
+func resume_game():
+	"""Resume the game"""
+	current_game_state = GameState.PLAYING
+	is_paused = false
+	if pause_screen:
+		pause_screen.hide_pause_screen()
+
+func _on_resume_game():
+	"""Handle resume button from pause screen"""
+	resume_game()
+
+func _on_restart_game():
+	"""Handle restart button from pause screen"""
+	reset_game()
+
+func _on_return_to_menu():
+	"""Handle menu button from pause screen"""
+	# Save current progress
+	save_game_data()
+	# Return to main menu
+	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
 func _process(_delta: float) -> void:
 	if current_game_state == GameState.PLAYING:
