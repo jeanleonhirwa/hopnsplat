@@ -7,30 +7,75 @@ extends Node2D
 var clouds: Array = []
 var cloud_speed: float = 20.0
 var cloud_spawn_timer: float = 0.0
-var cloud_spawn_interval: float = 3.0
+var cloud_spawn_interval: float = 5.0
+var cloud_texture: Texture2D
 
 # Particle systems
 @onready var ambient_particles = $AmbientParticles
 
 func _ready():
-	# Find all cloud elements
-	find_clouds()
+	# Load cloud texture
+	cloud_texture = preload("res://assets/items/cloud.png")
+	print("Cloud texture loaded: ", cloud_texture != null)
+	if cloud_texture:
+		print("Texture size: ", cloud_texture.get_size())
 	
-	# Setup ambient particles
+	# Wait a frame before setting up clouds to ensure scene is ready
+	await get_tree().process_frame
+	
+	# Initialize cloud system
+	setup_clouds()
 	setup_ambient_particles()
 	
 	print("Background animator initialized")
 
-func find_clouds():
-	"""Find all cloud elements in the scene"""
+func setup_clouds():
+	"""Initialize cloud system with PNG texture"""
 	var parallax_bg = get_node("../ParallaxBackground")
 	if parallax_bg:
 		var cloud_layer = parallax_bg.get_node("CloudLayer")
 		if cloud_layer:
-			for child in cloud_layer.get_children():
-				if "Cloud" in child.name:
-					clouds.append(child)
-					print("Found cloud: ", child.name)
+			print("Cloud layer found, creating clouds...")
+			# Create initial clouds with texture - on screen positions
+			spawn_cloud_at_position(cloud_layer, Vector2(100, 150))
+			spawn_cloud_at_position(cloud_layer, Vector2(350, 200))
+			spawn_cloud_at_position(cloud_layer, Vector2(200, 250))
+			print("Created ", clouds.size(), " clouds")
+		else:
+			print("CloudLayer not found!")
+	else:
+		print("ParallaxBackground not found!")
+
+func spawn_cloud_at_position(parent: Node, pos: Vector2):
+	"""Create a new cloud using the PNG texture"""
+	if not cloud_texture:
+		print("Cloud texture not loaded!")
+		return
+		
+	var cloud = TextureRect.new()
+	cloud.texture = cloud_texture
+	cloud.position = pos
+	
+	# Set explicit size based on texture - make them much larger
+	var texture_size = cloud_texture.get_size()
+	cloud.size = texture_size * 0.8  # Much larger size
+	cloud.modulate = Color(1, 1, 1, 1.0)  # Fully opaque for testing
+	
+	# Add random variation
+	var scale_factor = randf_range(0.8, 1.2)
+	cloud.size *= scale_factor
+	
+	# Ensure visibility - try different settings
+	cloud.visible = true
+	cloud.z_index = 10  # Much higher z-index
+	cloud.mouse_filter = Control.MOUSE_FILTER_IGNORE  # Don't block mouse
+	
+	# Debug texture info
+	print("Texture size: ", texture_size, " Final cloud size: ", cloud.size)
+	
+	parent.add_child(cloud)
+	clouds.append(cloud)
+	print("Spawned cloud at position: ", pos, " with size: ", cloud.size, " visible: ", cloud.visible)
 
 func setup_ambient_particles():
 	"""Setup ambient particle effects"""
@@ -66,19 +111,29 @@ func animate_clouds(delta):
 			# Move clouds horizontally
 			cloud.position.x += cloud_speed * delta
 			
-			# Wrap around screen
+			# Wrap around screen - keep clouds on screen
 			if cloud.position.x > 600:
-				cloud.position.x = -100
+				cloud.position.x = -50  # Start just off-screen left
 				# Randomize vertical position
 				cloud.position.y = randf_range(50, 400)
 
 func update_cloud_spawning(delta):
-	"""Handle dynamic cloud spawning"""
+	"""Spawn new clouds periodically"""
 	cloud_spawn_timer += delta
 	
 	if cloud_spawn_timer >= cloud_spawn_interval:
 		cloud_spawn_timer = 0.0
-		spawn_dynamic_cloud()
+		spawn_new_cloud()
+
+func spawn_new_cloud():
+	"""Create and spawn a new cloud using PNG texture"""
+	var parallax_bg = get_node("../ParallaxBackground")
+	if parallax_bg:
+		var cloud_layer = parallax_bg.get_node("CloudLayer")
+		if cloud_layer:
+			# Spawn cloud on-screen in visible area
+			var spawn_pos = Vector2(randf_range(50, 450), randf_range(50, 400))
+			spawn_cloud_at_position(cloud_layer, spawn_pos)
 
 func spawn_dynamic_cloud():
 	"""Spawn a new dynamic cloud"""
