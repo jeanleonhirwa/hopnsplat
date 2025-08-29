@@ -7,7 +7,8 @@ extends Node2D
 var clouds: Array = []
 var cloud_speed: float = 20.0
 var cloud_spawn_timer: float = 0.0
-var cloud_spawn_interval: float = 5.0
+var cloud_spawn_interval: float = 8.0
+var max_clouds: int = 6
 var cloud_texture: Texture2D
 
 # Particle systems
@@ -56,10 +57,10 @@ func spawn_cloud_at_position(parent: Node, pos: Vector2):
 	cloud.texture = cloud_texture
 	cloud.position = pos
 	
-	# Set explicit size based on texture - make them much larger
+	# Set appropriate size to fit on screen
 	var texture_size = cloud_texture.get_size()
-	cloud.size = texture_size * 0.8  # Much larger size
-	cloud.modulate = Color(1, 1, 1, 1.0)  # Fully opaque for testing
+	cloud.size = texture_size * 0.25  # Smaller size to fit properly
+	cloud.modulate = Color(1, 1, 1, 0.7)  # Semi-transparent
 	
 	# Add random variation
 	var scale_factor = randf_range(0.8, 1.2)
@@ -105,23 +106,40 @@ func _process(delta):
 	# update_background_position()
 
 func animate_clouds(delta):
-	"""Animate cloud movement"""
+	"""Animate cloud movement with parallax effect"""
+	var camera = get_viewport().get_camera_2d()
+	var camera_y = 0
+	if camera:
+		camera_y = camera.global_position.y
+	
 	for cloud in clouds:
 		if cloud and is_instance_valid(cloud):
 			# Move clouds horizontally
 			cloud.position.x += cloud_speed * delta
 			
-			# Wrap around screen - keep clouds on screen
+			# Create illusion of player jumping higher by moving clouds down slightly
+			# as player goes up (opposite parallax effect)
+			cloud.position.y += 5.0 * delta  # Slow downward drift
+			
+			# Wrap around screen horizontally
 			if cloud.position.x > 600:
-				cloud.position.x = -50  # Start just off-screen left
-				# Randomize vertical position
-				cloud.position.y = randf_range(50, 400)
+				cloud.position.x = -100  # Start off-screen left
+				# Respawn at camera level with some variation
+				cloud.position.y = camera_y + randf_range(-200, 50)
+			
+			# Remove clouds that are too far below camera
+			if cloud.position.y > camera_y + 500:
+				cloud.queue_free()
+				clouds.erase(cloud)
 
 func update_cloud_spawning(delta):
-	"""Spawn new clouds periodically"""
+	"""Spawn new clouds periodically with limit"""
 	cloud_spawn_timer += delta
 	
-	if cloud_spawn_timer >= cloud_spawn_interval:
+	# Clean up invalid clouds first
+	clouds = clouds.filter(func(cloud): return cloud != null and is_instance_valid(cloud))
+	
+	if cloud_spawn_timer >= cloud_spawn_interval and clouds.size() < max_clouds:
 		cloud_spawn_timer = 0.0
 		spawn_new_cloud()
 
@@ -131,8 +149,17 @@ func spawn_new_cloud():
 	if parallax_bg:
 		var cloud_layer = parallax_bg.get_node("CloudLayer")
 		if cloud_layer:
-			# Spawn cloud on-screen in visible area
-			var spawn_pos = Vector2(randf_range(50, 450), randf_range(50, 400))
+			# Get camera position to spawn clouds relative to player height
+			var camera = get_viewport().get_camera_2d()
+			var camera_y = 0
+			if camera:
+				camera_y = camera.global_position.y
+			
+			# Spawn cloud relative to camera position (higher as player climbs)
+			var spawn_pos = Vector2(
+				randf_range(-50, 600),  # Horizontal range including off-screen
+				camera_y + randf_range(-300, 100)  # Spawn above and around camera
+			)
 			spawn_cloud_at_position(cloud_layer, spawn_pos)
 
 func spawn_dynamic_cloud():
