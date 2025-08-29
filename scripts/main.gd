@@ -6,6 +6,16 @@ signal currency_changed(new_currency)
 signal successful_jump
 signal game_over
 
+# Node references
+@onready var player = $Player
+@onready var camera = $Camera2D
+@onready var platform_spawner = $PlatformSpawner
+@onready var rising_danger = $RisingDanger
+@onready var score_label = $UILayer/ScoreLabel
+@onready var currency_label = $UILayer/CurrencyLabel
+@onready var combo_label = $UILayer/ComboLabel
+@onready var ui_layer = $UILayer
+
 # Score and Currency System
 var current_score: int = 0
 var total_currency: int = 0  # Persistent currency for purchases
@@ -26,13 +36,6 @@ var highest_platform_reached: float = 0.0
 var game_started: bool = false
 var fall_threshold: float = 500.0  # Distance below camera to trigger game over
 
-# Node References
-@onready var player = $Player
-@onready var camera = $Camera2D
-@onready var ui_layer = $UILayer
-@onready var score_label = $UILayer/ScoreLabel
-@onready var currency_label = $UILayer/CurrencyLabel
-@onready var combo_label = $UILayer/ComboLabel
 # Audio node (optional - will be null if not present in scene)
 var falling_sound: AudioStreamPlayer
 
@@ -58,6 +61,10 @@ func _ready() -> void:
 	# Connect to player signals
 	if player:
 		player.connect("platform_landed", _on_player_platform_landed)
+	
+	# Start rising danger system
+	if rising_danger:
+		rising_danger.start_game()
 	
 	# Game over scene will be instantiated when needed
 	
@@ -240,6 +247,41 @@ func show_game_over_screen():
 		is_new_high_score
 	)
 
+func reset_game():
+	"""Reset game state for new game"""
+	current_game_state = GameState.PLAYING
+	current_score = 0
+	session_currency = 0
+	consecutive_jumps = 0
+	highest_platform_reached = 0.0
+	game_started = false
+	score_multiplier = 1.0
+	
+	# Reset player position
+	if player:
+		player.global_position = Vector2(270, 800)
+		player.velocity = Vector2.ZERO
+		player.reset_player_state()
+	
+	# Reset camera
+	if camera:
+		camera.global_position = Vector2(271, 479)
+		camera.offset = Vector2.ZERO
+	
+	# Clear platforms
+	if platform_spawner:
+		platform_spawner.clear_platforms()
+	
+	# Reset rising danger
+	if rising_danger:
+		rising_danger.reset()
+		rising_danger.start_game()
+	
+	# Update UI
+	update_ui()
+	
+	print("Game reset complete")
+
 func restart_game():
 	print("Restart game called!")
 	
@@ -247,12 +289,17 @@ func restart_game():
 	current_game_state = GameState.PLAYING
 	reset_session()
 	
-	# Reset player
+	# Reset rising danger FIRST to ensure it's at bottom
+	if rising_danger:
+		rising_danger.reset()
+		print("Rising danger reset to bottom position")
+	
+	# Reset player to safe starting position
 	if player:
-		player.global_position = Vector2(272, 871)  # Reset to starting position
+		player.global_position = Vector2(270, 800)  # Use consistent starting position
 		player.velocity = Vector2.ZERO
 		player.set_physics_process(true)
-		print("Player reset to starting position")
+		print("Player reset to starting position: ", player.global_position)
 	
 	# Reset camera
 	if camera:
@@ -261,7 +308,6 @@ func restart_game():
 		print("Camera reset to starting position")
 	
 	# Reset platform spawner
-	var platform_spawner = get_node("PlatformSpawner")
 	if platform_spawner:
 		# Clear existing platforms
 		for platform in platform_spawner.platforms:
@@ -270,6 +316,11 @@ func restart_game():
 		platform_spawner.platforms.clear()
 		platform_spawner.last_platform_y = 800.0
 		print("Platform spawner reset")
+	
+	# Start rising danger after everything is reset
+	if rising_danger:
+		rising_danger.start_game()
+		print("Rising danger started")
 	
 	# Hide game over screen
 	if game_over_instance:

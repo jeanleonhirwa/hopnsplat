@@ -56,8 +56,8 @@ func _process(delta):
 	# Update cloud spawning
 	update_cloud_spawning(delta)
 	
-	# Update background positioning to follow camera
-	update_background_position()
+	# Disable background positioning - causing issues
+	# update_background_position()
 
 func animate_clouds(delta):
 	"""Animate cloud movement"""
@@ -141,22 +141,20 @@ func update_background_position():
 	var parallax_bg = get_node("../ParallaxBackground")
 	
 	if parallax_bg:
-		# Update sky layer position
+		# Update sky layer position - always extend upward
 		var sky_layer = parallax_bg.get_node("SkyLayer")
 		if sky_layer:
 			var sky_rect = sky_layer.get_node("SkyRect")
 			if sky_rect:
-				# Extend sky background upward as camera moves up
-				if camera_y < sky_rect.position.y:
-					sky_rect.position.y = camera_y - 1000
-					sky_rect.size.y = 6000
+				# Always keep sky background well above camera
+				sky_rect.position.y = camera_y - 2000
+				sky_rect.size.y = 8000  # Large height to cover all areas
 		
-		# Update mid layer position
+		# Update mid layer position - always extend upward
 		var mid_layer = parallax_bg.get_node("MidLayer")
 		if mid_layer:
 			var mid_rect = mid_layer.get_node("MidRect")
 			if mid_rect:
-				# Extend mid background upward as camera moves up
-				if camera_y < mid_rect.position.y:
-					mid_rect.position.y = camera_y - 1000
-					mid_rect.size.y = 6000
+				# Always keep mid background well above camera
+				mid_rect.position.y = camera_y - 2000
+				mid_rect.size.y = 8000  # Large height to cover all areas
