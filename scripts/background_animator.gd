@@ -37,10 +37,10 @@ func setup_clouds():
 		var cloud_layer = parallax_bg.get_node("CloudLayer")
 		if cloud_layer:
 			print("Cloud layer found, creating clouds...")
-			# Create initial clouds with texture - on screen positions
-			spawn_cloud_at_position(cloud_layer, Vector2(100, 150))
-			spawn_cloud_at_position(cloud_layer, Vector2(350, 200))
-			spawn_cloud_at_position(cloud_layer, Vector2(200, 250))
+			# Create initial clouds with texture - safe on screen positions
+			spawn_cloud_at_position(cloud_layer, Vector2(50, 150))
+			spawn_cloud_at_position(cloud_layer, Vector2(200, 200))
+			spawn_cloud_at_position(cloud_layer, Vector2(100, 250))
 			print("Created ", clouds.size(), " clouds")
 		else:
 			print("CloudLayer not found!")
@@ -59,7 +59,7 @@ func spawn_cloud_at_position(parent: Node, pos: Vector2):
 	
 	# Set appropriate size to fit on screen
 	var texture_size = cloud_texture.get_size()
-	cloud.size = texture_size * 0.25  # Smaller size to fit properly
+	cloud.size = texture_size * 0.18  # Even smaller size
 	cloud.modulate = Color(1, 1, 1, 0.7)  # Semi-transparent
 	
 	# Add random variation
@@ -122,8 +122,10 @@ func animate_clouds(delta):
 			cloud.position.y += 5.0 * delta  # Slow downward drift
 			
 			# Wrap around screen horizontally
-			if cloud.position.x > 600:
-				cloud.position.x = -100  # Start off-screen left
+			if cloud.position.x > 540:  # Use actual screen width
+				# Calculate safe spawn position accounting for cloud size
+				var cloud_width = cloud.size.x if cloud.size.x > 0 else 100
+				cloud.position.x = -cloud_width  # Start completely off-screen left
 				# Respawn at camera level with some variation
 				cloud.position.y = camera_y + randf_range(-200, 50)
 			
@@ -155,9 +157,13 @@ func spawn_new_cloud():
 			if camera:
 				camera_y = camera.global_position.y
 			
-			# Spawn cloud relative to camera position (higher as player climbs)
+			# Calculate cloud size to ensure proper boundaries
+			var texture_size = cloud_texture.get_size()
+			var cloud_size = texture_size * 0.18 * randf_range(0.8, 1.2)  # Account for scaling
+			
+			# Spawn cloud within screen boundaries accounting for cloud size
 			var spawn_pos = Vector2(
-				randf_range(-50, 600),  # Horizontal range including off-screen
+				randf_range(0, 540 - cloud_size.x),  # Keep within screen width (540px)
 				camera_y + randf_range(-300, 100)  # Spawn above and around camera
 			)
 			spawn_cloud_at_position(cloud_layer, spawn_pos)
