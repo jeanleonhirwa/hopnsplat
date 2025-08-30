@@ -4,12 +4,16 @@ extends Camera2D
 # Follows player with smooth movement and offset
 
 @export var player_path: NodePath
-@export var follow_speed: float = 5.0
+@export var follow_speed: float = 8.0
 @export var vertical_offset: float = -200.0  # Camera offset above player
 @export var smoothing_enabled: bool = true
+@export var anticipation_distance: float = 100.0  # Look ahead distance
+@export var easing_strength: float = 0.15  # Smoother easing
 
 var player: Node2D
 var target_y: float
+var velocity_y: float = 0.0
+var last_player_y: float = 0.0
 
 # Screen shake variables
 var shake_intensity: float = 0.0
@@ -39,10 +43,22 @@ func _process(delta):
 	if player_y < target_y - vertical_offset:
 		target_y = player_y + vertical_offset
 	
-	# Smooth camera movement
+	# Calculate player velocity for anticipation
+	var current_player_y = player.global_position.y
+	velocity_y = (last_player_y - current_player_y) / delta if delta > 0 else 0
+	last_player_y = current_player_y
+	
+	# Add anticipation based on player velocity
+	var anticipation_offset = 0.0
+	if velocity_y > 50:  # Player moving up fast
+		anticipation_offset = -anticipation_distance
+	
+	# Smooth camera movement with easing
 	var base_position_y: float
 	if smoothing_enabled:
-		base_position_y = lerp(global_position.y, target_y, follow_speed * delta)
+		# Use exponential easing for smoother movement
+		var target_with_anticipation = target_y + anticipation_offset
+		base_position_y = lerp(global_position.y, target_with_anticipation, easing_strength)
 	else:
 		base_position_y = target_y
 	

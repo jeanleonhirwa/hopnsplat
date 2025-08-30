@@ -11,9 +11,9 @@ signal platform_landed(platform_y)
 var jump_sound: AudioStreamPlayer
 var danger_sound: AudioStreamPlayer
 
-# Particle effect nodes
-var jump_particles: CPUParticles2D
-var landing_particles: CPUParticles2D
+# Visual effects
+var particle_effects: Node2D
+var screen_shake: Node2D
 
 # Touch control variables
 var is_touching := false
@@ -49,15 +49,12 @@ func _ready() -> void:
 	jump_sound = get_node_or_null("JumpSound")
 	danger_sound = get_node_or_null("DangerSound")
 	
-	# Get particle effect nodes
-	jump_particles = get_node_or_null("JumpParticles")
-	landing_particles = get_node_or_null("LandingParticles")
+	# Initialize visual effects
+	setup_visual_effects()
 	
 	# Debug audio node detection
 	print("DEBUG: Jump sound node found: ", jump_sound != null)
 	print("DEBUG: Danger sound node found: ", danger_sound != null)
-	print("DEBUG: Jump particles found: ", jump_particles != null)
-	print("DEBUG: Landing particles found: ", landing_particles != null)
 	
 	# Load sound effects if nodes exist
 	if jump_sound:
@@ -77,6 +74,26 @@ func _ready() -> void:
 	# Store original values for boost system
 	original_jump_force = jump_force
 	original_move_speed = move_speed
+
+func setup_visual_effects():
+	"""Initialize particle effects and screen shake"""
+	# Create particle effects system
+	var ParticleEffectsScript = preload("res://scripts/particle_effects.gd")
+	particle_effects = ParticleEffectsScript.new()
+	add_child(particle_effects)
+	
+	# Get screen shake from main scene
+	var main_scene = get_tree().get_first_node_in_group("main_game")
+	if main_scene:
+		screen_shake = main_scene.get_node_or_null("ScreenShake")
+		if not screen_shake:
+			# Create screen shake if it doesn't exist
+			var ScreenShakeScript = preload("res://scripts/screen_shake.gd")
+			screen_shake = ScreenShakeScript.new()
+			main_scene.add_child(screen_shake)
+			var camera = get_viewport().get_camera_2d()
+			if camera:
+				screen_shake.initialize(camera)
 	
 
 
@@ -88,11 +105,11 @@ func _physics_process(delta):
 		# Player just landed - emit signal with platform Y position
 		emit_signal("platform_landed", global_position.y)
 		
-		# Trigger landing particles and screen shake
-		if landing_particles:
-			landing_particles.emitting = true
-			print("DEBUG: Landing particles triggered")
-		trigger_screen_shake(3.0, 0.15)
+		# Trigger landing effects
+		if particle_effects and particle_effects.has_method("play_landing_effect"):
+			particle_effects.play_landing_effect(global_position)
+		if screen_shake and screen_shake.has_method("landing_shake"):
+			screen_shake.landing_shake()
 		
 	was_on_floor = current_on_floor
 	
@@ -223,13 +240,11 @@ func perform_jump():
 		else:
 			print("DEBUG: No jump sound available to play")
 		
-		# Trigger jump particles
-		if jump_particles:
-			jump_particles.emitting = true
-			print("DEBUG: Jump particles triggered")
-		
-		# Add screen shake effect
-		trigger_screen_shake(2.0, 0.1)
+		# Trigger jump effects
+		if particle_effects and particle_effects.has_method("play_jump_effect"):
+			particle_effects.play_jump_effect(global_position)
+		if screen_shake and screen_shake.has_method("light_shake"):
+			screen_shake.light_shake()
 
 func handle_touch_jump(_delta):
 	"""Handle touch-based jumping with tap detection"""

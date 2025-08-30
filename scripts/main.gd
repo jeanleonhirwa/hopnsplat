@@ -18,6 +18,10 @@ signal game_over
 @onready var pause_button = $UILayer/PauseButton
 @onready var pause_screen = $UILayer/PauseScreen
 
+# Visual effects systems
+var visual_feedback: Node2D
+var platform_animations: Node2D
+
 # Score and Currency System
 var current_score: int = 0
 var total_currency: int = 0  # Persistent currency for purchases
@@ -59,6 +63,9 @@ func _ready() -> void:
 	# Add to main game group for achievement system
 	add_to_group("main_game")
 	
+	# Initialize visual effects
+	setup_visual_effects()
+	
 	# Load saved currency from file
 	load_game_data()
 	
@@ -96,6 +103,18 @@ func _ready() -> void:
 	update_ui()
 	
 	print("Game Manager initialized - Currency: ", total_currency, " Score: ", current_score)
+
+func setup_visual_effects():
+	"""Initialize visual feedback systems"""
+	# Create visual feedback system
+	var VisualFeedbackScript = preload("res://scripts/visual_feedback.gd")
+	visual_feedback = VisualFeedbackScript.new()
+	add_child(visual_feedback)
+	
+	# Create platform animations system
+	var PlatformAnimationsScript = preload("res://scripts/platform_animations.gd")
+	platform_animations = PlatformAnimationsScript.new()
+	add_child(platform_animations)
 
 func _input(event):
 	"""Handle input events including pause"""
