@@ -77,6 +77,12 @@ func connect_buttons():
 	if quit_button:
 		quit_button.pressed.connect(_on_quit_button_pressed)
 		quit_button.mouse_entered.connect(_on_button_hover)
+	
+	# Connect shop button
+	var shop_button = $VBoxContainer/ButtonContainer/ShopButton
+	if shop_button:
+		shop_button.pressed.connect(_on_shop_button_pressed)
+		shop_button.mouse_entered.connect(_on_button_hover)
 
 func start_animations():
 	"""Start background animations and effects"""
@@ -179,6 +185,18 @@ func hide_settings_panel():
 		var tween = create_tween()
 		tween.tween_property(settings_panel, "modulate:a", 0.0, 0.3)
 		tween.tween_callback(func(): settings_panel.visible = false)
+
+func _on_shop_button_pressed():
+	"""Open shop scene"""
+	print("Shop button pressed")
+	if button_click_sound:
+		button_click_sound.play()
+	
+	animate_button_press($VBoxContainer/ButtonContainer/ShopButton)
+	
+	# Wait for animation then switch scene
+	await get_tree().create_timer(0.2).timeout
+	get_tree().change_scene_to_file("res://scenes/Shop.tscn")
 
 func refresh_stats():
 	"""Refresh displayed stats (called when returning from game)"""
