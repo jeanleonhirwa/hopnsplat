@@ -11,18 +11,28 @@ signal game_over
 @onready var camera = $Camera2D
 @onready var platform_spawner = $PlatformSpawner
 @onready var rising_danger = $RisingDanger
-@onready var score_label = $UILayer/ScoreLabel
-@onready var currency_label = $UILayer/CurrencyLabel
-@onready var combo_label = $UILayer/ComboLabel
-@onready var ui_layer = $UILayer
-@onready var pause_button = $UILayer/PauseButton
-@onready var pause_screen = $UILayer/PauseScreen
+
+# UI elements and systems (will be initialized in _ready)
+var ui_layer: CanvasLayer
+var score_label: Label
+var currency_label: Label
+var combo_label: Label
+var pause_button: Button
+var pause_screen: Control
+
+# Power-up system references (optional - may not exist)
+var power_up_spawner: Node2D
+var advanced_power_ups: Node
+var power_up_ui: Control
 
 # Visual effects systems
 var visual_feedback: Node2D
 var platform_animations: Node2D
 var ui_animations: Node2D
 var power_up_effects: Node2D
+
+# Advanced power-up systems
+var boost_ui: Control
 
 # Score and Currency System
 var current_score: int = 0
@@ -34,7 +44,7 @@ var session_currency: int = 0  # Currency earned this session
 @export var currency_per_jump: int = 1
 @export var bonus_multiplier_threshold: int = 10  # Bonus every 10 jumps
 @export var bonus_points: int = 25
-@export var bonus_currency: int = 5
+@export var bonus_currency: int = 3
 
 # Game State
 enum GameState { PLAYING, GAME_OVER, PAUSED }
@@ -46,11 +56,11 @@ var fall_threshold: float = 500.0  # Distance below camera to trigger game over
 var is_game_over: bool = false
 var is_paused: bool = false
 
-# Audio node (optional - will be null if not present in scene)
+# Additional systems
+var achievement_system: Node
+var shop_system: Node
+var save_manager: Node
 var falling_sound: AudioStreamPlayer
-
-# Boost system
-var boost_ui: Control
 var score_multiplier: float = 1.0
 
 # Game Over Scene
@@ -62,6 +72,19 @@ var continues_used: int = 0
 var max_continues: int = 2
 
 func _ready() -> void:
+	# Get references to UI elements and systems first
+	ui_layer = get_node_or_null("UILayer")
+	score_label = get_node_or_null("UILayer/ScoreLabel")
+	currency_label = get_node_or_null("UILayer/CurrencyLabel")
+	combo_label = get_node_or_null("UILayer/ComboLabel")
+	pause_button = get_node_or_null("UILayer/PauseButton")
+	pause_screen = get_node_or_null("UILayer/PauseScreen")
+	
+	# Get power-up system references (optional - may not exist)
+	power_up_spawner = get_node_or_null("PowerUpSpawner")
+	advanced_power_ups = get_node_or_null("AdvancedPowerUps")
+	power_up_ui = get_node_or_null("UILayer/PowerUpUI")
+	
 	# Add to main game group for achievement system
 	add_to_group("main_game")
 	
@@ -84,6 +107,14 @@ func _ready() -> void:
 	# Connect to player signals
 	if player:
 		player.connect("platform_landed", _on_player_platform_landed)
+	
+	# Connect power-up system signals (only if nodes exist)
+	if power_up_spawner:
+		power_up_spawner.connect("power_up_collected", _on_power_up_collected)
+	
+	if advanced_power_ups:
+		advanced_power_ups.connect("power_up_activated", _on_power_up_activated)
+		advanced_power_ups.connect("power_up_expired", _on_power_up_expired)
 	
 	# Start rising danger system
 	if rising_danger:
@@ -127,6 +158,21 @@ func setup_visual_effects():
 	var PowerUpEffectsScript = preload("res://scripts/power_up_effects.gd")
 	power_up_effects = PowerUpEffectsScript.new()
 	add_child(power_up_effects)
+	
+	# Create advanced power-ups system
+	var AdvancedPowerUpsScript = preload("res://scripts/advanced_power_ups.gd")
+	advanced_power_ups = AdvancedPowerUpsScript.new()
+	add_child(advanced_power_ups)
+	
+	# Create power-up spawner
+	var PowerUpSpawnerScript = preload("res://scripts/power_up_spawner.gd")
+	power_up_spawner = PowerUpSpawnerScript.new()
+	add_child(power_up_spawner)
+	
+	# Create power-up UI
+	var PowerUpUIScript = preload("res://scripts/power_up_ui.gd")
+	power_up_ui = PowerUpUIScript.new()
+	ui_layer.add_child(power_up_ui)
 
 func _input(event):
 	"""Handle input events including pause"""
@@ -278,7 +324,38 @@ func _on_player_platform_landed(platform_y: float):
 					platform_animations.animate_platform_bounce(platform)
 				break
 		
+		# Trigger power-up spawning (only if power-up system exists)
+		if power_up_spawner and power_up_spawner.has_method("try_spawn_power_up"):
+			power_up_spawner.try_spawn_power_up(Vector2(0, platform_y))
+		
 		add_score_and_currency()
+
+func _on_power_up_collected(power_up_type: int, rarity: String):
+	"""Handle power-up collection"""
+	if advanced_power_ups:
+		advanced_power_ups.activate_power_up(power_up_type)
+	
+	# Add collection feedback
+	if visual_feedback and visual_feedback.has_method("create_power_up_collection_effect"):
+		visual_feedback.create_power_up_collection_effect(player.global_position, rarity)
+
+func _on_power_up_activated(power_up_type: int, power_up_name: String):
+	"""Handle power-up activation"""
+	if power_up_ui:
+		power_up_ui.show_activation_notification(power_up_name)
+	
+	# Apply power-up effects to player if using enhanced player
+	if player and player.has_method("apply_power_up_effect"):
+		player.apply_power_up_effect(power_up_type)
+
+func _on_power_up_expired(power_up_type: int, _power_up_name: String):
+	"""Handle power-up expiration"""
+	if power_up_ui:
+		power_up_ui.remove_power_up_icon(power_up_type)
+	
+	# Remove power-up effects from player if using enhanced player
+	if player and player.has_method("remove_power_up_effect"):
+		player.remove_power_up_effect(power_up_type)
 
 func add_score_and_currency():
 	consecutive_jumps += 1

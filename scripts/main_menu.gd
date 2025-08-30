@@ -6,6 +6,10 @@ extends Control
 # Scene references
 @export var game_scene: PackedScene = preload("res://scenes/Main.tscn")
 
+# UI Enhancement Systems
+var enhanced_ui_manager
+var responsive_layout
+
 # UI Node references
 @onready var title_label = $VBoxContainer/TitleLabel
 @onready var play_button = $VBoxContainer/ButtonContainer/PlayButton
