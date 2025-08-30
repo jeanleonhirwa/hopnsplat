@@ -8,6 +8,7 @@ extends Control
 
 # UI Node references
 @onready var title_label = $VBoxContainer/TitleLabel
+@onready var play_button = $VBoxContainer/ButtonContainer/PlayButton
 @onready var shop_button = $VBoxContainer/ButtonContainer/ShopButton
 @onready var achievements_button = $VBoxContainer/ButtonContainer/AchievementsButton
 @onready var settings_button = $VBoxContainer/ButtonContainer/SettingsButton
@@ -67,6 +68,10 @@ func load_game_data() -> Dictionary:
 
 func connect_buttons():
 	"""Connect all button signals"""
+	if play_button:
+		play_button.pressed.connect(_on_play_pressed)
+		play_button.mouse_entered.connect(_on_button_hover)
+	
 	if shop_button:
 		shop_button.pressed.connect(_on_shop_pressed)
 		shop_button.mouse_entered.connect(_on_button_hover)
@@ -102,7 +107,7 @@ func animate_title():
 
 func animate_buttons_entrance():
 	"""Animate buttons appearing with staggered timing"""
-	var buttons = [shop_button, achievements_button, settings_button, quit_button]
+	var buttons = [play_button, shop_button, achievements_button, settings_button, quit_button]
 	var delay = 0.0
 	
 	for button in buttons:
@@ -123,6 +128,11 @@ func _on_button_hover():
 	"""Play hover sound effect"""
 	if button_hover_sound:
 		button_hover_sound.play()
+
+func _on_play_pressed():
+	"""Handle play button press"""
+	print("Play button pressed")
+	get_tree().change_scene_to_file("res://scenes/Main.tscn")
 
 func _on_shop_pressed():
 	"""Handle shop button press"""

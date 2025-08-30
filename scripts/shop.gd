@@ -194,6 +194,16 @@ func _on_item_purchased(item: Dictionary, category: String):
 		# Emit signal for game to handle
 		emit_signal("purchase_made", category, item["id"])
 
+func _purchase_item(item_key: String, price: int) -> bool:
+	"""Purchase an item if player has enough currency"""
+	if current_currency >= price:
+		current_currency -= price
+		purchased_items[item_key] = true
+		update_currency_display()
+		save_shop_data()
+		return true
+	return false
+
 func refresh_shop_items():
 	"""Refresh all shop item displays"""
 	# Clear existing items
