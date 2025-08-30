@@ -12,10 +12,7 @@
 size = Vector2(542, 27)
 
 [node name="Main" type="Node2D"]
-script = ExtResource("1_main")
-
-[node name="AdMobManager" type="Node" parent="."]
-script = preload("res://scripts/admob_manager.gd")
+script = ExtResource("5_main")
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 
