@@ -51,6 +51,10 @@ var score_multiplier: float = 1.0
 @export var game_over_scene: PackedScene = preload("res://scenes/GameOver.tscn")
 var game_over_instance: Control = null
 
+# Continue system
+var continues_used: int = 0
+var max_continues: int = 2
+
 func _ready() -> void:
 	# Load saved currency from file
 	load_game_data()
@@ -283,6 +287,10 @@ func reset_session():
 	# Apply starting power-ups
 	apply_starting_power_ups()
 	
+	# Reset game over instance continues for new game
+	if game_over_instance:
+		game_over_instance.reset_continues()
+	
 	update_ui()
 
 func apply_starting_power_ups():
@@ -376,19 +384,21 @@ func show_game_over_screen():
 		
 		# Connect signals from game over screen
 		game_over_instance.connect("restart_requested", _on_restart_requested)
+		game_over_instance.connect("continue_requested", _on_continue_requested)
 		game_over_instance.connect("menu_requested", _on_menu_requested)
 	
 	# Calculate stats
 	var high_score = get_highest_score()
 	var is_new_high_score = current_score > high_score
 	
-	# Show the game over screen with stats
+	# Show the game over screen with stats and continue count
 	game_over_instance.show_game_over(
 		current_score,
 		session_currency,
 		consecutive_jumps,
 		high_score,
-		is_new_high_score
+		is_new_high_score,
+		continues_used
 	)
 
 func reset_game():
@@ -430,6 +440,8 @@ func restart_game():
 	
 	# Reset game state
 	current_game_state = GameState.PLAYING
+	# Reset continues for new game
+	continues_used = 0
 	reset_session()
 	
 	# Reset rising danger FIRST to ensure it's at bottom
@@ -592,6 +604,41 @@ func _on_restart_requested():
 	"""Handle restart request from game over screen"""
 	print("Restart requested from GameOver scene")
 	restart_game()
+
+func _on_continue_requested():
+	"""Handle continue request from game over screen - resume game after ad"""
+	print("Continue requested from GameOver scene")
+	# Resume game state
+	current_game_state = GameState.PLAYING
+	
+	# Reset player to safe position above rising danger
+	if player and rising_danger:
+		var safe_y = rising_danger.global_position.y - 200  # 200 pixels above danger
+		player.global_position = Vector2(270, safe_y)
+		player.velocity = Vector2.ZERO
+		player.set_physics_process(true)
+		print("Player repositioned for continue at: ", player.global_position)
+		
+		# Update camera to follow player
+		if camera:
+			camera.global_position.y = safe_y - 200  # Position camera above player
+			camera.target_y = player.global_position.y
+	
+	# Give brief invincibility
+	if player and player.has_method("activate_shield"):
+		player.activate_shield()
+		print("Temporary shield activated for continue")
+	
+	# Hide game over screen
+	if game_over_instance:
+		game_over_instance.hide_game_over()
+	
+	# Reset game over instance for next time
+	if game_over_instance:
+		game_over_instance.reset_continues()
+	
+	print("Game continued successfully! Continues used: ", continues_used)
+
 
 func _on_menu_requested():
 	"""Handle menu request from game over screen"""

@@ -105,6 +105,22 @@ text = "High Score: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ContinueButton" type="Button" parent="."]
+modulate = Color(0.2, 0.8, 0.2, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = 30.0
+offset_right = 80.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "📺 CONTINUE"
+
 [node name="RestartButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -113,9 +129,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -80.0
-offset_top = 40.0
+offset_top = 80.0
 offset_right = 80.0
-offset_bottom = 80.0
+offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "RESTART"
@@ -128,9 +144,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -80.0
-offset_top = 100.0
+offset_top = 130.0
 offset_right = 80.0
-offset_bottom = 140.0
+offset_bottom = 170.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "MENU"
