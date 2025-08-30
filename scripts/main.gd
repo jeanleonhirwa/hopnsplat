@@ -21,6 +21,8 @@ signal game_over
 # Visual effects systems
 var visual_feedback: Node2D
 var platform_animations: Node2D
+var ui_animations: Node2D
+var power_up_effects: Node2D
 
 # Score and Currency System
 var current_score: int = 0
@@ -115,6 +117,16 @@ func setup_visual_effects():
 	var PlatformAnimationsScript = preload("res://scripts/platform_animations.gd")
 	platform_animations = PlatformAnimationsScript.new()
 	add_child(platform_animations)
+	
+	# Create UI animations system
+	var UIAnimationsScript = preload("res://scripts/ui_animations.gd")
+	ui_animations = UIAnimationsScript.new()
+	add_child(ui_animations)
+	
+	# Create power-up effects system
+	var PowerUpEffectsScript = preload("res://scripts/power_up_effects.gd")
+	power_up_effects = PowerUpEffectsScript.new()
+	add_child(power_up_effects)
 
 func _input(event):
 	"""Handle input events including pause"""
@@ -257,6 +269,15 @@ func _on_player_platform_landed(platform_y: float):
 	# Only count upward progress
 	if platform_y < highest_platform_reached:
 		highest_platform_reached = platform_y
+		
+		# Animate platform bounce
+		var platforms = get_tree().get_nodes_in_group("platforms")
+		for platform in platforms:
+			if abs(platform.global_position.y - platform_y) < 20:  # Find the platform player landed on
+				if platform_animations and platform_animations.has_method("animate_platform_bounce"):
+					platform_animations.animate_platform_bounce(platform)
+				break
+		
 		add_score_and_currency()
 
 func add_score_and_currency():
@@ -292,6 +313,14 @@ func add_score_and_currency():
 	update_ui()
 	show_jump_feedback(score_earned, currency_earned)
 	
+	# Create visual feedback for score/coins
+	if visual_feedback and visual_feedback.has_method("create_score_popup"):
+		visual_feedback.create_score_popup(player.global_position + Vector2(0, -30), score_earned, currency_earned, ui_layer)
+	
+	# Show combo effect for bonus jumps
+	if consecutive_jumps % bonus_multiplier_threshold == 0 and visual_feedback and visual_feedback.has_method("create_combo_effect"):
+		visual_feedback.create_combo_effect(player.global_position + Vector2(0, -50), consecutive_jumps, ui_layer)
+	
 	# Save progress periodically
 	if consecutive_jumps % 5 == 0:
 		save_game_data()
@@ -299,8 +328,15 @@ func add_score_and_currency():
 func update_ui():
 	if score_label:
 		score_label.text = "Score: " + str(current_score)
+		# Animate score update
+		if ui_animations and ui_animations.has_method("animate_score_update"):
+			ui_animations.animate_score_update(score_label, current_score)
+	
 	if currency_label:
 		currency_label.text = "Coins: " + str(session_currency)
+		# Animate currency update
+		if ui_animations and ui_animations.has_method("animate_currency_update"):
+			ui_animations.animate_currency_update(currency_label, session_currency)
 
 func reset_session():
 	current_score = 0
