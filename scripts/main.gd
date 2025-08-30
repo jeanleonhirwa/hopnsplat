@@ -55,6 +55,9 @@ func _ready() -> void:
 	# Load saved currency from file
 	load_game_data()
 	
+	# Apply purchased items effects
+	apply_purchased_items()
+	
 	# Try to get audio node (optional)
 	falling_sound = get_node_or_null("FallingSound")
 	
@@ -276,7 +279,29 @@ func reset_session():
 	consecutive_jumps = 0
 	highest_platform_reached = 0.0
 	game_started = false
+	
+	# Apply starting power-ups
+	apply_starting_power_ups()
+	
 	update_ui()
+
+func apply_starting_power_ups():
+	"""Apply power-ups that activate at game start"""
+	var save_data = load_save_data()
+	var purchased_items = save_data.get("purchased_items", {})
+	
+	if not player:
+		return
+	
+	# Start with jump boost
+	if purchased_items.has("powerups_start_jump"):
+		player.activate_jump_boost()
+		print("Started game with jump boost")
+	
+	# Start with shield
+	if purchased_items.has("powerups_start_shield"):
+		player.activate_shield()
+		print("Started game with shield")
 
 func spend_currency(amount: int) -> bool:
 	if total_currency >= amount:
@@ -475,6 +500,93 @@ func hide_boost_ui(boost_type: int):
 func set_score_multiplier(multiplier: float):
 	"""Set score multiplier for double points boost"""
 	score_multiplier = multiplier
+
+func apply_purchased_items():
+	"""Apply effects of purchased items from shop"""
+	var save_data = load_save_data()
+	var purchased_items = save_data.get("purchased_items", {})
+	
+	# Apply player skin
+	apply_player_skin(purchased_items)
+	
+	# Apply boost upgrades
+	apply_boost_upgrades(purchased_items)
+	
+	# Apply power-ups
+	apply_power_ups(purchased_items)
+
+func load_save_data() -> Dictionary:
+	"""Load save data from file"""
+	var save_file = FileAccess.open("user://hopnsplat_save.dat", FileAccess.READ)
+	if save_file:
+		var save_data_text = save_file.get_as_text()
+		save_file.close()
+		
+		var json = JSON.new()
+		var parse_result = json.parse(save_data_text)
+		if parse_result == OK:
+			return json.data
+	
+	return {}
+
+func apply_player_skin(purchased_items: Dictionary):
+	"""Apply purchased player skin"""
+	if not player:
+		return
+	
+	var sprite = player.get_node("AnimatedSprite2D")
+	if not sprite:
+		return
+	
+	# Check for purchased skins in priority order (most expensive first)
+	if purchased_items.has("skins_alien_gold"):
+		sprite.modulate = Color.GOLD
+		print("Applied Golden Alien skin")
+	elif purchased_items.has("skins_alien_red"):
+		sprite.modulate = Color.RED
+		print("Applied Red Alien skin")
+	elif purchased_items.has("skins_alien_green"):
+		sprite.modulate = Color.GREEN
+		print("Applied Green Alien skin")
+	elif purchased_items.has("skins_alien_blue"):
+		sprite.modulate = Color.CYAN
+		print("Applied Blue Alien skin")
+
+func apply_boost_upgrades(purchased_items: Dictionary):
+	"""Apply purchased boost upgrades to player"""
+	if not player:
+		return
+	
+	# Store upgrade flags in player for boost system to use
+	if purchased_items.has("upgrades_jump_duration"):
+		player.set("jump_boost_upgraded", true)
+		print("Jump boost upgrade applied")
+	
+	if purchased_items.has("upgrades_speed_duration"):
+		player.set("speed_boost_upgraded", true)
+		print("Speed boost upgrade applied")
+	
+	if purchased_items.has("upgrades_shield_extra"):
+		player.set("shield_upgraded", true)
+		print("Shield upgrade applied")
+	
+	if purchased_items.has("upgrades_magnet_range"):
+		player.set("magnet_upgraded", true)
+		print("Magnet upgrade applied")
+
+func apply_power_ups(purchased_items: Dictionary):
+	"""Apply purchased power-ups"""
+	# Coin multiplier
+	if purchased_items.has("powerups_coin_multiplier"):
+		currency_per_jump = 2  # Double coin earning
+		print("Coin multiplier power-up applied")
+	
+	# Starting boosts will be handled in reset_session()
+	if purchased_items.has("powerups_start_jump"):
+		print("Jump start power-up available")
+	
+	if purchased_items.has("powerups_start_shield"):
+		print("Shield start power-up available")
 
 func _on_restart_requested():
 	"""Handle restart request from game over screen"""

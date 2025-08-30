@@ -5,9 +5,9 @@ signal purchase_made(item_type: String, item_id: String)
 
 # UI References
 @onready var currency_label = $VBoxContainer/HeaderContainer/CurrencyLabel
-@onready var skins_grid = $VBoxContainer/TabContainer/PlayerSkins/SkinsGrid
-@onready var upgrades_grid = $VBoxContainer/TabContainer/BoostUpgrades/UpgradesGrid
-@onready var powerups_grid = $VBoxContainer/TabContainer/PowerUps/PowerupsGrid
+@onready var skins_grid = $"VBoxContainer/TabContainer/Player Skins/SkinsGrid"
+@onready var upgrades_grid = $"VBoxContainer/TabContainer/Boost Upgrades/UpgradesGrid"
+@onready var powerups_grid = $"VBoxContainer/TabContainer/Power-ups/PowerupsGrid"
 
 # Shop Data
 var current_currency: int = 0
@@ -122,15 +122,15 @@ func create_shop_item_button(item: Dictionary, category: String) -> Control:
 	# Item name
 	var name_label = Label.new()
 	name_label.text = item["name"]
-	name_label.theme_override_font_sizes["font_size"] = 18
-	name_label.theme_override_colors["font_color"] = Color.WHITE
+	name_label.add_theme_font_size_override("font_size", 18)
+	name_label.add_theme_color_override("font_color", Color.WHITE)
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	
 	# Item description
 	var desc_label = Label.new()
 	desc_label.text = item["description"]
-	desc_label.theme_override_font_sizes["font_size"] = 12
-	desc_label.theme_override_colors["font_color"] = Color(0.8, 0.8, 0.8)
+	desc_label.add_theme_font_size_override("font_size", 12)
+	desc_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
 	desc_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	
@@ -143,14 +143,14 @@ func create_shop_item_button(item: Dictionary, category: String) -> Control:
 	if purchased_items.has(item_key):
 		purchase_button.text = "✓ OWNED"
 		purchase_button.disabled = true
-		purchase_button.theme_override_colors["font_color"] = Color.GREEN
+		purchase_button.add_theme_color_override("font_color", Color.GREEN)
 	else:
 		purchase_button.text = "💰 " + str(item["price"])
 		purchase_button.disabled = current_currency < item["price"]
 		if purchase_button.disabled:
-			purchase_button.theme_override_colors["font_color"] = Color.RED
+			purchase_button.add_theme_color_override("font_color", Color.RED)
 		else:
-			purchase_button.theme_override_colors["font_color"] = Color.WHITE
+			purchase_button.add_theme_color_override("font_color", Color.WHITE)
 	
 	# Connect purchase signal
 	purchase_button.pressed.connect(_on_item_purchased.bind(item, category))

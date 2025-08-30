@@ -1,16 +1,16 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvn8y2qwxr4kl"]
+[gd_scene load_steps=4 format=3 uid="uid://bmyj2knf5vwyc"]
 
-[ext_resource type="Script" path="res://scripts/shop.gd" id="1_shop"]
+[ext_resource type="Script" uid="uid://cg0ms1qhsbsxc" path="res://scripts/shop.gd" id="1_shop"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
-bg_color = Color(0.2, 0.6, 1, 0.9)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
+bg_color = Color(0.3, 0.7, 1, 1)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
 corner_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
-bg_color = Color(0.3, 0.7, 1, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
+bg_color = Color(0.2, 0.6, 1, 0.9)
 corner_radius_top_left = 15
 corner_radius_top_right = 15
 corner_radius_bottom_right = 15
@@ -21,6 +21,8 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_shop")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -28,6 +30,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 color = Color(0.4, 0.8, 1, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
@@ -39,35 +43,37 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = -20.0
 offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="HeaderContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
 
 [node name="BackButton" type="Button" parent="VBoxContainer/HeaderContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(80, 60)
-theme_override_styles/normal = SubResource("StyleBoxFlat_1")
-theme_override_styles/hover = SubResource("StyleBoxFlat_2")
-theme_override_font_sizes/font_size = 24
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/hover = SubResource("StyleBoxFlat_2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_1")
 text = "←"
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer/HeaderContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "🛒 SHOP"
-theme_override_font_sizes/font_size = 36
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 36
+text = "🛒 SHOP"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CurrencyLabel" type="Label" parent="VBoxContainer/HeaderContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(150, 0)
-text = "💰 Coins: 0"
-theme_override_font_sizes/font_size = 20
+layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "💰 Coins: 0"
 horizontal_alignment = 2
 vertical_alignment = 1
 
@@ -75,31 +81,34 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_font_sizes/font_size = 18
+current_tab = 0
 
-[node name="PlayerSkins" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
+[node name="Player Skins" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
 layout_mode = 2
+metadata/_tab_index = 0
 
-[node name="SkinsGrid" type="GridContainer" parent="VBoxContainer/TabContainer/PlayerSkins"]
+[node name="SkinsGrid" type="GridContainer" parent="VBoxContainer/TabContainer/Player Skins"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 2
 
-[node name="BoostUpgrades" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
-layout_mode = 2
+[node name="Boost Upgrades" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
 visible = false
+layout_mode = 2
+metadata/_tab_index = 1
 
-[node name="UpgradesGrid" type="GridContainer" parent="VBoxContainer/TabContainer/BoostUpgrades"]
+[node name="UpgradesGrid" type="GridContainer" parent="VBoxContainer/TabContainer/Boost Upgrades"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 1
 
-[node name="PowerUps" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
-layout_mode = 2
+[node name="Power-ups" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
 visible = false
+layout_mode = 2
+metadata/_tab_index = 2
 
-[node name="PowerupsGrid" type="GridContainer" parent="VBoxContainer/TabContainer/PowerUps"]
+[node name="PowerupsGrid" type="GridContainer" parent="VBoxContainer/TabContainer/Power-ups"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3

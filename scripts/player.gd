@@ -281,7 +281,13 @@ func apply_boost(boost_type: int):
 
 func activate_jump_boost():
 	"""Activate jump boost effect"""
-	var boost_info = {"duration": 8.0, "start_time": Time.get_unix_time_from_system()}
+	var duration = 8.0
+	# Check for upgrade
+	if get("jump_boost_upgraded"):
+		duration = 16.0  # Double duration
+		print("Jump Boost+ activated (upgraded duration)!")
+	
+	var boost_info = {"duration": duration, "start_time": Time.get_unix_time_from_system()}
 	active_boosts["jump"] = boost_info
 	jump_force = original_jump_force * 1.5
 	notify_boost_ui(0, boost_info.duration)
@@ -289,7 +295,13 @@ func activate_jump_boost():
 
 func activate_speed_boost():
 	"""Activate speed boost effect"""
-	var boost_info = {"duration": 6.0, "start_time": Time.get_unix_time_from_system()}
+	var duration = 6.0
+	# Check for upgrade
+	if get("speed_boost_upgraded"):
+		duration = 12.0  # Double duration
+		print("Speed Boost+ activated (upgraded duration)!")
+	
+	var boost_info = {"duration": duration, "start_time": Time.get_unix_time_from_system()}
 	active_boosts["speed"] = boost_info
 	move_speed = original_move_speed * 2.0
 	notify_boost_ui(1, boost_info.duration)
@@ -298,6 +310,11 @@ func activate_speed_boost():
 func activate_shield():
 	"""Activate shield effect"""
 	shield_uses = 1
+	# Check for upgrade
+	if get("shield_upgraded"):
+		shield_uses = 2  # Double shield hits
+		print("Double Shield activated (upgraded protection)!")
+	
 	notify_boost_ui(2, 999.0)  # Shield doesn't expire by time
 	print("Shield activated!")
 
@@ -306,6 +323,12 @@ func activate_coin_magnet():
 	var boost_info = {"duration": 10.0, "start_time": Time.get_unix_time_from_system()}
 	active_boosts["magnet"] = boost_info
 	coin_magnet_radius = 150.0
+	
+	# Check for upgrade
+	if get("magnet_upgraded"):
+		coin_magnet_radius = 300.0  # Double range
+		print("Super Magnet activated (upgraded range)!")
+	
 	notify_boost_ui(3, boost_info.duration)
 	print("Coin Magnet activated!")
 
