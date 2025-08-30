@@ -8,7 +8,8 @@ extends Control
 
 # UI Node references
 @onready var title_label = $VBoxContainer/TitleLabel
-@onready var play_button = $VBoxContainer/ButtonContainer/PlayButton
+@onready var shop_button = $VBoxContainer/ButtonContainer/ShopButton
+@onready var achievements_button = $VBoxContainer/ButtonContainer/AchievementsButton
 @onready var settings_button = $VBoxContainer/ButtonContainer/SettingsButton
 @onready var quit_button = $VBoxContainer/ButtonContainer/QuitButton
 @onready var high_score_label = $VBoxContainer/HighScoreLabel
@@ -34,7 +35,7 @@ func _ready():
 	start_animations()
 	
 	# Set initial focus for keyboard/controller navigation
-	play_button.grab_focus()
+	shop_button.grab_focus()
 	
 	print("Main Menu initialized")
 
@@ -66,23 +67,21 @@ func load_game_data() -> Dictionary:
 
 func connect_buttons():
 	"""Connect all button signals"""
-	if play_button:
-		play_button.pressed.connect(_on_play_button_pressed)
-		play_button.mouse_entered.connect(_on_button_hover)
+	if shop_button:
+		shop_button.pressed.connect(_on_shop_pressed)
+		shop_button.mouse_entered.connect(_on_button_hover)
+	
+	if achievements_button:
+		achievements_button.pressed.connect(_on_achievements_pressed)
+		achievements_button.mouse_entered.connect(_on_button_hover)
 	
 	if settings_button:
-		settings_button.pressed.connect(_on_settings_button_pressed)
+		settings_button.pressed.connect(_on_settings_pressed)
 		settings_button.mouse_entered.connect(_on_button_hover)
 	
 	if quit_button:
-		quit_button.pressed.connect(_on_quit_button_pressed)
+		quit_button.pressed.connect(_on_quit_pressed)
 		quit_button.mouse_entered.connect(_on_button_hover)
-	
-	# Connect shop button
-	var shop_button = $VBoxContainer/ButtonContainer/ShopButton
-	if shop_button:
-		shop_button.pressed.connect(_on_shop_button_pressed)
-		shop_button.mouse_entered.connect(_on_button_hover)
 
 func start_animations():
 	"""Start background animations and effects"""
@@ -103,7 +102,7 @@ func animate_title():
 
 func animate_buttons_entrance():
 	"""Animate buttons appearing with staggered timing"""
-	var buttons = [play_button, settings_button, quit_button]
+	var buttons = [shop_button, achievements_button, settings_button, quit_button]
 	var delay = 0.0
 	
 	for button in buttons:
@@ -125,20 +124,17 @@ func _on_button_hover():
 	if button_hover_sound:
 		button_hover_sound.play()
 
-func _on_play_button_pressed():
-	"""Start the game"""
-	print("Play button pressed - starting game")
-	if button_click_sound:
-		button_click_sound.play()
-	
-	# Add button press animation
-	animate_button_press(play_button)
-	
-	# Wait for animation then switch scene
-	await get_tree().create_timer(0.2).timeout
-	get_tree().change_scene_to_packed(game_scene)
+func _on_shop_pressed():
+	"""Handle shop button press"""
+	print("Shop button pressed")
+	get_tree().change_scene_to_file("res://scenes/Shop.tscn")
 
-func _on_settings_button_pressed():
+func _on_achievements_pressed():
+	"""Handle achievements button press"""
+	print("Achievements button pressed")
+	get_tree().change_scene_to_file("res://scenes/Achievements.tscn")
+
+func _on_settings_pressed():
 	"""Open settings panel"""
 	print("Settings button pressed")
 	if button_click_sound:
@@ -147,7 +143,7 @@ func _on_settings_button_pressed():
 	animate_button_press(settings_button)
 	show_settings_panel()
 
-func _on_quit_button_pressed():
+func _on_quit_pressed():
 	"""Quit the game"""
 	print("Quit button pressed")
 	if button_click_sound:
@@ -185,18 +181,6 @@ func hide_settings_panel():
 		var tween = create_tween()
 		tween.tween_property(settings_panel, "modulate:a", 0.0, 0.3)
 		tween.tween_callback(func(): settings_panel.visible = false)
-
-func _on_shop_button_pressed():
-	"""Open shop scene"""
-	print("Shop button pressed")
-	if button_click_sound:
-		button_click_sound.play()
-	
-	animate_button_press($VBoxContainer/ButtonContainer/ShopButton)
-	
-	# Wait for animation then switch scene
-	await get_tree().create_timer(0.2).timeout
-	get_tree().change_scene_to_file("res://scenes/Shop.tscn")
 
 func refresh_stats():
 	"""Refresh displayed stats (called when returning from game)"""

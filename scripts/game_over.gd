@@ -152,6 +152,12 @@ func _on_user_earned_reward(rewarded_item: RewardedItem):
 	print("User earned reward: ", rewarded_item.amount, " ", rewarded_item.type)
 	# Grant continue and emit signal
 	continues_used += 1
+	
+	# Track ad continue achievement
+	var achievement_system = get_node("/root/AchievementSystem")
+	if achievement_system:
+		achievement_system.track_special_event("ad_continue")
+	
 	emit_signal("continue_requested")
 	# Load next ad for future use
 	_load_rewarded_ad()

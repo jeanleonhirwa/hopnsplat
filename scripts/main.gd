@@ -56,6 +56,9 @@ var continues_used: int = 0
 var max_continues: int = 2
 
 func _ready() -> void:
+	# Add to main game group for achievement system
+	add_to_group("main_game")
+	
 	# Load saved currency from file
 	load_game_data()
 	
@@ -258,6 +261,9 @@ func add_score_and_currency():
 	session_currency += currency_earned
 	total_currency += currency_earned
 	
+	# Track achievements
+	_track_achievements()
+	
 	# Emit signals
 	emit_signal("score_changed", current_score)
 	emit_signal("currency_changed", total_currency)
@@ -442,6 +448,12 @@ func restart_game():
 	current_game_state = GameState.PLAYING
 	# Reset continues for new game
 	continues_used = 0
+	
+	# Reset session-based achievements
+	var achievement_system = get_node("/root/AchievementSystem")
+	if achievement_system:
+		achievement_system.reset_session_progress()
+	
 	reset_session()
 	
 	# Reset rising danger FIRST to ensure it's at bottom
@@ -639,6 +651,27 @@ func _on_continue_requested():
 	
 	print("Game continued successfully! Continues used: ", continues_used)
 
+
+func _track_achievements():
+	"""Track achievement progress"""
+	var achievement_system = get_node("/root/AchievementSystem")
+	if achievement_system:
+		# Track score achievements
+		achievement_system.track_score(current_score)
+		# Track jump achievements
+		achievement_system.track_jumps(consecutive_jumps)
+		# Track coin achievements
+		achievement_system.track_coins(total_currency)
+		# Track combo achievements
+		achievement_system.track_combo(consecutive_jumps)
+
+func add_achievement_coins(coins: int):
+	"""Add coins from achievement rewards"""
+	total_currency += coins
+	emit_signal("currency_changed", total_currency)
+	update_ui()
+	save_game_data()
+	print("Added ", coins, " achievement reward coins")
 
 func _on_menu_requested():
 	"""Handle menu request from game over screen"""

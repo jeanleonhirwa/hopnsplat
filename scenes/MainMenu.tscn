@@ -115,6 +115,20 @@ text = "🛒 SHOP"
 layout_mode = 2
 custom_minimum_size = Vector2(0, 15)
 
+[node name="AchievementsButton" type="Button" parent="VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 50)
+theme_override_styles/normal = SubResource("StyleBoxFlat_1")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_1")
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "🏆 ACHIEVEMENTS"
+
+[node name="Spacer6" type="Control" parent="VBoxContainer/ButtonContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 15)
+
 [node name="SettingsButton" type="Button" parent="VBoxContainer/ButtonContainer"]
 layout_mode = 2
 custom_minimum_size = Vector2(0, 50)

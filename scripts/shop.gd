@@ -169,24 +169,30 @@ func _on_item_purchased(item: Dictionary, category: String):
 	var item_key = category + "_" + item["id"]
 	var price = item["price"]
 	
-	if current_currency >= price and not purchased_items.has(item_key):
-		# Deduct currency
-		current_currency -= price
+	# Check if player has enough currency
+	if current_currency < price:
+		print("Not enough currency for ", item["name"])
+		return
+	
+	# Check if already purchased
+	if purchased_items.has(item_key):
+		print("Item already purchased: ", item["name"])
+		return
+	
+	# Purchase the item
+	if _purchase_item(item_key, price):
+		print("Purchased: ", item["name"], " for ", price, " coins")
 		
-		# Mark as purchased
-		purchased_items[item_key] = true
+		# Track first purchase achievement
+		var achievement_system = get_node("/root/AchievementSystem")
+		if achievement_system:
+			achievement_system.track_special_event("first_purchase")
 		
-		# Save data
-		save_shop_data()
-		
-		# Update UI
-		update_currency_display()
+		# Refresh the UI to show the purchase
 		refresh_shop_items()
 		
 		# Emit signal for game to handle
 		emit_signal("purchase_made", category, item["id"])
-		
-		print("Purchased: ", item["name"], " for ", price, " coins")
 
 func refresh_shop_items():
 	"""Refresh all shop item displays"""
