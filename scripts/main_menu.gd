@@ -42,6 +42,9 @@ func _ready():
 	# Set initial focus for keyboard/controller navigation
 	shop_button.grab_focus()
 	
+	# Start background music
+	AudioManager.play_background_music()
+	
 	print("Main Menu initialized")
 
 func load_and_display_stats():

@@ -7,6 +7,7 @@
 [ext_resource type="Script" uid="uid://domxsvp1u3x2j" path="res://scripts/main.gd" id="5_main"]
 [ext_resource type="Script" uid="uid://b0xdcvwy3yoty" path="res://scripts/background_animator.gd" id="6_bg_anim"]
 [ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4r" path="res://scenes/rising_danger.tscn" id="7_danger"]
+[ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4s" path="res://scenes/AudioSettingsMenu.tscn" id="8_audio_settings"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qnwvq"]
 size = Vector2(542, 27)
@@ -200,14 +201,23 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "RESTART"
 
+[node name="SettingsButton" type="Button" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "SETTINGS"
+
 [node name="MenuButton" type="Button" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 text = "MAIN MENU"
+
+[node name="AudioSettingsMenu" parent="UILayer" instance=ExtResource("8_audio_settings")]
+visible = false
 
 [node name="FallingSound" type="AudioStreamPlayer" parent="."]
 
 [connection signal="pressed" from="UILayer/PauseButton" to="." method="_on_pause_button_pressed"]
 [connection signal="pressed" from="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer/ResumeButton" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer/RestartButton" to="." method="_on_restart_pressed"]
+[connection signal="pressed" from="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer/MenuButton" to="." method="_on_menu_pressed"]

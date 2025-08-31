@@ -20,6 +20,11 @@ enum AchievementType {
 
 func _ready():
 	"""Initialize achievement system"""
+	# Initialize empty dictionaries first
+	achievements = {}
+	player_progress = {}
+	unlocked_achievements = []
+	
 	_initialize_achievements()
 	_load_progress()
 	print("Achievement System initialized with ", achievements.size(), " achievements")
@@ -325,18 +330,41 @@ func _save_progress():
 
 func _load_progress():
 	"""Load achievement progress from file"""
+	# Ensure dictionaries are initialized before loading
+	if player_progress == null:
+		player_progress = {}
+	if unlocked_achievements == null:
+		unlocked_achievements = []
+	
 	var save_file = FileAccess.open("user://achievements.dat", FileAccess.READ)
-	if save_file:
-		var save_data_text = save_file.get_as_text()
-		save_file.close()
+	if not save_file:
+		print("No achievement save file found, using defaults")
+		return
 		
-		var json = JSON.new()
-		var parse_result = json.parse(save_data_text)
-		if parse_result == OK:
-			var save_data = json.data
+	var save_data_text = save_file.get_as_text()
+	save_file.close()
+	
+	# Check if file has content
+	if save_data_text.is_empty():
+		print("Achievement file is empty, using defaults")
+		return
+	
+	var json = JSON.new()
+	var parse_result = json.parse(save_data_text)
+	if parse_result == OK and json.data != null:
+		var save_data = json.data
+		if typeof(save_data) == TYPE_DICTIONARY:
 			player_progress = save_data.get("progress", {})
-			unlocked_achievements = save_data.get("unlocked", [])
+			var loaded_unlocked = save_data.get("unlocked", [])
+			unlocked_achievements.clear()
+			for item in loaded_unlocked:
+				if typeof(item) == TYPE_STRING:
+					unlocked_achievements.append(item)
 			print("Loaded achievement progress: ", unlocked_achievements.size(), " unlocked")
+		else:
+			print("Invalid achievement data format, using defaults")
+	else:
+		print("Failed to parse achievement data, using defaults")
 
 func reset_session_progress():
 	"""Reset session-based progress (called on new game)"""

@@ -19,6 +19,7 @@ var currency_label: Label
 var combo_label: Label
 var pause_button: Button
 var pause_screen: Control
+var audio_settings_menu: Control
 
 # Power-up system references (optional - may not exist)
 var power_up_spawner: Node2D
@@ -79,6 +80,7 @@ func _ready() -> void:
 	combo_label = get_node_or_null("UILayer/ComboLabel")
 	pause_button = get_node_or_null("UILayer/PauseButton")
 	pause_screen = get_node_or_null("UILayer/PauseScreen")
+	audio_settings_menu = get_node_or_null("UILayer/AudioSettingsMenu")
 	
 	# Get power-up system references (optional - may not exist)
 	power_up_spawner = get_node_or_null("PowerUpSpawner")
@@ -134,6 +136,9 @@ func _ready() -> void:
 	
 	# Initialize UI
 	update_ui()
+	
+	# Start background music
+	AudioManager.play_background_music()
 	
 	print("Game Manager initialized - Currency: ", total_currency, " Score: ", current_score)
 
@@ -192,12 +197,16 @@ func pause_game():
 	is_paused = true
 	if pause_screen:
 		show_pause_screen()
+	# Pause background music
+	AudioManager.pause_background_music()
 
 func resume_game():
 	"""Resume the game"""
 	current_game_state = GameState.PLAYING
 	is_paused = false
 	hide_pause_screen()
+	# Resume background music
+	AudioManager.resume_background_music()
 
 func _on_resume_game():
 	"""Handle resume button from pause screen"""
@@ -270,6 +279,11 @@ func _on_restart_pressed():
 	"""Handle restart button from pause screen"""
 	hide_pause_screen()
 	restart_game()
+
+func _on_settings_pressed():
+	"""Handle settings button from pause screen"""
+	if audio_settings_menu:
+		audio_settings_menu.show_settings()
 
 func _on_menu_pressed():
 	"""Handle menu button from pause screen"""
@@ -582,9 +596,9 @@ func restart_game():
 	continues_used = 0
 	
 	# Reset session-based achievements
-	var achievement_system = get_node("/root/AchievementSystem")
-	if achievement_system:
-		achievement_system.reset_session_progress()
+	var achievement_sys = get_node("/root/AchievementSystem")
+	if achievement_sys:
+		achievement_sys.reset_session_progress()
 	
 	reset_session()
 	
@@ -786,16 +800,16 @@ func _on_continue_requested():
 
 func _track_achievements():
 	"""Track achievement progress"""
-	var achievement_system = get_node("/root/AchievementSystem")
-	if achievement_system:
+	var achievement_sys = get_node("/root/AchievementSystem")
+	if achievement_sys:
 		# Track score achievements
-		achievement_system.track_score(current_score)
+		achievement_sys.track_score(current_score)
 		# Track jump achievements
-		achievement_system.track_jumps(consecutive_jumps)
+		achievement_sys.track_jumps(consecutive_jumps)
 		# Track coin achievements
-		achievement_system.track_coins(total_currency)
+		achievement_sys.track_coins(total_currency)
 		# Track combo achievements
-		achievement_system.track_combo(consecutive_jumps)
+		achievement_sys.track_combo(consecutive_jumps)
 
 func add_achievement_coins(coins: int):
 	"""Add coins from achievement rewards"""
