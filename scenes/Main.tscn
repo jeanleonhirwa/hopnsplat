@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://domxsvp1u3x2j" path="res://scripts/main.gd" id="5_main"]
 [ext_resource type="Script" uid="uid://b0xdcvwy3yoty" path="res://scripts/background_animator.gd" id="6_bg_anim"]
 [ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4r" path="res://scenes/rising_danger.tscn" id="7_danger"]
-[ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4s" path="res://scenes/AudioSettingsMenu.tscn" id="8_audio_settings"]
+[ext_resource type="PackedScene" uid="uid://bxm8k2n7qp4t" path="res://scenes/SimpleAudioSettings.tscn" id="9_simple_audio"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qnwvq"]
 size = Vector2(542, 27)
@@ -211,7 +211,7 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "MAIN MENU"
 
-[node name="AudioSettingsMenu" parent="UILayer" instance=ExtResource("8_audio_settings")]
+[node name="SimpleAudioSettings" parent="UILayer" instance=ExtResource("9_simple_audio")]
 visible = false
 
 [node name="FallingSound" type="AudioStreamPlayer" parent="."]

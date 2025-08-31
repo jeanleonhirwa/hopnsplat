@@ -282,8 +282,10 @@ func _on_restart_pressed():
 
 func _on_settings_pressed():
 	"""Handle settings button from pause screen"""
-	if audio_settings_menu:
-		audio_settings_menu.show_settings()
+	var simple_audio_settings = $UILayer/SimpleAudioSettings
+	if simple_audio_settings:
+		simple_audio_settings.visible = true
+		print("Showing simple audio settings")
 
 func _on_menu_pressed():
 	"""Handle menu button from pause screen"""
