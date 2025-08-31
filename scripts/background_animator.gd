@@ -112,7 +112,12 @@ func animate_clouds(delta):
 	if camera:
 		camera_y = camera.global_position.y
 	
-	for cloud in clouds:
+	# Get screen dimensions
+	var screen_width = get_viewport().get_visible_rect().size.x
+	var screen_height = get_viewport().get_visible_rect().size.y
+	
+	for i in range(clouds.size() - 1, -1, -1):  # Iterate backwards for safe removal
+		var cloud = clouds[i]
 		if cloud and is_instance_valid(cloud):
 			# Move clouds horizontally
 			cloud.position.x += cloud_speed * delta
@@ -121,18 +126,21 @@ func animate_clouds(delta):
 			# as player goes up (opposite parallax effect)
 			cloud.position.y += 5.0 * delta  # Slow downward drift
 			
-			# Wrap around screen horizontally
-			if cloud.position.x > 540:  # Use actual screen width
+			# Get cloud dimensions
+			var cloud_width = cloud.size.x if cloud.size.x > 0 else 100
+			var cloud_height = cloud.size.y if cloud.size.y > 0 else 50
+			
+			# Only remove clouds after they completely leave the screen
+			if cloud.position.x > screen_width + cloud_width:
 				# Calculate safe spawn position accounting for cloud size
-				var cloud_width = cloud.size.x if cloud.size.x > 0 else 100
 				cloud.position.x = -cloud_width  # Start completely off-screen left
 				# Respawn at camera level with some variation
 				cloud.position.y = camera_y + randf_range(-200, 50)
 			
-			# Remove clouds that are too far below camera
-			if cloud.position.y > camera_y + 500:
+			# Remove clouds that are too far below or above camera view
+			if cloud.position.y > camera_y + screen_height + cloud_height or cloud.position.y < camera_y - screen_height - cloud_height:
 				cloud.queue_free()
-				clouds.erase(cloud)
+				clouds.remove_at(i)
 
 func update_cloud_spawning(delta):
 	"""Spawn new clouds periodically with limit"""
