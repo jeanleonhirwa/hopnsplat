@@ -180,17 +180,11 @@ func animate_button_press(button: Button):
 		tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.1)
 
 func show_settings_panel():
-	"""Show settings panel (placeholder for now)"""
-	if settings_panel:
-		settings_panel.visible = true
-		
-		# Simple fade in animation
-		settings_panel.modulate.a = 0.0
-		var tween = create_tween()
-		tween.tween_property(settings_panel, "modulate:a", 1.0, 0.3)
-	else:
-		# Placeholder - just show a simple dialog
-		print("Settings panel not implemented yet")
+	"""Show audio settings menu"""
+	var audio_settings = $AudioSettingsMenu
+	if audio_settings:
+		audio_settings.visible = true
+		print("Showing audio settings from main menu")
 
 func hide_settings_panel():
 	"""Hide settings panel"""

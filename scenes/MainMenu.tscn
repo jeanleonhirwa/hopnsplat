@@ -1,6 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bvn8y2qwxr4kl"]
+[gd_scene load_steps=5 format=3 uid="uid://bvn8y2qwxr4kl"]
 
 [ext_resource type="Script" uid="uid://c4sxplixb3mjl" path="res://scripts/main_menu.gd" id="1_main_menu"]
+[ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4s" path="res://scenes/AudioSettingsMenu.tscn" id="2_audio_settings"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
 bg_color = Color(0.3, 0.7, 1, 1)
@@ -161,55 +162,10 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_1")
 theme_override_styles/normal = SubResource("StyleBoxFlat_1")
 text = "❌ QUIT"
 
-[node name="SettingsPanel" type="Panel" parent="."]
+[node name="AudioSettingsMenu" parent="." instance=ExtResource("2_audio_settings")]
 visible = false
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -100.0
-offset_right = 150.0
-offset_bottom = 100.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="SettingsLabel" type="Label" parent="SettingsPanel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -75.0
-offset_top = -50.0
-offset_right = 75.0
-offset_bottom = -10.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Settings"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="CloseButton" type="Button" parent="SettingsPanel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -50.0
-offset_top = 10.0
-offset_right = 50.0
-offset_bottom = 40.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Close"
 
 [node name="ButtonHoverSound" type="AudioStreamPlayer" parent="."]
 
 [node name="ButtonClickSound" type="AudioStreamPlayer" parent="."]
-
-[connection signal="pressed" from="SettingsPanel/CloseButton" to="." method="hide_settings_panel"]

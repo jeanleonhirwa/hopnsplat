@@ -280,12 +280,6 @@ func _on_restart_pressed():
 	hide_pause_screen()
 	restart_game()
 
-func _on_settings_pressed():
-	"""Handle settings button from pause screen"""
-	var simple_audio_settings = $UILayer/SimpleAudioSettings
-	if simple_audio_settings:
-		simple_audio_settings.visible = true
-		print("Showing simple audio settings")
 
 func _on_menu_pressed():
 	"""Handle menu button from pause screen"""
