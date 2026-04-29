@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bvn8y2qwxr4kl"]
+[gd_scene load_steps=6 format=3 uid="uid://bvn8y2qwxr4kl"]
 
 [ext_resource type="Script" uid="uid://c4sxplixb3mjl" path="res://scripts/main_menu.gd" id="1_main_menu"]
 [ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4s" path="res://scenes/AudioSettingsMenu.tscn" id="2_audio_settings"]
+[ext_resource type="PackedScene" uid="uid://c8k2n7qp4game" path="res://scenes/GameSettingsMenu.tscn" id="3_game_settings"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
 bg_color = Color(0.3, 0.7, 1, 1)
@@ -163,6 +164,10 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_1")
 text = "❌ QUIT"
 
 [node name="AudioSettingsMenu" parent="." instance=ExtResource("2_audio_settings")]
+visible = false
+layout_mode = 1
+
+[node name="GameSettingsMenu" parent="." instance=ExtResource("3_game_settings")]
 visible = false
 layout_mode = 1
 

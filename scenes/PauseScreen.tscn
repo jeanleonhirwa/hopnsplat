@@ -80,6 +80,11 @@ layout_mode = 2
 size_flags_vertical = 3
 text = "RESUME"
 
+[node name="SettingsButton" type="Button" parent="PausePanel/VBoxContainer/ButtonContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "⚙️ SETTINGS"
+
 [node name="RestartButton" type="Button" parent="PausePanel/VBoxContainer/ButtonContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -91,5 +96,6 @@ size_flags_vertical = 3
 text = "MAIN MENU"
 
 [connection signal="pressed" from="PausePanel/VBoxContainer/ButtonContainer/ResumeButton" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="PausePanel/VBoxContainer/ButtonContainer/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="PausePanel/VBoxContainer/ButtonContainer/RestartButton" to="." method="_on_restart_pressed"]
 [connection signal="pressed" from="PausePanel/VBoxContainer/ButtonContainer/MenuButton" to="." method="_on_menu_pressed"]

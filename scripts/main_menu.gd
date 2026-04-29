@@ -180,7 +180,15 @@ func animate_button_press(button: Button):
 		tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.1)
 
 func show_settings_panel():
-	"""Show audio settings menu"""
+	"""Show game settings menu"""
+	# Try new comprehensive settings first
+	var game_settings = $GameSettingsMenu
+	if game_settings:
+		game_settings.show_settings()
+		print("Showing game settings from main menu")
+		return
+	
+	# Fallback to audio settings
 	var audio_settings = $AudioSettingsMenu
 	if audio_settings:
 		audio_settings.visible = true

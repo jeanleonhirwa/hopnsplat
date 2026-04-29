@@ -6,12 +6,14 @@ extends Control
 @onready var score_label = $PausePanel/VBoxContainer/ScoreContainer/ScoreLabel
 @onready var coins_label = $PausePanel/VBoxContainer/ScoreContainer/CoinsLabel
 @onready var resume_button = $PausePanel/VBoxContainer/ButtonContainer/ResumeButton
+@onready var settings_button = $PausePanel/VBoxContainer/ButtonContainer/SettingsButton
 @onready var restart_button = $PausePanel/VBoxContainer/ButtonContainer/RestartButton
 @onready var menu_button = $PausePanel/VBoxContainer/ButtonContainer/MenuButton
 
 signal resume_game
 signal restart_game
 signal return_to_menu
+signal open_settings
 
 func _ready():
 	# Hide pause screen initially
@@ -47,11 +49,12 @@ func style_buttons():
 	button_hover_style.border_color = Color(0.2, 0.3, 0.5, 1.0)
 	
 	# Apply styles to all buttons
-	for button in [resume_button, restart_button, menu_button]:
-		button.add_theme_stylebox_override("normal", button_style)
-		button.add_theme_stylebox_override("hover", button_hover_style)
-		button.add_theme_color_override("font_color", Color.WHITE)
-		button.add_theme_font_size_override("font_size", 18)
+	for button in [resume_button, settings_button, restart_button, menu_button]:
+		if button:
+			button.add_theme_stylebox_override("normal", button_style)
+			button.add_theme_stylebox_override("hover", button_hover_style)
+			button.add_theme_color_override("font_color", Color.WHITE)
+			button.add_theme_font_size_override("font_size", 18)
 
 func show_pause_screen(current_score: int, current_coins: int):
 	"""Display pause screen with current game stats"""
@@ -71,6 +74,10 @@ func _on_resume_pressed():
 	"""Resume button pressed"""
 	hide_pause_screen()
 	resume_game.emit()
+
+func _on_settings_pressed():
+	"""Settings button pressed"""
+	open_settings.emit()
 
 func _on_restart_pressed():
 	"""Restart button pressed"""

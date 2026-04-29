@@ -127,7 +127,9 @@ func _ready() -> void:
 		style_pause_button()
 	
 	# Connect pause screen signals - using direct method calls since it's built into scene
-	# No need to connect signals for embedded pause screen
+	if pause_screen:
+		if not pause_screen.is_connected("open_settings", _on_open_settings):
+			pause_screen.connect("open_settings", _on_open_settings)
 	
 	# Game over scene will be instantiated when needed
 	
@@ -223,6 +225,21 @@ func _on_return_to_menu():
 	# Return to main menu
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
+func _on_open_settings():
+	"""Handle settings button from pause screen"""
+	# Show game settings menu
+	var game_settings = ui_layer.get_node_or_null("GameSettingsMenu")
+	if not game_settings:
+		# Create settings menu if it doesn't exist
+		var settings_scene = load("res://scenes/GameSettingsMenu.tscn")
+		if settings_scene:
+			game_settings = settings_scene.instantiate()
+			ui_layer.add_child(game_settings)
+	
+	if game_settings:
+		game_settings.show_settings()
+		print("Opened settings from pause screen")
+
 func style_pause_button():
 	"""Style the pause button for mobile interface"""
 	var button_style = StyleBoxFlat.new()
@@ -285,6 +302,16 @@ func _on_menu_pressed():
 	"""Handle menu button from pause screen"""
 	hide_pause_screen()
 	_on_return_to_menu()
+
+func _on_settings_pressed():
+	"""Handle settings button from pause screen"""
+	# Show game settings menu
+	var game_settings = ui_layer.get_node_or_null("GameSettingsMenu")
+	if game_settings:
+		game_settings.show_settings()
+		print("Opened settings from pause screen")
+	else:
+		print("GameSettingsMenu not found in UILayer")
 
 func hide_pause_screen():
 	"""Hide pause screen and resume game"""

@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://c8k2n7qp4game"]
+
+[ext_resource type="Script" path="res://scripts/game_settings_menu.gd" id="1_game_settings"]
+
+[node name="GameSettingsMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_game_settings")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8)
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -300.0
+offset_right = 250.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+text = "⚙️ GAME SETTINGS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="AudioSection" type="VBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="AudioTitle" type="Label" parent="Panel/VBoxContainer/AudioSection"]
+layout_mode = 2
+text = "🔊 Audio Settings"
+horizontal_alignment = 1
+
+[node name="MusicContainer" type="VBoxContainer" parent="Panel/VBoxContainer/AudioSection"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="MusicLabel" type="Label" parent="Panel/VBoxContainer/AudioSection/MusicContainer"]
+layout_mode = 2
+text = "Music Volume: 70%"
+
+[node name="MusicSlider" type="HSlider" parent="Panel/VBoxContainer/AudioSection/MusicContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.7
+
+[node name="MusicToggle" type="CheckButton" parent="Panel/VBoxContainer/AudioSection/MusicContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Enable Music"
+
+[node name="SFXContainer" type="VBoxContainer" parent="Panel/VBoxContainer/AudioSection"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="SFXLabel" type="Label" parent="Panel/VBoxContainer/AudioSection/SFXContainer"]
+layout_mode = 2
+text = "SFX Volume: 80%"
+
+[node name="SFXSlider" type="HSlider" parent="Panel/VBoxContainer/AudioSection/SFXContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.8
+
+[node name="SFXToggle" type="CheckButton" parent="Panel/VBoxContainer/AudioSection/SFXContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Enable SFX"
+
+[node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ResetSection" type="VBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ResetTitle" type="Label" parent="Panel/VBoxContainer/ResetSection"]
+layout_mode = 2
+text = "🔄 Reset Game Data"
+horizontal_alignment = 1
+
+[node name="ResetDescription" type="Label" parent="Panel/VBoxContainer/ResetSection"]
+layout_mode = 2
+text = "This will reset ALL game data including:
+• High scores and progress
+• Coins and purchases
+• Achievements
+• Audio settings"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ResetButton" type="Button" parent="Panel/VBoxContainer/ResetSection"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_hover_color = Color(1, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 18
+text = "⚠️ RESET ALL DATA"
+
+[node name="HSeparator3" type="HSeparator" parent="Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="CloseButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(150, 40)
+layout_mode = 2
+text = "CLOSE"
+
+[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+title = "⚠️ Confirm Reset"
+initial_position = 2
+size = Vector2i(400, 200)
+dialog_text = "Are you sure you want to reset ALL game data?
+
+This will permanently delete:
+• All progress and high scores
+• All coins and shop purchases
+• All achievements
+• Audio settings
+
+This action CANNOT be undone!"
+ok_button_text = "Yes, Reset Everything"
+cancel_button_text = "Cancel"
