@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/game_settings_menu.gd" id="1_game_settings"]
 
 [node name="GameSettingsMenu" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -110,28 +111,13 @@ layout_mode = 2
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ResetTitle" type="Label" parent="Panel/VBoxContainer/ResetSection"]
-layout_mode = 2
-text = "🔄 Reset Game Data"
-horizontal_alignment = 1
-
-[node name="ResetDescription" type="Label" parent="Panel/VBoxContainer/ResetSection"]
-layout_mode = 2
-text = "This will reset ALL game data including:
-• High scores and progress
-• Coins and purchases
-• Achievements
-• Audio settings"
-horizontal_alignment = 1
-autowrap_mode = 3
-
 [node name="ResetButton" type="Button" parent="Panel/VBoxContainer/ResetSection"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
 theme_override_colors/font_hover_color = Color(1, 0.5, 0.5, 1)
 theme_override_font_sizes/font_size = 18
-text = "⚠️ RESET ALL DATA"
+text = "🔄 RESET GAME"
 
 [node name="HSeparator3" type="HSeparator" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -146,6 +132,7 @@ layout_mode = 2
 text = "CLOSE"
 
 [node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+process_mode = 3
 title = "⚠️ Confirm Reset"
 initial_position = 2
 size = Vector2i(400, 200)
