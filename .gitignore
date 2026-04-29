@@ -1,3 +1,81 @@
 # Godot 4+ specific ignores
 .godot/
+
+# Android build files
 /android/
+android/
+*.apk
+*.apk.idsig
+*.aab
+
+# iOS build files
+/ios/
+ios/
+*.ipa
+
+# Export files and folders
+export/
+exports/
+web-exported/
+*.pck
+*.zip
+*.exe
+*.dmg
+*.app
+*.x86_64
+*.x86
+*.arm64
+
+# Build artifacts
+build/
+builds/
+dist/
+*.import
+
+# Godot-specific
+*.translation
+project.godot.old
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+logs/
+
+# User-specific files
+user://
+*.user
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# IDE-specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Save data (optional - uncomment if you don't want to track save files)
+# *.dat
+# *.save
+
+# Screenshots and recordings (optional)
+screenshots/
+recordings/
+*.png
+!icon.png
+!icon.svg
+!addons/**/*.png
+!assets/**/*.png
+!sprites/**/*.png
+!textures/**/*.png
