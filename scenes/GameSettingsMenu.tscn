@@ -1,6 +1,13 @@
-[gd_scene format=3 uid="uid://c8k2n7qp4game"]
+[gd_scene load_steps=3 format=3 uid="uid://c8k2n7qp4game"]
 
 [ext_resource type="Script" path="res://scripts/game_settings_menu.gd" id="1_game_settings"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.2, 0.6, 1, 0.9)
+corner_radius_top_left = 15
+corner_radius_top_right = 15
+corner_radius_bottom_right = 15
+corner_radius_bottom_left = 15
 
 [node name="GameSettingsMenu" type="Control"]
 process_mode = 3
@@ -19,7 +26,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.8)
+color = Color(0, 0, 0, 0.7)
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -50,6 +57,8 @@ theme_override_constants/separation = 15
 
 [node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
 text = "⚙️ GAME SETTINGS"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -63,6 +72,8 @@ theme_override_constants/separation = 10
 
 [node name="AudioTitle" type="Label" parent="Panel/VBoxContainer/AudioSection"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
 text = "🔊 Audio Settings"
 horizontal_alignment = 1
 
@@ -114,9 +125,11 @@ theme_override_constants/separation = 10
 [node name="ResetButton" type="Button" parent="Panel/VBoxContainer/ResetSection"]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
-theme_override_colors/font_hover_color = Color(1, 0.5, 0.5, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
 text = "🔄 RESET GAME"
 
 [node name="HSeparator3" type="HSeparator" parent="Panel/VBoxContainer"]
@@ -129,21 +142,105 @@ alignment = 1
 [node name="CloseButton" type="Button" parent="Panel/VBoxContainer/ButtonContainer"]
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
 text = "CLOSE"
 
-[node name="ConfirmationDialog" type="ConfirmationDialog" parent="."]
+[node name="CustomConfirmDialog" type="Control" parent="."]
 process_mode = 3
-title = "⚠️ Confirm Reset"
-initial_position = 2
-size = Vector2i(400, 200)
-dialog_text = "Are you sure you want to reset ALL game data?
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
-This will permanently delete:
-• All progress and high scores
-• All coins and shop purchases
-• All achievements
-• Audio settings
+[node name="Background" type="ColorRect" parent="CustomConfirmDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="DialogPanel" type="Panel" parent="CustomConfirmDialog"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CustomConfirmDialog/DialogPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 15
+
+[node name="TitleLabel" type="Label" parent="CustomConfirmDialog/DialogPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+text = "⚠️ Confirm Reset"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CustomConfirmDialog/DialogPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="MessageLabel" type="Label" parent="CustomConfirmDialog/DialogPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Are you sure you want to
+reset ALL game data?
 
 This action CANNOT be undone!"
-ok_button_text = "Yes, Reset Everything"
-cancel_button_text = "Cancel"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Spacer" type="Control" parent="CustomConfirmDialog/DialogPanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="CustomConfirmDialog/DialogPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="CancelButton" type="Button" parent="CustomConfirmDialog/DialogPanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(140, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
+text = "Cancel"
+
+[node name="ConfirmButton" type="Button" parent="CustomConfirmDialog/DialogPanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(140, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button")
+text = "Reset All"

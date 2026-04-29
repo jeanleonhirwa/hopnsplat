@@ -11,7 +11,7 @@ extends Control
 @onready var sfx_toggle: CheckButton
 @onready var reset_button: Button
 @onready var close_button: Button
-@onready var confirmation_dialog: ConfirmationDialog
+@onready var confirmation_dialog: Control
 
 # Managers
 var audio_manager
@@ -35,7 +35,7 @@ func _ready():
 	sfx_toggle = get_node_or_null("Panel/VBoxContainer/AudioSection/SFXContainer/SFXToggle")
 	reset_button = get_node_or_null("Panel/VBoxContainer/ResetSection/ResetButton")
 	close_button = get_node_or_null("Panel/VBoxContainer/ButtonContainer/CloseButton")
-	confirmation_dialog = get_node_or_null("ConfirmationDialog")
+	confirmation_dialog = get_node_or_null("CustomConfirmDialog")
 	
 	# Connect signals
 	if music_slider:
@@ -51,7 +51,12 @@ func _ready():
 	if close_button:
 		close_button.pressed.connect(_on_close_button_pressed)
 	if confirmation_dialog:
-		confirmation_dialog.confirmed.connect(_on_reset_confirmed)
+		var confirm_btn = confirmation_dialog.get_node_or_null("DialogPanel/VBoxContainer/ButtonContainer/ConfirmButton")
+		var cancel_btn = confirmation_dialog.get_node_or_null("DialogPanel/VBoxContainer/ButtonContainer/CancelButton")
+		if confirm_btn:
+			confirm_btn.pressed.connect(_on_reset_confirmed)
+		if cancel_btn:
+			cancel_btn.pressed.connect(_on_reset_cancelled)
 	
 	# Load current settings
 	load_current_settings()
@@ -106,14 +111,27 @@ func _on_sfx_toggle_changed(enabled: bool):
 
 func _on_reset_button_pressed():
 	"""Show confirmation dialog for reset"""
+	print("Reset button pressed")
 	if confirmation_dialog:
-		confirmation_dialog.popup_centered()
+		confirmation_dialog.visible = true
+		print("Confirmation dialog shown")
 	else:
+		print("Warning: confirmation_dialog not found")
 		# Fallback if dialog doesn't exist
 		_on_reset_confirmed()
 
+func _on_reset_cancelled():
+	"""Hide confirmation dialog when cancelled"""
+	print("Reset cancelled")
+	if confirmation_dialog:
+		confirmation_dialog.visible = false
+
 func _on_reset_confirmed():
 	"""Reset all game data"""
+	# Hide dialog first
+	if confirmation_dialog:
+		confirmation_dialog.visible = false
+	
 	print("Resetting all game data...")
 	
 	# Reset save data
@@ -208,7 +226,8 @@ func show_reset_feedback():
 
 func _on_close_button_pressed():
 	"""Close settings menu"""
-	hide()
+	visible = false
+	print("Settings menu closed")
 
 func show_settings():
 	"""Show settings menu"""

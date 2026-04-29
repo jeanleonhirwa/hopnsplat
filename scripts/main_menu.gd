@@ -26,7 +26,7 @@ var responsive_layout
 @onready var button_click_sound = $ButtonClickSound
 
 # Settings panel (optional)
-@onready var settings_panel = $SettingsPanel
+@onready var settings_panel = null
 
 func _ready():
 	"""Initialize main menu"""
