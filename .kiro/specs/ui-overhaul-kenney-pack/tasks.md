@@ -191,7 +191,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Add Divider TextureRect nodes with divider_edges.png
     - _Requirements: 7.1, 7.2, 7.4_
 
-  - [~] 8.2 Replace PauseScreen buttons with KenneyButton
+  - [x] 8.2 Replace PauseScreen buttons with KenneyButton
     - Replace ResumeButton with KenneyButton (RECTANGLE_DEPTH_GLOSS, Yellow, play icon)
     - Replace SettingsButton with KenneyButton (RECTANGLE_GLOSS, Yellow, gear icon)
     - Replace RestartButton with KenneyButton (RECTANGLE_GLOSS, Yellow, repeat icon)
@@ -199,7 +199,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - All buttons 350x60px
     - _Requirements: 7.1, 7.5_
 
-  - [~] 8.3 Implement PauseScreen entrance animation
+  - [ ] 8.3 Implement PauseScreen entrance animation
     - In pause_screen.gd _ready(), implement animation sequence
     - Background fades in (0.2s)
     - Panel zooms in with elastic easing (0.4s, scale from 0.5 to 1.0)

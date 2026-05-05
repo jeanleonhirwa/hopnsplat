@@ -3,8 +3,8 @@ extends Control
 # Pause screen UI controller
 # Handles pause menu interactions and display
 
-@onready var score_label = $PausePanel/VBoxContainer/ScoreContainer/ScoreLabel
-@onready var coins_label = $PausePanel/VBoxContainer/ScoreContainer/CoinsLabel
+@onready var score_label = $PausePanel/VBoxContainer/StatsContainer/ScorePanel/HBoxContainer/ScoreLabel
+@onready var coins_label = $PausePanel/VBoxContainer/StatsContainer/CoinsPanel/HBoxContainer/CoinsLabel
 @onready var resume_button = $PausePanel/VBoxContainer/ButtonContainer/ResumeButton
 @onready var settings_button = $PausePanel/VBoxContainer/ButtonContainer/SettingsButton
 @onready var restart_button = $PausePanel/VBoxContainer/ButtonContainer/RestartButton
@@ -18,43 +18,6 @@ signal open_settings
 func _ready():
 	# Hide pause screen initially
 	visible = false
-	
-	# Style the buttons
-	style_buttons()
-
-func style_buttons():
-	"""Apply modern styling to buttons"""
-	var button_style = StyleBoxFlat.new()
-	button_style.bg_color = Color(0.2, 0.4, 0.8, 1.0)
-	button_style.corner_radius_top_left = 10
-	button_style.corner_radius_top_right = 10
-	button_style.corner_radius_bottom_left = 10
-	button_style.corner_radius_bottom_right = 10
-	button_style.border_width_left = 2
-	button_style.border_width_right = 2
-	button_style.border_width_top = 2
-	button_style.border_width_bottom = 2
-	button_style.border_color = Color(0.1, 0.2, 0.4, 1.0)
-	
-	var button_hover_style = StyleBoxFlat.new()
-	button_hover_style.bg_color = Color(0.3, 0.5, 0.9, 1.0)
-	button_hover_style.corner_radius_top_left = 10
-	button_hover_style.corner_radius_top_right = 10
-	button_hover_style.corner_radius_bottom_left = 10
-	button_hover_style.corner_radius_bottom_right = 10
-	button_hover_style.border_width_left = 2
-	button_hover_style.border_width_right = 2
-	button_hover_style.border_width_top = 2
-	button_hover_style.border_width_bottom = 2
-	button_hover_style.border_color = Color(0.2, 0.3, 0.5, 1.0)
-	
-	# Apply styles to all buttons
-	for button in [resume_button, settings_button, restart_button, menu_button]:
-		if button:
-			button.add_theme_stylebox_override("normal", button_style)
-			button.add_theme_stylebox_override("hover", button_hover_style)
-			button.add_theme_color_override("font_color", Color.WHITE)
-			button.add_theme_font_size_override("font_size", 18)
 
 func show_pause_screen(current_score: int, current_coins: int):
 	"""Display pause screen with current game stats"""
