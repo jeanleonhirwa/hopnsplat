@@ -207,13 +207,13 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - _Requirements: 7.3_
 
 - [ ] 9. Phase 6: GameOver Screen Overhaul
-  - [-] 9.1 Convert GameOver.tscn to use Kenney components
+  - [x] 9.1 Convert GameOver.tscn to use Kenney components
     - Replace panel with KenneyPanel (RECTANGLE_DEPTH, Yellow)
     - Wrap FinalScoreLabel, CurrencyEarnedLabel, JumpsLabel, HighScoreLabel in KenneyPanel instances
     - Add appropriate icons (star, coin) to stat panels
     - _Requirements: 8.1_
 
-  - [~] 9.2 Implement star rating system
+  - [x] 9.2 Implement star rating system
     - Add StarRating HBoxContainer with 3 TextureRect nodes
     - Implement star rating logic: 1 star (score > 0), 2 stars (score > 50), 3 stars (score > 100)
     - Use star.png for filled, star_outline.png for empty

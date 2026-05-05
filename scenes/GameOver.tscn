@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://bxm8lan7p2q4r"]
+[gd_scene load_steps=7 format=3 uid="uid://bxm8lan7p2q4r"]
 
 [ext_resource type="Script" uid="uid://cnrbh3gmhrqve" path="res://scripts/game_over.gd" id="1_game_over"]
 [ext_resource type="Script" path="res://scripts/components/kenney_panel.gd" id="2_kenney_panel"]
 [ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/star.png" id="3_star_icon"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/star_outline.png" id="3_star_outline"]
 [ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/icon_circle.png" id="4_coin_icon"]
 [ext_resource type="Texture2D" path="res://assets/ui_packs/Extra/Default/icon_arrow_up_outline.png" id="5_jump_icon"]
 
@@ -59,6 +60,32 @@ layout_mode = 2
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="StarRating" type="HBoxContainer" parent="GameOverPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="Star1" type="TextureRect" parent="GameOverPanel/VBoxContainer/StarRating"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_star_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Star2" type="TextureRect" parent="GameOverPanel/VBoxContainer/StarRating"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_star_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Star3" type="TextureRect" parent="GameOverPanel/VBoxContainer/StarRating"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("3_star_icon")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="StatsContainer" type="VBoxContainer" parent="GameOverPanel/VBoxContainer"]
 layout_mode = 2

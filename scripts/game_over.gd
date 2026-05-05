@@ -13,6 +13,15 @@ signal continue_requested
 @onready var restart_button = $GameOverPanel/VBoxContainer/ButtonContainer/RestartButton
 @onready var menu_button = $GameOverPanel/VBoxContainer/ButtonContainer/MenuButton
 
+# Star rating references
+@onready var star1 = $GameOverPanel/VBoxContainer/StarRating/Star1
+@onready var star2 = $GameOverPanel/VBoxContainer/StarRating/Star2
+@onready var star3 = $GameOverPanel/VBoxContainer/StarRating/Star3
+
+# Star textures
+var star_filled: Texture2D
+var star_outline: Texture2D
+
 # Continue system variables
 var continues_used: int = 0
 var max_continues: int = 2
@@ -20,6 +29,15 @@ var rewarded_ad_loader: RewardedAdLoader
 var current_rewarded_ad: RewardedAd
 
 func _ready():
+	# Load star textures
+	star_filled = preload("res://assets/ui_packs/Yellow/Default/star.png")
+	star_outline = preload("res://assets/ui_packs/Yellow/Default/star_outline.png")
+	
+	# Initialize all stars as outline
+	star1.texture = star_outline
+	star2.texture = star_outline
+	star3.texture = star_outline
+	
 	# Connect button signals
 	continue_button.pressed.connect(_on_continue_button_pressed)
 	restart_button.pressed.connect(_on_restart_button_pressed)
@@ -49,6 +67,9 @@ func show_game_over(final_score: int, currency_earned: int, jumps: int, high_sco
 	
 	# Update continue button state
 	_update_continue_button()
+	
+	# Calculate and animate star rating
+	_animate_star_rating(final_score)
 	
 	# Show the screen
 	visible = true
@@ -213,6 +234,45 @@ func _on_manager_ad_failed():
 	"""Called when AdMob manager fails to load ad"""
 	print("AdMob manager: Failed to load rewarded ad")
 	_update_continue_button()
+
+func _animate_star_rating(score: int):
+	"""Animate star rating based on score
+	Star rating logic:
+	- 1 star: score > 0
+	- 2 stars: score > 50
+	- 3 stars: score > 100
+	"""
+	# Calculate number of stars to fill
+	var stars_to_fill = 0
+	if score > 0:
+		stars_to_fill = 1
+	if score > 50:
+		stars_to_fill = 2
+	if score > 100:
+		stars_to_fill = 3
+	
+	# Reset all stars to outline
+	star1.texture = star_outline
+	star2.texture = star_outline
+	star3.texture = star_outline
+	star1.scale = Vector2.ONE
+	star2.scale = Vector2.ONE
+	star3.scale = Vector2.ONE
+	
+	# Animate stars filling in sequence
+	var stars = [star1, star2, star3]
+	for i in range(stars_to_fill):
+		var star = stars[i]
+		var delay = i * 0.1  # 0.1s delay between each star
+		
+		# Wait for delay, then fill and animate
+		await get_tree().create_timer(delay).timeout
+		star.texture = star_filled
+		
+		# Pop animation using UIAnimationManager
+		var ui_anim = get_node("/root/UIAnimationManager")
+		if ui_anim:
+			ui_anim.pop_out(star, 0.2)
 
 func reset_continues():
 	"""Reset continues counter for new game"""
