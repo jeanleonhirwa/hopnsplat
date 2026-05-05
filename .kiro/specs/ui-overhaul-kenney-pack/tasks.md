@@ -220,7 +220,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Animate stars filling in sequence with pop effect (0.2s each, 0.1s delay)
     - _Requirements: 8.2_
 
-  - [~] 9.3 Replace GameOver buttons with KenneyButton
+  - [x] 9.3 Replace GameOver buttons with KenneyButton
     - Replace ContinueButton with KenneyButton (RECTANGLE_DEPTH_GLOSS, Yellow, 350x80px, TV icon, idle wobble enabled)
     - Replace RestartButton with KenneyButton (RECTANGLE_DEPTH_GLOSS, Yellow, 350x60px, repeat icon)
     - Replace MenuButton with KenneyButton (RECTANGLE_GLOSS, Yellow, 350x60px, home icon)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bxm8lan7p2q4r"]
+[gd_scene load_steps=11 format=3 uid="uid://bxm8lan7p2q4r"]
 
 [ext_resource type="Script" uid="uid://cnrbh3gmhrqve" path="res://scripts/game_over.gd" id="1_game_over"]
 [ext_resource type="Script" path="res://scripts/components/kenney_panel.gd" id="2_kenney_panel"]
@@ -6,6 +6,10 @@
 [ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/star_outline.png" id="3_star_outline"]
 [ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/icon_circle.png" id="4_coin_icon"]
 [ext_resource type="Texture2D" path="res://assets/ui_packs/Extra/Default/icon_arrow_up_outline.png" id="5_jump_icon"]
+[ext_resource type="Script" path="res://scripts/components/kenney_button.gd" id="6_kenney_button"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Extra/Default/icon_play_outline.png" id="7_tv_icon"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Extra/Default/icon_repeat_outline.png" id="8_repeat_icon"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/arrow_basic_w.png" id="9_home_icon"]
 
 [node name="GameOver" type="Control"]
 layout_mode = 3
@@ -236,18 +240,30 @@ vertical_alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="ContinueButton" type="Button" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
-modulate = Color(0.2, 0.8, 0.2, 1)
-custom_minimum_size = Vector2(0, 60)
+[node name="ContinueButton" type="TextureButton" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(350, 80)
 layout_mode = 2
-text = "📺 CONTINUE"
+script = ExtResource("6_kenney_button")
+button_style = 2
+color_pack = 0
+icon_texture = ExtResource("7_tv_icon")
+button_text = "CONTINUE"
+enable_idle_wobble = true
 
-[node name="RestartButton" type="Button" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 60)
+[node name="RestartButton" type="TextureButton" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(350, 60)
 layout_mode = 2
-text = "RESTART"
+script = ExtResource("6_kenney_button")
+button_style = 2
+color_pack = 0
+icon_texture = ExtResource("8_repeat_icon")
+button_text = "RESTART"
 
-[node name="MenuButton" type="Button" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 60)
+[node name="MenuButton" type="TextureButton" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(350, 60)
 layout_mode = 2
-text = "MENU"
+script = ExtResource("6_kenney_button")
+button_style = 1
+color_pack = 0
+icon_texture = ExtResource("9_home_icon")
+button_text = "MENU"

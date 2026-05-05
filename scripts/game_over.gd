@@ -199,7 +199,7 @@ func _update_continue_button():
 	
 	if continues_remaining <= 0:
 		# No continues left
-		continue_button.text = "No continues left"
+		continue_button.set_button_text("No continues left")
 		continue_button.disabled = true
 		continue_button.modulate = Color.GRAY
 	else:
@@ -213,17 +213,17 @@ func _update_continue_button():
 		
 		if not ad_available:
 			# Ad not loaded
-			continue_button.text = "📺 Loading..."
+			continue_button.set_button_text("Loading...")
 			continue_button.disabled = true
 			continue_button.modulate = Color.YELLOW
 		else:
 			# Continue available
 			if continues_remaining == 1:
-				continue_button.text = "📺 CONTINUE (1 left)"
+				continue_button.set_button_text("CONTINUE (1 left)")
 			else:
-				continue_button.text = "📺 CONTINUE (" + str(continues_remaining) + " left)"
+				continue_button.set_button_text("CONTINUE (" + str(continues_remaining) + " left)")
 			continue_button.disabled = false
-			continue_button.modulate = Color(0.2, 0.8, 0.2, 1)
+			continue_button.modulate = Color.WHITE
 
 func _on_manager_ad_loaded():
 	"""Called when AdMob manager loads an ad"""
