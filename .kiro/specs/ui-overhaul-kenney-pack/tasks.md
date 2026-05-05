@@ -78,14 +78,14 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Connect mouse_entered, button_down, button_up signals to animation methods
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [-] 3. Phase 3: Sound Integration - UI Audio Feedback
-  - [-] 3.1 Extend AudioManager with UI sound support
+- [x] 3. Phase 3: Sound Integration - UI Audio Feedback
+  - [x] 3.1 Extend AudioManager with UI sound support
     - Add ui_sounds_cache Dictionary to AudioManager
     - Add ui_sound_pitch_variance float property (0.05)
     - Pre-cache all UI sounds in _ready(): tap-a.ogg, tap-b.ogg, click-a.ogg, click-b.ogg, switch-a.ogg, switch-b.ogg
     - _Requirements: 4.5, 13.3_
 
-  - [ ] 3.2 Implement UI sound playback methods
+  - [x] 3.2 Implement UI sound playback methods
     - Implement play_ui_hover() - randomly plays tap-a or tap-b
     - Implement play_ui_click() - randomly plays click-a or click-b
     - Implement play_ui_switch() - randomly plays switch-a or switch-b
@@ -93,18 +93,18 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Implement _get_random_pitch() returning value between 0.95 and 1.05
     - _Requirements: 4.1, 4.2, 4.3, 4.4_
 
-  - [ ] 3.3 Integrate sounds into KenneyButton
+  - [x] 3.3 Integrate sounds into KenneyButton
     - Add hover_sound and click_sound @export properties to KenneyButton
     - Add last_hover_time tracking and HOVER_SOUND_COOLDOWN constant (0.1s)
     - Call AudioManager.play_ui_hover() in mouse_entered with cooldown check
     - Call AudioManager.play_ui_click() in button_down signal
     - _Requirements: 4.1, 4.2_
 
-- [ ] 4. Checkpoint - Foundation Validation
+- [x] 4. Checkpoint - Foundation Validation
   - Ensure all tests pass, verify KenneyButton and KenneyPanel components work correctly, ask the user if questions arise.
 
-- [ ] 5. Phase 4: MainMenu Screen Overhaul
-  - [ ] 5.1 Replace MainMenu buttons with KenneyButton instances
+- [x] 5. Phase 4: MainMenu Screen Overhaul
+  - [x] 5.1 Replace MainMenu buttons with KenneyButton instances
     - Replace PlayButton with KenneyButton (RECTANGLE_DEPTH_GLOSS, Yellow, 300x70px)
     - Replace ShopButton with KenneyButton (RECTANGLE_GLOSS, Yellow, 300x60px)
     - Replace AchievementsButton with KenneyButton (RECTANGLE_GLOSS, Yellow, 300x60px)
@@ -114,20 +114,20 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Enable idle_wobble for PlayButton
     - _Requirements: 5.1, 5.5, 2.4_
 
-  - [ ] 5.2 Add decorative elements to MainMenu
+  - [x] 5.2 Add decorative elements to MainMenu
     - Add BackgroundDecoration Control node
     - Add FloatingStar1 and FloatingStar2 TextureRect nodes with star.png texture
     - Add DecorativeArrow TextureRect with arrow_decorative_s.png
     - Implement floating animation for stars using UIAnimationManager
     - _Requirements: 5.2, 15.3_
 
-  - [ ] 5.3 Create stats panel with Kenney backgrounds
+  - [x] 5.3 Create stats panel with Kenney backgrounds
     - Wrap HighScoreLabel and CurrencyLabel in KenneyPanel (RECTANGLE_DEPTH, Yellow)
     - Add star icon TextureRect next to HighScoreLabel
     - Add coin icon TextureRect next to CurrencyLabel
     - _Requirements: 5.4_
 
-  - [ ] 5.4 Implement MainMenu stagger animation sequence
+  - [x] 5.4 Implement MainMenu stagger animation sequence
     - In main_menu.gd _ready(), implement animation timeline from design
     - Fade in background (0.3s)
     - Title drop with bounce (0.4s, starts at 0.1s)

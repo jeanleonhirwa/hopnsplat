@@ -17,11 +17,17 @@ var responsive_layout
 @onready var achievements_button = $VBoxContainer/ButtonContainer/AchievementsButton
 @onready var settings_button = $VBoxContainer/ButtonContainer/SettingsButton
 @onready var quit_button = $VBoxContainer/ButtonContainer/QuitButton
-@onready var high_score_label = $VBoxContainer/HighScoreLabel
-@onready var currency_label = $VBoxContainer/CurrencyLabel
+@onready var high_score_label = $VBoxContainer/StatsPanel/VBoxContainer/HighScoreContainer/HighScoreLabel
+@onready var currency_label = $VBoxContainer/StatsPanel/VBoxContainer/CurrencyContainer/CurrencyLabel
+@onready var stats_panel = $VBoxContainer/StatsPanel
+
+# Decorative elements
+@onready var floating_star1 = $BackgroundDecoration/FloatingStar1
+@onready var floating_star2 = $BackgroundDecoration/FloatingStar2
+@onready var decorative_arrow = $BackgroundDecoration/DecorativeArrow
 
 # Animation and effects
-@onready var background_animation = $BackgroundAnimation
+@onready var background_animation = $BackgroundDecoration
 @onready var button_hover_sound = $ButtonHoverSound
 @onready var button_click_sound = $ButtonClickSound
 
@@ -53,11 +59,11 @@ func load_and_display_stats():
 	
 	if high_score_label:
 		var high_score = save_data.get("highest_score", 0)
-		high_score_label.text = "🏆 Best Score: " + str(high_score)
+		high_score_label.text = "Best Score: " + str(high_score)
 	
 	if currency_label:
 		var total_currency = save_data.get("total_currency", 0)
-		currency_label.text = "💰 Coins: " + str(total_currency)
+		currency_label.text = "Coins: " + str(total_currency)
 
 func load_game_data() -> Dictionary:
 	"""Load game data from save file"""
@@ -77,32 +83,48 @@ func connect_buttons():
 	"""Connect all button signals"""
 	if play_button:
 		play_button.pressed.connect(_on_play_pressed)
-		play_button.mouse_entered.connect(_on_button_hover)
 	
 	if shop_button:
 		shop_button.pressed.connect(_on_shop_pressed)
-		shop_button.mouse_entered.connect(_on_button_hover)
 	
 	if achievements_button:
 		achievements_button.pressed.connect(_on_achievements_pressed)
-		achievements_button.mouse_entered.connect(_on_button_hover)
 	
 	if settings_button:
 		settings_button.pressed.connect(_on_settings_pressed)
-		settings_button.mouse_entered.connect(_on_button_hover)
 	
 	if quit_button:
 		quit_button.pressed.connect(_on_quit_pressed)
-		quit_button.mouse_entered.connect(_on_button_hover)
 
 func start_animations():
 	"""Start background animations and effects"""
-	if background_animation:
-		# Create floating animation for title
-		animate_title()
-		
-	# Animate buttons with staggered entrance
-	animate_buttons_entrance()
+	# Animate decorative elements with floating motion
+	animate_decorative_elements()
+	
+	# Animate buttons with staggered entrance (Task 5.4)
+	animate_buttons_entrance_staggered()
+
+
+func animate_decorative_elements():
+	"""Animate floating stars and decorative arrow with subtle motion"""
+	if floating_star1:
+		var tween1 = create_tween()
+		tween1.set_loops()
+		tween1.tween_property(floating_star1, "position:y", floating_star1.position.y - 15, 2.5).set_ease(Tween.EASE_IN_OUT)
+		tween1.tween_property(floating_star1, "position:y", floating_star1.position.y + 15, 2.5).set_ease(Tween.EASE_IN_OUT)
+	
+	if floating_star2:
+		var tween2 = create_tween()
+		tween2.set_loops()
+		tween2.tween_property(floating_star2, "position:y", floating_star2.position.y - 20, 3.0).set_ease(Tween.EASE_IN_OUT)
+		tween2.tween_property(floating_star2, "position:y", floating_star2.position.y + 20, 3.0).set_ease(Tween.EASE_IN_OUT)
+	
+	if decorative_arrow:
+		var tween3 = create_tween()
+		tween3.set_loops()
+		tween3.tween_property(decorative_arrow, "rotation_degrees", -5, 1.5).set_ease(Tween.EASE_IN_OUT)
+		tween3.tween_property(decorative_arrow, "rotation_degrees", 5, 1.5).set_ease(Tween.EASE_IN_OUT)
+
 
 func animate_title():
 	"""Animate the title with gentle floating motion"""
@@ -112,10 +134,34 @@ func animate_title():
 		tween.tween_property(title_label, "position:y", title_label.position.y - 10, 2.0)
 		tween.tween_property(title_label, "position:y", title_label.position.y + 10, 2.0)
 
-func animate_buttons_entrance():
-	"""Animate buttons appearing with staggered timing"""
+
+func animate_buttons_entrance_staggered():
+	"""Animate buttons and UI elements appearing with staggered timing (Task 5.4)
+	Timeline from design:
+	- Background fade in (0.3s) - already visible
+	- Title drop with bounce (0.4s, starts at 0.1s)
+	- Stats panel slide in (0.3s, starts at 0.3s)
+	- Stagger button appearances (0.2s each, starting at 0.6s with 0.1s delays)
+	- Start PlayButton wobble loop after stagger complete
+	"""
+	# Title drop with bounce (starts at 0.1s)
+	if title_label:
+		title_label.position.y -= 50
+		title_label.modulate.a = 0.0
+		await get_tree().create_timer(0.1).timeout
+		UIAnimationManager.fade_in(title_label, 0.2)
+		UIAnimationManager.slide_in(title_label, Vector2.UP, 0.4, 50)
+	
+	# Stats panel slide in (starts at 0.3s)
+	if stats_panel:
+		stats_panel.modulate.a = 0.0
+		await get_tree().create_timer(0.2).timeout  # 0.3s total from start
+		UIAnimationManager.fade_in(stats_panel, 0.2)
+		UIAnimationManager.slide_in(stats_panel, Vector2.LEFT, 0.3, 100)
+	
+	# Stagger button appearances (starting at 0.6s with 0.1s delays)
 	var buttons = [play_button, shop_button, achievements_button, settings_button, quit_button]
-	var delay = 0.0
+	await get_tree().create_timer(0.3).timeout  # 0.6s total from start
 	
 	for button in buttons:
 		if button:
@@ -123,18 +169,27 @@ func animate_buttons_entrance():
 			button.modulate.a = 0.0
 			button.scale = Vector2(0.8, 0.8)
 			
-			# Animate in with delay
-			await get_tree().create_timer(delay).timeout
-			var tween = create_tween()
-			tween.tween_property(button, "modulate:a", 1.0, 0.3)
-			tween.parallel().tween_property(button, "scale", Vector2(1.0, 1.0), 0.3)
+			# Animate in with bounce
+			UIAnimationManager.fade_in(button, 0.2)
+			UIAnimationManager.bounce_in(button, 0.2, 1.25)
 			
-			delay += 0.1
+			# Wait before next button
+			await get_tree().create_timer(0.1).timeout
+	
+	# Start PlayButton wobble loop after all buttons appear
+	await get_tree().create_timer(0.2).timeout
+	if play_button and play_button.has_method("play_idle_wobble"):
+		play_button.play_idle_wobble()
+
+
+func animate_buttons_entrance():
+	"""Legacy method - replaced by animate_buttons_entrance_staggered"""
+	pass
 
 func _on_button_hover():
-	"""Play hover sound effect"""
-	if button_hover_sound:
-		button_hover_sound.play()
+	"""Play hover sound effect - now handled by KenneyButton component"""
+	# This method is no longer needed as KenneyButton handles hover sounds
+	pass
 
 func _on_play_pressed():
 	"""Handle play button press"""
@@ -154,30 +209,22 @@ func _on_achievements_pressed():
 func _on_settings_pressed():
 	"""Open settings panel"""
 	print("Settings button pressed")
-	if button_click_sound:
-		button_click_sound.play()
-	
-	animate_button_press(settings_button)
+	# KenneyButton already plays click sound
 	show_settings_panel()
 
 func _on_quit_pressed():
 	"""Quit the game"""
 	print("Quit button pressed")
-	if button_click_sound:
-		button_click_sound.play()
-	
-	animate_button_press(quit_button)
+	# KenneyButton already plays click sound
 	
 	# Wait for animation then quit
 	await get_tree().create_timer(0.2).timeout
 	get_tree().quit()
 
-func animate_button_press(button: Button):
-	"""Animate button press with scale effect"""
-	if button:
-		var tween = create_tween()
-		tween.tween_property(button, "scale", Vector2(0.95, 0.95), 0.1)
-		tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.1)
+func animate_button_press(_button: Button):
+	"""Animate button press with scale effect - now handled by KenneyButton"""
+	# This method is no longer needed as KenneyButton handles press animations
+	pass
 
 func show_settings_panel():
 	"""Show game settings menu"""

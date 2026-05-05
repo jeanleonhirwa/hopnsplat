@@ -1,22 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://bvn8y2qwxr4kl"]
+[gd_scene load_steps=8 format=3 uid="uid://bvn8y2qwxr4kl"]
 
 [ext_resource type="Script" uid="uid://c4sxplixb3mjl" path="res://scripts/main_menu.gd" id="1_main_menu"]
 [ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4s" path="res://scenes/AudioSettingsMenu.tscn" id="2_audio_settings"]
 [ext_resource type="PackedScene" uid="uid://c8k2n7qp4game" path="res://scenes/GameSettingsMenu.tscn" id="3_game_settings"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
-bg_color = Color(0.3, 0.7, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
-bg_color = Color(0.2, 0.6, 1, 0.9)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+[ext_resource type="Script" path="res://scripts/components/kenney_button.gd" id="4_kenney_button"]
+[ext_resource type="Script" path="res://scripts/components/kenney_panel.gd" id="5_kenney_panel"]
+[ext_resource type="Texture2D" uid="uid://bl7gip3unc76i" path="res://assets/ui_packs/Extra/Default/icon_play_light.png" id="6_icon_play"]
+[ext_resource type="Texture2D" uid="uid://c8sesgkv8t1yn" path="res://assets/ui_packs/Yellow/Default/star.png" id="7_star"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -36,13 +26,43 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.4, 0.8, 1, 1)
 
-[node name="BackgroundAnimation" type="Control" parent="."]
+[node name="BackgroundDecoration" type="Control" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="FloatingStar1" type="TextureRect" parent="BackgroundDecoration"]
+layout_mode = 0
+offset_left = 100.0
+offset_top = 150.0
+offset_right = 164.0
+offset_bottom = 214.0
+texture = ExtResource("7_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="FloatingStar2" type="TextureRect" parent="BackgroundDecoration"]
+layout_mode = 0
+offset_left = 440.0
+offset_top = 200.0
+offset_right = 504.0
+offset_bottom = 264.0
+texture = ExtResource("7_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DecorativeArrow" type="TextureRect" parent="BackgroundDecoration"]
+layout_mode = 0
+offset_left = 450.0
+offset_top = 700.0
+offset_right = 514.0
+offset_bottom = 764.0
+texture = ExtResource("7_star")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -52,9 +72,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -200.0
-offset_top = -250.0
+offset_top = -300.0
 offset_right = 200.0
-offset_bottom = 250.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -70,23 +90,60 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Spacer1" type="Control" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="HighScoreLabel" type="Label" parent="VBoxContainer"]
+[node name="StatsPanel" type="NinePatchRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(380, 80)
 layout_mode = 2
+script = ExtResource("5_kenney_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/StatsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HighScoreContainer" type="HBoxContainer" parent="VBoxContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="StarIcon" type="TextureRect" parent="VBoxContainer/StatsPanel/VBoxContainer/HighScoreContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("7_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HighScoreLabel" type="Label" parent="VBoxContainer/StatsPanel/VBoxContainer/HighScoreContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.8, 0, 1)
 theme_override_font_sizes/font_size = 20
-text = "🏆 Best Score: 0"
-horizontal_alignment = 1
+text = "Best Score: 0"
 vertical_alignment = 1
 
-[node name="CurrencyLabel" type="Label" parent="VBoxContainer"]
+[node name="CurrencyContainer" type="HBoxContainer" parent="VBoxContainer/StatsPanel/VBoxContainer"]
 layout_mode = 2
+
+[node name="CoinIcon" type="TextureRect" parent="VBoxContainer/StatsPanel/VBoxContainer/CurrencyContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("7_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CurrencyLabel" type="Label" parent="VBoxContainer/StatsPanel/VBoxContainer/CurrencyContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.8, 0, 1)
 theme_override_font_sizes/font_size = 20
-text = "💰 Coins: 0"
-horizontal_alignment = 1
+text = "Coins: 0"
 vertical_alignment = 1
 
 [node name="Spacer2" type="Control" parent="VBoxContainer"]
@@ -96,72 +153,45 @@ layout_mode = 2
 [node name="ButtonContainer" type="VBoxContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
+theme_override_constants/separation = 15
 
-[node name="PlayButton" type="Button" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 60)
+[node name="PlayButton" type="TextureButton" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(300, 70)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/hover = SubResource("StyleBoxFlat_2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_1")
-theme_override_styles/normal = SubResource("StyleBoxFlat_1")
-text = "🚀 PLAY"
+script = ExtResource("4_kenney_button")
+button_style = 2
+icon_texture = ExtResource("6_icon_play")
+button_text = "PLAY"
+enable_idle_wobble = true
 
-[node name="Spacer3" type="Control" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 15)
+[node name="ShopButton" type="TextureButton" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
+script = ExtResource("4_kenney_button")
+button_style = 1
+button_text = "🛒 SHOP"
 
-[node name="ShopButton" type="Button" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="AchievementsButton" type="TextureButton" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/hover = SubResource("StyleBoxFlat_2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_1")
-theme_override_styles/normal = SubResource("StyleBoxFlat_1")
-text = "🛒 SHOP"
+script = ExtResource("4_kenney_button")
+button_style = 1
+button_text = "🏆 ACHIEVEMENTS"
 
-[node name="Spacer5" type="Control" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 15)
+[node name="SettingsButton" type="TextureButton" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
+script = ExtResource("4_kenney_button")
+button_style = 1
+button_text = "⚙️ SETTINGS"
 
-[node name="AchievementsButton" type="Button" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="QuitButton" type="TextureButton" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/hover = SubResource("StyleBoxFlat_2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_1")
-theme_override_styles/normal = SubResource("StyleBoxFlat_1")
-text = "🏆 ACHIEVEMENTS"
-
-[node name="Spacer6" type="Control" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 15)
-layout_mode = 2
-
-[node name="SettingsButton" type="Button" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/hover = SubResource("StyleBoxFlat_2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_1")
-theme_override_styles/normal = SubResource("StyleBoxFlat_1")
-text = "⚙️ SETTINGS"
-
-[node name="Spacer4" type="Control" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 15)
-layout_mode = 2
-
-[node name="QuitButton" type="Button" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 50)
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 20
-theme_override_styles/hover = SubResource("StyleBoxFlat_2")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_1")
-theme_override_styles/normal = SubResource("StyleBoxFlat_1")
-text = "❌ QUIT"
+script = ExtResource("4_kenney_button")
+button_style = 1
+color_pack = 1
+button_text = "❌ QUIT"
 
 [node name="AudioSettingsMenu" parent="." instance=ExtResource("2_audio_settings")]
 visible = false
