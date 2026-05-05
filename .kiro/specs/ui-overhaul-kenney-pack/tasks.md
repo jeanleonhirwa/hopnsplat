@@ -49,14 +49,14 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - _Requirements: 1.3_
 
 - [-] 2. Phase 2: Animation System - UI Juice Effects
-  - [-] 2.1 Create UIAnimationManager autoload singleton
+  - [x] 2.1 Create UIAnimationManager autoload singleton
     - Create `scripts/autoload/ui_animation_manager.gd` extending Node
     - Add to project.godot autoload configuration
     - Implement active_tweens array and MAX_CONCURRENT_TWEENS constant (10)
     - Implement register_tween(), cleanup_finished_tweens(), stop_all_tweens() methods
     - _Requirements: 3.5, 13.1_
 
-  - [ ] 2.2 Implement core juice effect methods
+  - [x] 2.2 Implement core juice effect methods
     - Implement bounce_in(node, duration) - scale from 1.0 to 1.1 with EASE_OUT
     - Implement squash(node, duration) - scale to 0.95 with EASE_IN
     - Implement pop_out(node, duration) - scale with TRANS_ELASTIC easing
@@ -64,13 +64,13 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - All methods should return Tween and call register_tween()
     - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5_
 
-  - [ ] 2.3 Implement additional animation effects
+  - [x] 2.3 Implement additional animation effects
     - Implement slide_in(node, direction, duration) for panel entrances
     - Implement fade_in(node, duration) for screen transitions
     - Implement count_up(label, from, to, duration) for currency animations
     - _Requirements: 15.2, 15.4_
 
-  - [ ] 2.4 Integrate animations into KenneyButton
+  - [-] 2.4 Integrate animations into KenneyButton
     - Add AnimationTween node reference to KenneyButton
     - Implement play_hover_animation() calling UIAnimationManager.bounce_in()
     - Implement play_press_animation() calling UIAnimationManager.squash()

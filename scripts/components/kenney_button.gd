@@ -55,7 +55,7 @@ enum ColorPack {
 @export var button_text: String = ""
 @export var enable_idle_wobble: bool = false
 
-# Animation settings (placeholders for Task 2.4)
+# Animation settings
 @export var hover_scale: float = 1.1
 @export var press_scale: float = 0.95
 @export var animation_duration: float = 0.15
@@ -67,6 +67,11 @@ enum ColorPack {
 # Child node references
 var icon_node: TextureRect
 var label_node: Label
+
+# Animation state tracking
+var current_tween: Tween = null
+var idle_wobble_tween: Tween = null
+var original_scale: Vector2 = Vector2.ONE
 
 # Texture cache for efficient state management
 var texture_cache: Dictionary = {}
@@ -115,6 +120,9 @@ const COLOR_NAMES: Dictionary = {
 
 
 func _ready() -> void:
+	# Store original scale for animations
+	original_scale = scale
+	
 	# Load and cache textures
 	_load_textures()
 	
@@ -127,7 +135,15 @@ func _ready() -> void:
 	# Validate touch target size (accessibility requirement)
 	_validate_touch_target_size()
 	
-	# Placeholder: Animation and sound integration will be added in later tasks
+	# Connect signals for animation integration
+	mouse_entered.connect(_on_mouse_entered)
+	mouse_exited.connect(_on_mouse_exited)
+	button_down.connect(_on_button_down)
+	button_up.connect(_on_button_up)
+	
+	# Start idle wobble if enabled
+	if enable_idle_wobble:
+		play_idle_wobble()
 
 
 func _load_textures() -> void:
@@ -278,15 +294,86 @@ func set_icon(texture: Texture2D) -> void:
 
 # Placeholder methods for animation integration (Task 2.4)
 func play_hover_animation() -> void:
-	"""Placeholder: Will be implemented in Task 2.4 with UIAnimationManager."""
-	pass
+	"""Play bounce-in animation when button is hovered."""
+	if disabled:
+		return
+	
+	# Cancel any existing animation
+	if current_tween and current_tween.is_running():
+		current_tween.kill()
+	
+	# Call UIAnimationManager to create bounce-in effect
+	current_tween = UIAnimationManager.bounce_in(self, animation_duration, hover_scale)
 
 
 func play_press_animation() -> void:
-	"""Placeholder: Will be implemented in Task 2.4 with UIAnimationManager."""
-	pass
+	"""Play squash animation when button is pressed."""
+	if disabled:
+		return
+	
+	# Cancel any existing animation
+	if current_tween and current_tween.is_running():
+		current_tween.kill()
+	
+	# Call UIAnimationManager to create squash effect
+	current_tween = UIAnimationManager.squash(self, animation_duration * 0.67, press_scale)
 
 
 func play_idle_wobble() -> void:
-	"""Placeholder: Will be implemented in Task 2.4 with UIAnimationManager."""
-	pass
+	"""Play subtle wobble animation for important buttons (loops)."""
+	if disabled:
+		return
+	
+	# Stop any existing wobble
+	if idle_wobble_tween and idle_wobble_tween.is_running():
+		idle_wobble_tween.kill()
+	
+	# Call UIAnimationManager to create wobble effect
+	# Use smaller angle (2 degrees) and longer duration (2.5s) for subtle effect
+	idle_wobble_tween = UIAnimationManager.wobble(self, true, 2.0, 2.5)
+
+
+func stop_idle_wobble() -> void:
+	"""Stop the idle wobble animation."""
+	if idle_wobble_tween and idle_wobble_tween.is_running():
+		idle_wobble_tween.kill()
+		rotation_degrees = 0.0
+
+
+func _on_mouse_entered() -> void:
+	"""Handle mouse enter event - play hover animation."""
+	play_hover_animation()
+
+
+func _on_mouse_exited() -> void:
+	"""Handle mouse exit event - return to normal scale."""
+	if disabled:
+		return
+	
+	# Cancel any existing animation
+	if current_tween and current_tween.is_running():
+		current_tween.kill()
+	
+	# Smoothly return to original scale
+	current_tween = create_tween()
+	current_tween.tween_property(self, "scale", original_scale, animation_duration * 0.5).set_ease(Tween.EASE_OUT)
+
+
+func _on_button_down() -> void:
+	"""Handle button press event - play press animation."""
+	play_press_animation()
+
+
+func _on_button_up() -> void:
+	"""Handle button release event - return to hover scale."""
+	if disabled:
+		return
+	
+	# Cancel any existing animation
+	if current_tween and current_tween.is_running():
+		current_tween.kill()
+	
+	# Return to hover scale (if mouse is still over button)
+	var target_scale = original_scale * hover_scale if is_hovered() else original_scale
+	current_tween = create_tween()
+	current_tween.tween_property(self, "scale", target_scale, animation_duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_ELASTIC)
