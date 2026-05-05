@@ -70,7 +70,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Implement count_up(label, from, to, duration) for currency animations
     - _Requirements: 15.2, 15.4_
 
-  - [-] 2.4 Integrate animations into KenneyButton
+  - [x] 2.4 Integrate animations into KenneyButton
     - Add AnimationTween node reference to KenneyButton
     - Implement play_hover_animation() calling UIAnimationManager.bounce_in()
     - Implement play_press_animation() calling UIAnimationManager.squash()
