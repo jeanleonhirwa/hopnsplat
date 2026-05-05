@@ -4,7 +4,7 @@ extends Control
 signal purchase_made(item_type: String, item_id: String)
 
 # UI References
-@onready var currency_label = $VBoxContainer/HeaderContainer/CurrencyLabel
+@onready var currency_label = $VBoxContainer/HeaderContainer/CurrencyPanel/HBoxContainer/CurrencyLabel
 @onready var skins_grid = $"VBoxContainer/TabContainer/Player Skins/SkinsGrid"
 @onready var upgrades_grid = $"VBoxContainer/TabContainer/Boost Upgrades/UpgradesGrid"
 @onready var powerups_grid = $"VBoxContainer/TabContainer/Power-ups/PowerupsGrid"
@@ -79,7 +79,7 @@ func save_shop_data():
 
 func update_currency_display():
 	"""Update the currency label"""
-	currency_label.text = "💰 Coins: " + str(current_currency)
+	currency_label.text = "Coins: " + str(current_currency)
 
 func populate_shop_items():
 	"""Create shop item buttons for each category"""

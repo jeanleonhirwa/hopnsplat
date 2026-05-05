@@ -1,20 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bmyj2knf5vwyc"]
+[gd_scene load_steps=7 format=3 uid="uid://bmyj2knf5vwyc"]
 
 [ext_resource type="Script" uid="uid://cg0ms1qhsbsxc" path="res://scripts/shop.gd" id="1_shop"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2"]
-bg_color = Color(0.3, 0.7, 1, 1)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1"]
-bg_color = Color(0.2, 0.6, 1, 0.9)
-corner_radius_top_left = 15
-corner_radius_top_right = 15
-corner_radius_bottom_right = 15
-corner_radius_bottom_left = 15
+[ext_resource type="Theme" uid="uid://c8j7xqm5yvn8r" path="res://resources/themes/kenney_ui_theme.tres" id="2_theme"]
+[ext_resource type="Script" path="res://scripts/components/kenney_button.gd" id="3_kenney_button"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/arrow_basic_w.png" id="4_arrow_icon"]
+[ext_resource type="Script" path="res://scripts/components/kenney_panel.gd" id="5_kenney_panel"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/star.png" id="6_coin_icon"]
 
 [node name="Shop" type="Control"]
 layout_mode = 3
@@ -23,6 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_theme")
 script = ExtResource("1_shop")
 
 [node name="Background" type="ColorRect" parent="."]
@@ -50,14 +42,13 @@ grow_vertical = 2
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="VBoxContainer/HeaderContainer"]
-custom_minimum_size = Vector2(80, 60)
+[node name="BackButton" type="TextureButton" parent="VBoxContainer/HeaderContainer"]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 24
-theme_override_styles/hover = SubResource("StyleBoxFlat_2")
-theme_override_styles/normal = SubResource("StyleBoxFlat_1")
-text = "←"
+script = ExtResource("3_kenney_button")
+button_style = 22
+color_pack = 0
+icon_texture = ExtResource("4_arrow_icon")
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer/HeaderContainer"]
 layout_mode = 2
@@ -68,13 +59,39 @@ text = "🛒 SHOP"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CurrencyLabel" type="Label" parent="VBoxContainer/HeaderContainer"]
-custom_minimum_size = Vector2(150, 0)
+[node name="CurrencyPanel" type="NinePatchRect" parent="VBoxContainer/HeaderContainer"]
+custom_minimum_size = Vector2(180, 60)
 layout_mode = 2
+script = ExtResource("5_kenney_panel")
+panel_style = 1
+color_pack = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HeaderContainer/CurrencyPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="CoinIcon" type="TextureRect" parent="VBoxContainer/HeaderContainer/CurrencyPanel/HBoxContainer"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+texture = ExtResource("6_coin_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CurrencyLabel" type="Label" parent="VBoxContainer/HeaderContainer/CurrencyPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.8, 0, 1)
 theme_override_font_sizes/font_size = 20
-text = "💰 Coins: 0"
-horizontal_alignment = 2
+text = "Coins: 0"
 vertical_alignment = 1
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]

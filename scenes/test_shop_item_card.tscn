@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://test_shop_item_card"]
+
+[ext_resource type="PackedScene" uid="uid://c8vx7y3m4n2p1" path="res://scenes/components/ShopItemCard.tscn" id="1_shop_card"]
+[ext_resource type="Texture2D" uid="uid://c9216c5bac9590f5f2de5f21fcca1e69" path="res://assets/p1_spritesheet/alienPink.png" id="2_alien_icon"]
+
+[node name="TestShopItemCard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.3, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = -250.0
+offset_right = 160.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "ShopItemCard Component Test"
+horizontal_alignment = 1
+
+[node name="ShopItemCard1" parent="VBoxContainer" instance=ExtResource("1_shop_card")]
+layout_mode = 2
+item_name = "Pink Alien Skin"
+item_description = "The classic pink alien look"
+item_price = 0
+item_icon = ExtResource("2_alien_icon")
+is_purchased = false
+is_equipped = false
+
+[node name="ShopItemCard2" parent="VBoxContainer" instance=ExtResource("1_shop_card")]
+layout_mode = 2
+item_name = "Speed Boost"
+item_description = "Increases movement speed by 20%"
+item_price = 150
+item_icon = ExtResource("2_alien_icon")
+is_purchased = true
+is_equipped = false
+
+[node name="ShopItemCard3" parent="VBoxContainer" instance=ExtResource("1_shop_card")]
+layout_mode = 2
+item_name = "Double Jump"
+item_description = "Allows you to jump twice in mid-air"
+item_price = 250
+item_icon = ExtResource("2_alien_icon")
+is_purchased = true
+is_equipped = true

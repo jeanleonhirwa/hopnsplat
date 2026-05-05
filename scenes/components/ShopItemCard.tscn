@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8vx7y3m4n2p1"]
+
+[ext_resource type="Script" path="res://scripts/components/shop_item_card.gd" id="1_shop_item_card"]
+
+[node name="ShopItemCard" type="NinePatchRect"]
+custom_minimum_size = Vector2(300, 150)
+offset_right = 300.0
+offset_bottom = 150.0
+script = ExtResource("1_shop_item_card")

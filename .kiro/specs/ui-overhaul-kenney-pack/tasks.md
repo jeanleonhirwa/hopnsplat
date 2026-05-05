@@ -137,7 +137,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - _Requirements: 5.3_
 
 - [ ] 6. Phase 5: Shop Screen Overhaul
-  - [ ] 6.1 Create ShopItemCard reusable component
+  - [x] 6.1 Create ShopItemCard reusable component
     - Create `scenes/components/ShopItemCard.tscn` with KenneyPanel root
     - Add ItemIcon (TextureRect), ItemName (Label), ItemDescription (Label)
     - Add PricePanel (KenneyPanel) with CoinIcon and PriceLabel
@@ -146,25 +146,25 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Create `scripts/components/shop_item_card.gd` with item data properties
     - _Requirements: 6.2_
 
-  - [ ] 6.2 Convert Shop.tscn header to use Kenney components
+  - [-] 6.2 Convert Shop.tscn header to use Kenney components
     - Replace BackButton with KenneyButton (SQUARE_DEPTH_GLOSS, arrow icon)
     - Wrap CurrencyLabel in KenneyPanel with coin icon
     - Apply kenney_ui_theme to Shop scene
     - _Requirements: 6.1, 6.4_
 
-  - [ ] 6.3 Style TabContainer with Kenney textures
+  - [~] 6.3 Style TabContainer with Kenney textures
     - Configure TabContainer to use Yellow button textures for tabs
     - Active tab: button_rectangle_depth_gloss.png
     - Inactive tab: button_rectangle_flat.png with 80% opacity
     - _Requirements: 6.1_
 
-  - [ ] 6.4 Implement tab switching animation
+  - [~] 6.4 Implement tab switching animation
     - In shop.gd, connect TabContainer tab_changed signal
     - Implement slide-in animation (0.3s) when switching tabs
     - Use UIAnimationManager.slide_in() with direction from right
     - _Requirements: 6.3_
 
-  - [ ] 6.5 Implement purchase animation sequence
+  - [~] 6.5 Implement purchase animation sequence
     - In ShopItemCard, implement _on_purchase_button_pressed()
     - Button press animation (0.1s)
     - Coin icon flies from item to header currency display (0.5s with arc motion)
@@ -173,7 +173,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Spawn particle burst at item location using star textures
     - _Requirements: 6.6_
 
-  - [ ] 6.6 Add particle system for purchase celebrations
+  - [~] 6.6 Add particle system for purchase celebrations
     - Create CPUParticles2D or GPUParticles2D with star.png texture
     - Configure particle settings: 20-30 particles, 0.8s lifetime, explosiveness 1.0
     - Implement spawn_celebration_particles() method in shop.gd
@@ -184,14 +184,14 @@ This implementation plan breaks down the UI overhaul into actionable coding task
   - Ensure all tests pass, verify MainMenu and Shop screens work correctly with animations and sounds, ask the user if questions arise.
 
 - [ ] 8. Phase 6: PauseScreen Overhaul
-  - [ ] 8.1 Convert PauseScreen.tscn to use Kenney components
+  - [~] 8.1 Convert PauseScreen.tscn to use Kenney components
     - Replace PausePanel with KenneyPanel (RECTANGLE_DEPTH, Yellow, 85% opacity)
     - Wrap ScoreLabel in KenneyPanel with star icon
     - Wrap CoinsLabel in KenneyPanel with coin icon
     - Add Divider TextureRect nodes with divider_edges.png
     - _Requirements: 7.1, 7.2, 7.4_
 
-  - [ ] 8.2 Replace PauseScreen buttons with KenneyButton
+  - [~] 8.2 Replace PauseScreen buttons with KenneyButton
     - Replace ResumeButton with KenneyButton (RECTANGLE_DEPTH_GLOSS, Yellow, play icon)
     - Replace SettingsButton with KenneyButton (RECTANGLE_GLOSS, Yellow, gear icon)
     - Replace RestartButton with KenneyButton (RECTANGLE_GLOSS, Yellow, repeat icon)
@@ -199,7 +199,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - All buttons 350x60px
     - _Requirements: 7.1, 7.5_
 
-  - [ ] 8.3 Implement PauseScreen entrance animation
+  - [~] 8.3 Implement PauseScreen entrance animation
     - In pause_screen.gd _ready(), implement animation sequence
     - Background fades in (0.2s)
     - Panel zooms in with elastic easing (0.4s, scale from 0.5 to 1.0)
@@ -207,26 +207,26 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - _Requirements: 7.3_
 
 - [ ] 9. Phase 6: GameOver Screen Overhaul
-  - [ ] 9.1 Convert GameOver.tscn to use Kenney components
+  - [~] 9.1 Convert GameOver.tscn to use Kenney components
     - Replace panel with KenneyPanel (RECTANGLE_DEPTH, Yellow)
     - Wrap FinalScoreLabel, CurrencyEarnedLabel, JumpsLabel, HighScoreLabel in KenneyPanel instances
     - Add appropriate icons (star, coin) to stat panels
     - _Requirements: 8.1_
 
-  - [ ] 9.2 Implement star rating system
+  - [~] 9.2 Implement star rating system
     - Add StarRating HBoxContainer with 3 TextureRect nodes
     - Implement star rating logic: 1 star (score > 0), 2 stars (score > 50), 3 stars (score > 100)
     - Use star.png for filled, star_outline.png for empty
     - Animate stars filling in sequence with pop effect (0.2s each, 0.1s delay)
     - _Requirements: 8.2_
 
-  - [ ] 9.3 Replace GameOver buttons with KenneyButton
+  - [~] 9.3 Replace GameOver buttons with KenneyButton
     - Replace ContinueButton with KenneyButton (RECTANGLE_DEPTH_GLOSS, Yellow, 350x80px, TV icon, idle wobble enabled)
     - Replace RestartButton with KenneyButton (RECTANGLE_DEPTH_GLOSS, Yellow, 350x60px, repeat icon)
     - Replace MenuButton with KenneyButton (RECTANGLE_GLOSS, Yellow, 350x60px, home icon)
     - _Requirements: 8.3_
 
-  - [ ] 9.4 Implement new high score celebration animation
+  - [~] 9.4 Implement new high score celebration animation
     - In game_over.gd _ready(), detect if new high score achieved
     - Title flashes between colors (0.5s loop, 3 times)
     - Spawn particle burst from title using star textures
@@ -234,7 +234,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Play celebration sound effect
     - _Requirements: 8.4_
 
-  - [ ] 9.5 Add CelebrationParticles system
+  - [~] 9.5 Add CelebrationParticles system
     - Add CPUParticles2D node to GameOver scene
     - Configure for star texture burst effect
     - Trigger on new high score detection
@@ -244,7 +244,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
   - Ensure all tests pass, verify PauseScreen and GameOver work correctly with entrance animations, ask the user if questions arise.
 
 - [ ] 11. Phase 7: Achievements Screen Overhaul
-  - [ ] 11.1 Create AchievementCard reusable component
+  - [~] 11.1 Create AchievementCard reusable component
     - Create `scenes/components/AchievementCard.tscn` with KenneyPanel root
     - Add IconContainer with IconBackground (button_square_depth_gloss.png) and AchievementIcon
     - Add InfoContainer with TitleLabel, DescriptionLabel, ProgressBar (KenneySlider for progressive achievements)
@@ -253,27 +253,27 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Create `scripts/components/achievement_card.gd` with achievement data properties
     - _Requirements: 9.1, 9.2, 9.4_
 
-  - [ ] 11.2 Convert Achievements.tscn to use Kenney components
+  - [~] 11.2 Convert Achievements.tscn to use Kenney components
     - Replace BackButton with KenneyButton (SQUARE_DEPTH_GLOSS, arrow icon)
     - Wrap ProgressLabel in KenneyPanel with star icon
     - Add Divider TextureRect with divider_edges.png
     - Replace achievement list with AchievementCard instances
     - _Requirements: 9.1_
 
-  - [ ] 11.3 Implement locked/unlocked visual states
+  - [~] 11.3 Implement locked/unlocked visual states
     - In AchievementCard, implement set_locked(bool) method
     - Locked: Show grey overlay (0.6 alpha), star_outline.png, desaturated icon
     - Unlocked: Full color, star.png, no overlay
     - _Requirements: 9.2, 9.4_
 
-  - [ ] 11.4 Implement progress bar for progressive achievements
+  - [~] 11.4 Implement progress bar for progressive achievements
     - Use KenneySlider component in read-only mode
     - Show "X/Y" text overlay on progress bar
     - Animate fill when progress updates (0.3s smooth transition)
     - Hide progress bar for one-time achievements
     - _Requirements: 9.3_
 
-  - [ ] 11.5 Implement achievement unlock animation
+  - [~] 11.5 Implement achievement unlock animation
     - In AchievementCard, implement play_unlock_animation() method
     - Card shakes (0.2s)
     - Overlay fades out (0.3s)
@@ -284,7 +284,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - _Requirements: 9.5_
 
 - [ ] 12. Phase 8: AudioSettingsMenu Overhaul
-  - [ ] 12.1 Create KenneySlider component
+  - [~] 12.1 Create KenneySlider component
     - Create `scripts/components/kenney_slider.gd` with class_name KenneySlider extending HSlider
     - Add Background (TextureRect with slide_horizontal_grey.png)
     - Add Fill (TextureRect with slide_horizontal_color.png)
@@ -293,7 +293,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Add @export properties: slider_color, show_value_label, value_suffix
     - _Requirements: 10.1, 10.2_
 
-  - [ ] 12.2 Implement KenneySlider animations
+  - [~] 12.2 Implement KenneySlider animations
     - Implement play_handle_animation() for value changes
     - Handle hover: Scale to 1.1 (0.1s)
     - Handle drag: Scale to 1.15 (0.1s)
@@ -301,7 +301,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Fill bar: Smooth transition (0.2s)
     - _Requirements: 10.3_
 
-  - [ ] 12.3 Convert AudioSettingsMenu.tscn to use Kenney components
+  - [~] 12.3 Convert AudioSettingsMenu.tscn to use Kenney components
     - Replace BackButton with KenneyButton (SQUARE_DEPTH_GLOSS, arrow icon)
     - Wrap each volume row in KenneyPanel
     - Add IconPanel with speaker icon for each volume control
@@ -309,14 +309,14 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Add ValueLabel showing percentage next to each slider
     - _Requirements: 10.1, 10.5_
 
-  - [ ] 12.4 Implement checkbox toggles with Kenney textures
+  - [~] 12.4 Implement checkbox toggles with Kenney textures
     - Replace checkbox controls with TextureButton
     - Unchecked: check_square_grey.png
     - Checked: check_square_color_checkmark.png (Yellow)
     - Implement toggle animation: Checkmark fades in with scale (0.2s)
     - _Requirements: 10.4_
 
-  - [ ] 12.5 Connect sliders to AudioManager
+  - [~] 12.5 Connect sliders to AudioManager
     - Connect each KenneySlider value_changed signal to AudioManager methods
     - Implement real-time feedback: value changes immediately update AudioManager
     - Add TestSoundButton (KenneyButton) that plays click-a.ogg at current SFX volume
@@ -327,7 +327,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
   - Ensure all tests pass, verify all six screens use Kenney components correctly, ask the user if questions arise.
 
 - [ ] 14. Phase 9: Polish and Optimization
-  - [ ] 14.1 Add particle effects for significant actions
+  - [~] 14.1 Add particle effects for significant actions
     - Shop purchase: Star burst (already implemented in 6.6)
     - Achievement unlock: Star burst (already implemented in 11.5)
     - High score: Star burst (already implemented in 9.5)
@@ -335,40 +335,40 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Level up or milestone: Confetti-style particle effect
     - _Requirements: 15.1_
 
-  - [ ] 14.2 Implement screen transition animations
+  - [~] 14.2 Implement screen transition animations
     - Create screen_transition.gd utility script
     - Implement fade_to_scene(scene_path, duration) method
     - Implement slide_to_scene(scene_path, direction, duration) method
     - Apply to all scene changes in main_menu.gd, shop.gd, etc.
     - _Requirements: 15.2_
 
-  - [ ] 14.3 Add floating animations to decorative elements
+  - [~] 14.3 Add floating animations to decorative elements
     - Implement subtle floating animation for MainMenu stars
     - Add gentle rotation to decorative arrows
     - Use UIAnimationManager with looping tweens
     - _Requirements: 15.3_
 
-  - [ ] 14.4 Implement currency count-up animations
+  - [~] 14.4 Implement currency count-up animations
     - Use UIAnimationManager.count_up() for currency changes
     - Add bounce effect when currency increases
     - Apply to MainMenu, Shop, GameOver currency displays
     - _Requirements: 15.4_
 
-  - [ ] 14.5 Validate touch target sizes
+  - [~] 14.5 Validate touch target sizes
     - Create editor tool script to scan all scenes for button sizes
     - Ensure all KenneyButton instances meet 44x44px minimum
     - Add warnings in KenneyButton _ready() for violations
     - Fix any buttons below minimum size
     - _Requirements: 14.1, 2.4_
 
-  - [ ] 14.6 Optimize texture atlases and draw calls
+  - [~] 14.6 Optimize texture atlases and draw calls
     - Create texture atlas for Yellow pack button textures
     - Create texture atlas for icon textures
     - Update Theme resource to use atlas textures
     - Measure draw call reduction using Godot profiler
     - _Requirements: 13.2_
 
-  - [ ] 14.7 Performance profiling and optimization
+  - [~] 14.7 Performance profiling and optimization
     - Profile all six screens with Godot profiler
     - Verify 60 FPS maintained during animations
     - Check memory usage stays under 50MB for UI
@@ -376,7 +376,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Document performance metrics
     - _Requirements: 13.1, 13.4, 13.5_
 
-  - [ ] 14.8 Accessibility audit
+  - [~] 14.8 Accessibility audit
     - Verify all touch targets meet 44x44px minimum (from 14.5)
     - Check text contrast ratios against Kenney backgrounds
     - Ensure all interactive elements have visible focus indicators
