@@ -5,6 +5,7 @@ signal purchase_made(item_type: String, item_id: String)
 
 # UI References
 @onready var currency_label = $VBoxContainer/HeaderContainer/CurrencyPanel/HBoxContainer/CurrencyLabel
+@onready var tab_container = $VBoxContainer/TabContainer
 @onready var skins_grid = $"VBoxContainer/TabContainer/Player Skins/SkinsGrid"
 @onready var upgrades_grid = $"VBoxContainer/TabContainer/Boost Upgrades/UpgradesGrid"
 @onready var powerups_grid = $"VBoxContainer/TabContainer/Power-ups/PowerupsGrid"
@@ -38,6 +39,9 @@ func _ready():
 	load_shop_data()
 	update_currency_display()
 	populate_shop_items()
+	
+	# Connect tab_changed signal for slide-in animation
+	tab_container.tab_changed.connect(_on_tab_changed)
 
 func load_shop_data():
 	"""Load currency and purchased items from save file"""
@@ -194,6 +198,17 @@ func _on_item_purchased(item: Dictionary, category: String):
 		# Emit signal for game to handle
 		emit_signal("purchase_made", category, item["id"])
 
+
+func animate_currency_update(old_value: int, new_value: int) -> void:
+	"""Animate the currency count-up when a purchase is made."""
+	# Use UIAnimationManager to count up from old to new value
+	UIAnimationManager.count_up(currency_label, old_value, new_value, 0.3)
+	
+	# Add a bounce effect to the currency panel
+	var currency_panel = $VBoxContainer/HeaderContainer/CurrencyPanel
+	if currency_panel:
+		UIAnimationManager.bounce_in(currency_panel, 0.2, 1.05)
+
 func _purchase_item(item_key: String, price: int) -> bool:
 	"""Purchase an item if player has enough currency"""
 	if current_currency >= price:
@@ -221,7 +236,82 @@ func _on_back_button_pressed():
 	"""Return to main menu"""
 	get_tree().change_scene_to_file("res://scenes/MainMenu.tscn")
 
+
+func _on_tab_changed(tab_index: int):
+	"""Handle tab switching with slide-in animation"""
+	# Get the current tab content
+	var current_tab = tab_container.get_child(tab_index)
+	
+	if current_tab:
+		# Apply slide-in animation from the right
+		UIAnimationManager.slide_in(current_tab, Vector2.RIGHT, 0.3)
+
 func set_currency(amount: int):
 	"""Set current currency amount (called from main menu)"""
 	current_currency = amount
 	update_currency_display()
+
+
+func spawn_celebration_particles(global_pos: Vector2) -> void:
+	"""Spawn a particle burst at the specified global position for celebration events.
+	
+	This is a global method that can be used for various celebration events in the shop,
+	such as first purchase, milestone achievements, or special unlocks.
+	
+	Args:
+		global_pos: The global position where particles should spawn
+	"""
+	# Create particle system
+	var particles = CPUParticles2D.new()
+	
+	# Add to the shop scene
+	add_child(particles)
+	
+	# Position at the specified location
+	particles.global_position = global_pos
+	
+	# Configure particle properties (matching Task 6.5 specifications)
+	particles.emitting = false
+	particles.amount = 25  # 20-30 particles as specified
+	particles.lifetime = 0.8  # 0.8s lifetime as specified
+	particles.one_shot = true
+	particles.explosiveness = 1.0  # Explosiveness 1.0 as specified
+	particles.randomness = 0.5
+	
+	# Set texture
+	particles.texture = load("res://assets/ui_packs/Yellow/Default/star.png")
+	
+	# Emission shape (circle)
+	particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
+	particles.emission_sphere_radius = 20.0
+	
+	# Direction and spread
+	particles.direction = Vector2(0, -1)
+	particles.spread = 180.0
+	
+	# Velocity
+	particles.initial_velocity_min = 100.0
+	particles.initial_velocity_max = 200.0
+	
+	# Gravity
+	particles.gravity = Vector2(0, 300)
+	
+	# Scale
+	particles.scale_amount_min = 0.3
+	particles.scale_amount_max = 0.6
+	
+	# Color (yellow/gold tint)
+	particles.color = Color(1.0, 0.9, 0.3, 1.0)
+	
+	# Fade out over lifetime
+	var gradient = Gradient.new()
+	gradient.add_point(0.0, Color(1, 1, 1, 1))
+	gradient.add_point(1.0, Color(1, 1, 1, 0))
+	particles.color_ramp = gradient
+	
+	# Start emitting
+	particles.emitting = true
+	
+	# Auto-cleanup after lifetime (as specified in task)
+	await get_tree().create_timer(particles.lifetime + 0.1).timeout
+	particles.queue_free()

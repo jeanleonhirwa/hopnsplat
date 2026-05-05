@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=13 format=3 uid="uid://c8j7xqm5yvn8r"]
+[gd_resource type="Theme" load_steps=17 format=3 uid="uid://c8j7xqm5yvn8r"]
 
 [ext_resource type="Texture2D" uid="uid://dxqxqxqxqxqxq" path="res://assets/ui_packs/Yellow/Default/button_rectangle_depth_gloss.png" id="1_button_rect_depth"]
 [ext_resource type="Texture2D" uid="uid://dxqxqxqxqxqxr" path="res://assets/ui_packs/Yellow/Default/button_round_depth_gloss.png" id="2_button_round_depth"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dxqxqxqxqxqxu" path="res://assets/ui_packs/Yellow/Default/slide_horizontal_grey.png" id="5_slider_bg"]
 [ext_resource type="Texture2D" uid="uid://dxqxqxqxqxqxv" path="res://assets/ui_packs/Yellow/Default/slide_horizontal_color.png" id="6_slider_fill"]
 [ext_resource type="FontFile" uid="uid://dxqxqxqxqxqxw" path="res://addons/admob/assets/fonts/arial.ttf" id="7_font"]
+[ext_resource type="Texture2D" uid="uid://dxqxqxqxqxqxy" path="res://assets/ui_packs/Yellow/Default/button_rectangle_flat.png" id="8_tab_inactive"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_button_normal"]
 texture = ExtResource("1_button_rect_depth")
@@ -52,6 +53,32 @@ texture_margin_left = 5.0
 texture_margin_top = 5.0
 texture_margin_right = 5.0
 texture_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tab_selected"]
+texture = ExtResource("1_button_rect_depth")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(0, 0, 190, 49)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tab_unselected"]
+texture = ExtResource("8_tab_inactive")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(0, 0, 190, 49)
+modulate_color = Color(1, 1, 1, 0.8)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tab_hover"]
+texture = ExtResource("8_tab_inactive")
+texture_margin_left = 10.0
+texture_margin_top = 10.0
+texture_margin_right = 10.0
+texture_margin_bottom = 10.0
+region_rect = Rect2(0, 0, 190, 49)
+modulate_color = Color(1, 1, 1, 0.9)
 
 [resource]
 default_font = ExtResource("7_font")
@@ -117,3 +144,21 @@ VSlider/constants/grabber_offset = 0
 VSlider/styles/grabber_area = SubResource("StyleBoxTexture_slider_fill")
 VSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_slider_fill")
 VSlider/styles/slider = SubResource("StyleBoxTexture_slider_bg")
+
+TabContainer/colors/font_disabled_color = Color(0.5, 0.5, 0.5, 1)
+TabContainer/colors/font_hovered_color = Color(1, 1, 1, 1)
+TabContainer/colors/font_outline_color = Color(0, 0, 0, 1)
+TabContainer/colors/font_selected_color = Color(1, 1, 1, 1)
+TabContainer/colors/font_unselected_color = Color(0.9, 0.9, 0.9, 1)
+TabContainer/constants/icon_max_width = 0
+TabContainer/constants/icon_separation = 4
+TabContainer/constants/outline_size = 0
+TabContainer/constants/side_margin = 8
+TabContainer/font_sizes/font_size = 18
+TabContainer/fonts/font = ExtResource("7_font")
+TabContainer/styles/panel = SubResource("StyleBoxTexture_panel")
+TabContainer/styles/tab_disabled = SubResource("StyleBoxTexture_tab_unselected")
+TabContainer/styles/tab_focus = SubResource("StyleBoxTexture_tab_hover")
+TabContainer/styles/tab_hovered = SubResource("StyleBoxTexture_tab_hover")
+TabContainer/styles/tab_selected = SubResource("StyleBoxTexture_tab_selected")
+TabContainer/styles/tab_unselected = SubResource("StyleBoxTexture_tab_unselected")

@@ -215,7 +215,9 @@ func _on_purchase_button_pressed() -> void:
 		# Emit equip signal
 		equip_requested.emit(item_id)
 	else:
-		# Emit purchase signal
+		# Play purchase animation sequence before emitting signal
+		await play_purchase_animation()
+		# Emit purchase signal after animation
 		purchase_requested.emit(item_id)
 
 
@@ -254,6 +256,158 @@ func set_equipped(equipped: bool) -> void:
 
 func play_purchase_animation() -> void:
 	"""Play the purchase celebration animation sequence."""
-	# This will be implemented in Task 6.5
-	# For now, just update the state
+	# Task 6.5: Purchase animation sequence
+	# 1. Button press animation (0.1s)
+	# 2. Coin icon flies from item to header currency display (0.5s with arc motion)
+	# 3. Currency count-up animation (0.3s)
+	# 4. Checkmark appears with pop-out animation (0.2s)
+	# 5. Spawn particle burst at item location using star textures
+	
+	# 1. Button press animation (0.1s)
+	UIAnimationManager.squash(purchase_button, 0.1)
+	await get_tree().create_timer(0.1).timeout
+	
+	# Play purchase sound
+	AudioManager.play_ui_click()
+	
+	# 2. Coin icon flies from item to header currency display (0.5s with arc motion)
+	await _animate_coin_fly()
+	
+	# 3. Currency count-up animation (0.3s) - handled by Shop script
+	# The Shop script will handle updating the currency display
+	
+	# 4. Checkmark appears with pop-out animation (0.2s)
+	equipped_checkmark.visible = true
+	equipped_checkmark.scale = Vector2.ZERO
+	UIAnimationManager.pop_out(equipped_checkmark, 0.2)
+	
+	# 5. Spawn particle burst at item location using star textures
+	_spawn_purchase_particles()
+	
+	# Update the card state to purchased
 	set_purchased(true)
+
+
+func _animate_coin_fly() -> void:
+	"""Animate a coin flying from the item to the currency display in the header."""
+	# Create a temporary coin icon for the animation
+	var flying_coin = TextureRect.new()
+	flying_coin.texture = load("res://assets/ui_packs/Yellow/Default/star.png")
+	flying_coin.custom_minimum_size = Vector2(32, 32)
+	flying_coin.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+	flying_coin.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	
+	# Find the Shop node (traverse up the tree)
+	var shop_node = get_tree().current_scene
+	if shop_node and shop_node.name == "Shop":
+		shop_node.add_child(flying_coin)
+		
+		# Get the global position of the coin icon in the price panel
+		var start_pos = coin_icon_node.global_position
+		
+		# Get the global position of the currency display in the header
+		var currency_icon = shop_node.get_node_or_null("VBoxContainer/HeaderContainer/CurrencyPanel/HBoxContainer/CoinIcon")
+		var end_pos = currency_icon.global_position if currency_icon else start_pos + Vector2(0, -200)
+		
+		# Set initial position
+		flying_coin.global_position = start_pos
+		
+		# Create arc motion using a tween with custom interpolation
+		var tween = create_tween()
+		tween.set_parallel(true)
+		
+		# Animate X position linearly
+		tween.tween_property(flying_coin, "global_position:x", end_pos.x, 0.5).set_ease(Tween.EASE_IN_OUT)
+		
+		# Animate Y position with arc (ease out then ease in for parabolic motion)
+		var mid_y = min(start_pos.y, end_pos.y) - 100  # Arc peak 100 pixels above
+		tween.tween_method(
+			func(t: float):
+				# Quadratic bezier curve for arc motion
+				var p0 = start_pos.y
+				var p1 = mid_y
+				var p2 = end_pos.y
+				var y = (1-t)*(1-t)*p0 + 2*(1-t)*t*p1 + t*t*p2
+				flying_coin.global_position.y = y,
+			0.0, 1.0, 0.5
+		).set_ease(Tween.EASE_IN_OUT)
+		
+		# Add a slight rotation during flight
+		tween.tween_property(flying_coin, "rotation_degrees", 360, 0.5).set_ease(Tween.EASE_IN_OUT)
+		
+		# Scale down slightly during flight
+		tween.tween_property(flying_coin, "scale", Vector2(0.7, 0.7), 0.25).set_ease(Tween.EASE_OUT)
+		tween.tween_property(flying_coin, "scale", Vector2(1.2, 1.2), 0.25).set_ease(Tween.EASE_IN).set_delay(0.25)
+		
+		# Wait for animation to complete
+		await tween.finished
+		
+		# Trigger currency count-up animation in Shop
+		if shop_node.has_method("animate_currency_update"):
+			var old_currency = shop_node.current_currency + item_price  # Before purchase
+			var new_currency = shop_node.current_currency  # After purchase
+			shop_node.animate_currency_update(old_currency, new_currency)
+		
+		# Cleanup the flying coin
+		flying_coin.queue_free()
+	else:
+		# If we can't find the shop node, just wait for the duration
+		await get_tree().create_timer(0.5).timeout
+
+
+func _spawn_purchase_particles() -> void:
+	"""Spawn a particle burst at the item location using star textures."""
+	# Create particle system
+	var particles = CPUParticles2D.new()
+	
+	# Add to the card
+	add_child(particles)
+	
+	# Position at center of card
+	particles.position = size / 2
+	
+	# Configure particle properties
+	particles.emitting = false
+	particles.amount = 25
+	particles.lifetime = 0.8
+	particles.one_shot = true
+	particles.explosiveness = 1.0
+	particles.randomness = 0.5
+	
+	# Set texture
+	particles.texture = load("res://assets/ui_packs/Yellow/Default/star.png")
+	
+	# Emission shape (circle)
+	particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
+	particles.emission_sphere_radius = 20.0
+	
+	# Direction and spread
+	particles.direction = Vector2(0, -1)
+	particles.spread = 180.0
+	
+	# Velocity
+	particles.initial_velocity_min = 100.0
+	particles.initial_velocity_max = 200.0
+	
+	# Gravity
+	particles.gravity = Vector2(0, 300)
+	
+	# Scale
+	particles.scale_amount_min = 0.3
+	particles.scale_amount_max = 0.6
+	
+	# Color (yellow/gold tint)
+	particles.color = Color(1.0, 0.9, 0.3, 1.0)
+	
+	# Fade out over lifetime
+	var gradient = Gradient.new()
+	gradient.add_point(0.0, Color(1, 1, 1, 1))
+	gradient.add_point(1.0, Color(1, 1, 1, 0))
+	particles.color_ramp = gradient
+	
+	# Start emitting
+	particles.emitting = true
+	
+	# Auto-cleanup after lifetime
+	await get_tree().create_timer(particles.lifetime + 0.1).timeout
+	particles.queue_free()

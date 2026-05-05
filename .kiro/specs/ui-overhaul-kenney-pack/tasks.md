@@ -146,25 +146,25 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Create `scripts/components/shop_item_card.gd` with item data properties
     - _Requirements: 6.2_
 
-  - [-] 6.2 Convert Shop.tscn header to use Kenney components
+  - [x] 6.2 Convert Shop.tscn header to use Kenney components
     - Replace BackButton with KenneyButton (SQUARE_DEPTH_GLOSS, arrow icon)
     - Wrap CurrencyLabel in KenneyPanel with coin icon
     - Apply kenney_ui_theme to Shop scene
     - _Requirements: 6.1, 6.4_
 
-  - [~] 6.3 Style TabContainer with Kenney textures
+  - [x] 6.3 Style TabContainer with Kenney textures
     - Configure TabContainer to use Yellow button textures for tabs
     - Active tab: button_rectangle_depth_gloss.png
     - Inactive tab: button_rectangle_flat.png with 80% opacity
     - _Requirements: 6.1_
 
-  - [~] 6.4 Implement tab switching animation
+  - [x] 6.4 Implement tab switching animation
     - In shop.gd, connect TabContainer tab_changed signal
     - Implement slide-in animation (0.3s) when switching tabs
     - Use UIAnimationManager.slide_in() with direction from right
     - _Requirements: 6.3_
 
-  - [~] 6.5 Implement purchase animation sequence
+  - [x] 6.5 Implement purchase animation sequence
     - In ShopItemCard, implement _on_purchase_button_pressed()
     - Button press animation (0.1s)
     - Coin icon flies from item to header currency display (0.5s with arc motion)
@@ -173,7 +173,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Spawn particle burst at item location using star textures
     - _Requirements: 6.6_
 
-  - [~] 6.6 Add particle system for purchase celebrations
+  - [x] 6.6 Add particle system for purchase celebrations
     - Create CPUParticles2D or GPUParticles2D with star.png texture
     - Configure particle settings: 20-30 particles, 0.8s lifetime, explosiveness 1.0
     - Implement spawn_celebration_particles() method in shop.gd
@@ -184,7 +184,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
   - Ensure all tests pass, verify MainMenu and Shop screens work correctly with animations and sounds, ask the user if questions arise.
 
 - [ ] 8. Phase 6: PauseScreen Overhaul
-  - [~] 8.1 Convert PauseScreen.tscn to use Kenney components
+  - [ ] 8.1 Convert PauseScreen.tscn to use Kenney components
     - Replace PausePanel with KenneyPanel (RECTANGLE_DEPTH, Yellow, 85% opacity)
     - Wrap ScoreLabel in KenneyPanel with star icon
     - Wrap CoinsLabel in KenneyPanel with coin icon
