@@ -12,14 +12,14 @@ This implementation plan breaks down the UI overhaul into actionable coding task
 
 ## Tasks
 
-- [ ] 1. Phase 1: Foundation Setup - Asset Integration and Core Components
-  - [ ] 1.1 Verify and configure Kenney asset import settings
+- [-] 1. Phase 1: Foundation Setup - Asset Integration and Core Components
+  - [x] 1.1 Verify and configure Kenney asset import settings
     - Verify all PNG textures in `assets/ui_packs/` have correct import settings (mipmaps off, filter on, VRAM compression mode 2)
     - Create import preset for Kenney UI textures if needed
     - Document any missing or incorrectly imported assets
     - _Requirements: 1.1, 1.4_
 
-  - [ ] 1.2 Create Kenney UI Theme resource
+  - [-] 1.2 Create Kenney UI Theme resource
     - Create `resources/themes/kenney_ui_theme.tres` file
     - Configure StyleBoxTexture resources for Yellow pack button textures (rectangle_depth_gloss, round_depth_gloss, square_depth_gloss)
     - Set up font configurations (arial.ttf, sizes, colors)
