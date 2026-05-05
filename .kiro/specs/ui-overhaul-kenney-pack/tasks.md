@@ -199,7 +199,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - All buttons 350x60px
     - _Requirements: 7.1, 7.5_
 
-  - [ ] 8.3 Implement PauseScreen entrance animation
+  - [x] 8.3 Implement PauseScreen entrance animation
     - In pause_screen.gd _ready(), implement animation sequence
     - Background fades in (0.2s)
     - Panel zooms in with elastic easing (0.4s, scale from 0.5 to 1.0)
@@ -207,7 +207,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - _Requirements: 7.3_
 
 - [ ] 9. Phase 6: GameOver Screen Overhaul
-  - [~] 9.1 Convert GameOver.tscn to use Kenney components
+  - [-] 9.1 Convert GameOver.tscn to use Kenney components
     - Replace panel with KenneyPanel (RECTANGLE_DEPTH, Yellow)
     - Wrap FinalScoreLabel, CurrencyEarnedLabel, JumpsLabel, HighScoreLabel in KenneyPanel instances
     - Add appropriate icons (star, coin) to stat panels

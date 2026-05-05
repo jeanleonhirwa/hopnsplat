@@ -5,13 +5,13 @@ signal restart_requested
 signal continue_requested
 
 # UI References
-@onready var final_score_label = $FinalScoreLabel
-@onready var currency_earned_label = $CurrencyEarnedLabel
-@onready var jumps_label = $JumpsLabel
-@onready var high_score_label = $HighScoreLabel
-@onready var continue_button = $ContinueButton
-@onready var restart_button = $RestartButton
-@onready var menu_button = $MenuButton
+@onready var final_score_label = $GameOverPanel/VBoxContainer/StatsContainer/FinalScorePanel/HBoxContainer/FinalScoreLabel
+@onready var currency_earned_label = $GameOverPanel/VBoxContainer/StatsContainer/CurrencyPanel/HBoxContainer/CurrencyEarnedLabel
+@onready var jumps_label = $GameOverPanel/VBoxContainer/StatsContainer/JumpsPanel/HBoxContainer/JumpsLabel
+@onready var high_score_label = $GameOverPanel/VBoxContainer/StatsContainer/HighScorePanel/HBoxContainer/HighScoreLabel
+@onready var continue_button = $GameOverPanel/VBoxContainer/ButtonContainer/ContinueButton
+@onready var restart_button = $GameOverPanel/VBoxContainer/ButtonContainer/RestartButton
+@onready var menu_button = $GameOverPanel/VBoxContainer/ButtonContainer/MenuButton
 
 # Continue system variables
 var continues_used: int = 0

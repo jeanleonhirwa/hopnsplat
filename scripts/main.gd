@@ -277,16 +277,21 @@ func _on_pause_button_pressed():
 
 func show_pause_screen():
 	"""Show the pause screen with current stats"""
-	var pause_score_label = pause_screen.get_node("PausePanel/VBoxContainer/ScoreContainer/ScoreLabel")
-	var pause_coins_label = pause_screen.get_node("PausePanel/VBoxContainer/ScoreContainer/CoinsLabel")
-	
-	if pause_score_label:
-		pause_score_label.text = "Score: " + str(current_score)
-	if pause_coins_label:
-		pause_coins_label.text = "Coins: " + str(total_currency + session_currency)
-	
-	pause_screen.visible = true
-	get_tree().paused = true
+	if pause_screen and pause_screen.has_method("show_pause_screen"):
+		# Call the pause screen's own method which handles animation
+		pause_screen.show_pause_screen(current_score, total_currency + session_currency)
+	else:
+		# Fallback to old behavior if method doesn't exist
+		var pause_score_label = pause_screen.get_node("PausePanel/VBoxContainer/ScoreContainer/ScoreLabel")
+		var pause_coins_label = pause_screen.get_node("PausePanel/VBoxContainer/ScoreContainer/CoinsLabel")
+		
+		if pause_score_label:
+			pause_score_label.text = "Score: " + str(current_score)
+		if pause_coins_label:
+			pause_coins_label.text = "Coins: " + str(total_currency + session_currency)
+		
+		pause_screen.visible = true
+		get_tree().paused = true
 
 func _on_resume_pressed():
 	"""Handle resume button from pause screen"""
