@@ -73,6 +73,10 @@ var current_tween: Tween = null
 var idle_wobble_tween: Tween = null
 var original_scale: Vector2 = Vector2.ONE
 
+# Sound cooldown tracking (Task 3.3)
+var last_hover_time: float = 0.0
+const HOVER_SOUND_COOLDOWN: float = 0.1  # 100ms cooldown
+
 # Texture cache for efficient state management
 var texture_cache: Dictionary = {}
 
@@ -341,7 +345,14 @@ func stop_idle_wobble() -> void:
 
 
 func _on_mouse_entered() -> void:
-	"""Handle mouse enter event - play hover animation."""
+	"""Handle mouse enter event - play hover animation and sound."""
+	# Play hover sound with cooldown check (Task 3.3)
+	var current_time = Time.get_ticks_msec() / 1000.0
+	if current_time - last_hover_time >= HOVER_SOUND_COOLDOWN:
+		AudioManager.play_ui_hover()
+		last_hover_time = current_time
+	
+	# Play hover animation
 	play_hover_animation()
 
 
@@ -360,7 +371,11 @@ func _on_mouse_exited() -> void:
 
 
 func _on_button_down() -> void:
-	"""Handle button press event - play press animation."""
+	"""Handle button press event - play press animation and click sound."""
+	# Play click sound (Task 3.3)
+	AudioManager.play_ui_click()
+	
+	# Play press animation
 	play_press_animation()
 
 

@@ -21,6 +21,10 @@ var sfx_enabled: bool = true
 var current_music_track: AudioStream
 var is_music_playing: bool = false
 
+# UI sound system (Task 3.1)
+var ui_sounds_cache: Dictionary = {}
+var ui_sound_pitch_variance: float = 0.05
+
 func _ready():
 	"""Initialize the audio manager"""
 	# Create audio players
@@ -45,6 +49,9 @@ func _ready():
 	
 	# Apply initial volumes
 	update_volumes()
+	
+	# Pre-cache UI sounds (Task 3.1)
+	_cache_ui_sounds()
 	
 	print("AudioManager initialized - Music: ", music_volume, " SFX: ", sfx_volume)
 
@@ -213,3 +220,67 @@ func is_music_enabled() -> bool:
 func is_sfx_enabled() -> bool:
 	"""Check if SFX is enabled"""
 	return sfx_enabled
+
+
+# UI Sound System Methods (Task 3.1)
+
+func _cache_ui_sounds() -> void:
+	"""Pre-cache all UI sounds for instant playback."""
+	ui_sounds_cache = {
+		"tap_a": preload("res://assets/ui_sounds/tap-a.ogg"),
+		"tap_b": preload("res://assets/ui_sounds/tap-b.ogg"),
+		"click_a": preload("res://assets/ui_sounds/click-a.ogg"),
+		"click_b": preload("res://assets/ui_sounds/click-b.ogg"),
+		"switch_a": preload("res://assets/ui_sounds/switch-a.ogg"),
+		"switch_b": preload("res://assets/ui_sounds/switch-b.ogg")
+	}
+	print("UI sounds cached: ", ui_sounds_cache.size(), " sounds loaded")
+
+
+# UI Sound Playback Methods (Task 3.2)
+
+func play_ui_hover() -> void:
+	"""Play a random hover sound (tap-a or tap-b)."""
+	var sound_key = "tap_a" if randf() > 0.5 else "tap_b"
+	if ui_sounds_cache.has(sound_key):
+		_play_ui_sound(ui_sounds_cache[sound_key])
+
+
+func play_ui_click() -> void:
+	"""Play a random click sound (click-a or click-b)."""
+	var sound_key = "click_a" if randf() > 0.5 else "click_b"
+	if ui_sounds_cache.has(sound_key):
+		_play_ui_sound(ui_sounds_cache[sound_key])
+
+
+func play_ui_switch() -> void:
+	"""Play a random switch sound (switch-a or switch-b)."""
+	var sound_key = "switch_a" if randf() > 0.5 else "switch_b"
+	if ui_sounds_cache.has(sound_key):
+		_play_ui_sound(ui_sounds_cache[sound_key])
+
+
+func _play_ui_sound(sound: AudioStream, pitch_variance: bool = true) -> void:
+	"""Play a UI sound with optional pitch variation."""
+	if not sfx_enabled or not sound:
+		return
+	
+	# Create temporary player for this UI sound
+	var temp_player = AudioStreamPlayer.new()
+	temp_player.bus = "SFX"
+	temp_player.stream = sound
+	
+	# Apply pitch variation if enabled
+	if pitch_variance:
+		temp_player.pitch_scale = _get_random_pitch()
+	
+	add_child(temp_player)
+	temp_player.play()
+	
+	# Remove player when finished
+	temp_player.finished.connect(func(): temp_player.queue_free())
+
+
+func _get_random_pitch() -> float:
+	"""Return a random pitch value between 0.95 and 1.05."""
+	return randf_range(0.95, 1.05)

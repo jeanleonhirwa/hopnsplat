@@ -78,8 +78,8 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Connect mouse_entered, button_down, button_up signals to animation methods
     - _Requirements: 3.1, 3.2, 3.3, 3.4_
 
-- [ ] 3. Phase 3: Sound Integration - UI Audio Feedback
-  - [ ] 3.1 Extend AudioManager with UI sound support
+- [-] 3. Phase 3: Sound Integration - UI Audio Feedback
+  - [-] 3.1 Extend AudioManager with UI sound support
     - Add ui_sounds_cache Dictionary to AudioManager
     - Add ui_sound_pitch_variance float property (0.05)
     - Pre-cache all UI sounds in _ready(): tap-a.ogg, tap-b.ogg, click-a.ogg, click-b.ogg, switch-a.ogg, switch-b.ogg
