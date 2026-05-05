@@ -1,0 +1,119 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_kenney_panel_001"]
+
+[ext_resource type="Script" path="res://scripts/components/kenney_panel.gd" id="1_test"]
+
+[node name="TestKenneyPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.3, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+text = "KenneyPanel Component Test"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="RectanglePanel" type="NinePatchRect" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(400, 200)
+layout_mode = 2
+script = ExtResource("1_test")
+panel_style = 1
+semi_transparent = false
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/RectanglePanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -11.5
+offset_right = 100.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "RECTANGLE_DEPTH Panel"
+horizontal_alignment = 1
+
+[node name="Spacer2" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="SquarePanel" type="NinePatchRect" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(300, 150)
+layout_mode = 2
+script = ExtResource("1_test")
+panel_style = 3
+color_pack = 1
+semi_transparent = false
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/SquarePanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -11.5
+offset_right = 100.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "SQUARE_DEPTH Panel (Red)"
+horizontal_alignment = 1
+
+[node name="Spacer3" type="Control" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="TransparentPanel" type="NinePatchRect" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(350, 100)
+layout_mode = 2
+script = ExtResource("1_test")
+panel_style = 0
+semi_transparent = true
+transparency_alpha = 0.7
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer/TransparentPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -11.5
+offset_right = 100.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Semi-Transparent Panel"
+horizontal_alignment = 1
