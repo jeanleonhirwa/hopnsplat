@@ -236,7 +236,7 @@ func _setup_children() -> void:
 		label_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		# Style the label with proper font size and color
-		label_node.add_theme_font_size_override("font_size", 20)
+		label_node.add_theme_font_size_override("font_size", 18)
 		label_node.add_theme_color_override("font_color", Color.WHITE)
 		label_node.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.5))
 		label_node.add_theme_constant_override("shadow_offset_x", 2)

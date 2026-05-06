@@ -15,8 +15,8 @@ var responsive_layout
 @onready var play_button = $VBoxContainer/ButtonContainer/PlayButton
 @onready var shop_button = $VBoxContainer/ButtonContainer/ShopButton
 @onready var achievements_button = $VBoxContainer/ButtonContainer/AchievementsButton
-@onready var settings_button = $VBoxContainer/ButtonContainer/SettingsButton
-@onready var quit_button = $VBoxContainer/ButtonContainer/QuitButton
+@onready var settings_button = $VBoxContainer/BottomButtons/SettingsButton
+@onready var quit_button = $VBoxContainer/BottomButtons/QuitButton
 @onready var high_score_label = $VBoxContainer/StatsPanel/VBoxContainer/HighScoreContainer/HighScoreLabel
 @onready var currency_label = $VBoxContainer/StatsPanel/VBoxContainer/CurrencyContainer/CurrencyLabel
 @onready var stats_panel = $VBoxContainer/StatsPanel
@@ -60,7 +60,7 @@ func load_and_display_stats():
 	if high_score_label:
 		var high_score = save_data.get("highest_score", 0)
 		# Use count-up animation for high score with prefix
-		_count_up_with_prefix(high_score_label, "Best Score: ", 0, high_score, 0.8)
+		_count_up_with_prefix(high_score_label, "Best: ", 0, high_score, 0.8)
 	
 	if currency_label:
 		var total_currency = save_data.get("total_currency", 0)
