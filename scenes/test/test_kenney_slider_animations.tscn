@@ -1,0 +1,59 @@
+[gd_scene load_steps=2 format=3 uid="uid://test_kenney_slider_animations"]
+
+[ext_resource type="Script" path="res://scripts/components/kenney_slider.gd" id="1"]
+
+[node name="TestKenneySliderAnimations" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.3, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 30
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "KenneySlider Animation Test"
+horizontal_alignment = 1
+
+[node name="YellowSlider" type="HSlider" parent="VBoxContainer"]
+custom_minimum_size = Vector2(400, 60)
+layout_mode = 2
+min_value = 0.0
+max_value = 100.0
+value = 50.0
+script = ExtResource("1")
+slider_color = 0
+show_value_label = true
+value_suffix = "%"
+
+[node name="Instructions" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Hover over handle: Scale to 1.1 (0.1s)
+Drag handle: Scale to 1.15 (0.1s)
+Value change: Bounce (0.15s)
+Fill bar: Smooth transition (0.2s)"
+horizontal_alignment = 1

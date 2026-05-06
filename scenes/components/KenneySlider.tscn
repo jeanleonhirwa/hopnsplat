@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://c8j5m3n2p4q6r"]
+
+[ext_resource type="Script" path="res://scripts/components/kenney_slider.gd" id="1_slider"]
+
+[node name="KenneySlider" type="HSlider"]
+custom_minimum_size = Vector2(200, 50)
+min_value = 0.0
+max_value = 100.0
+step = 1.0
+value = 50.0
+script = ExtResource("1_slider")

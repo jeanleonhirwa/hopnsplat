@@ -253,27 +253,27 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Create `scripts/components/achievement_card.gd` with achievement data properties
     - _Requirements: 9.1, 9.2, 9.4_
 
-  - [-] 11.2 Convert Achievements.tscn to use Kenney components
+  - [x] 11.2 Convert Achievements.tscn to use Kenney components
     - Replace BackButton with KenneyButton (SQUARE_DEPTH_GLOSS, arrow icon)
     - Wrap ProgressLabel in KenneyPanel with star icon
     - Add Divider TextureRect with divider_edges.png
     - Replace achievement list with AchievementCard instances
     - _Requirements: 9.1_
 
-  - [~] 11.3 Implement locked/unlocked visual states
+  - [x] 11.3 Implement locked/unlocked visual states
     - In AchievementCard, implement set_locked(bool) method
     - Locked: Show grey overlay (0.6 alpha), star_outline.png, desaturated icon
     - Unlocked: Full color, star.png, no overlay
     - _Requirements: 9.2, 9.4_
 
-  - [~] 11.4 Implement progress bar for progressive achievements
+  - [x] 11.4 Implement progress bar for progressive achievements
     - Use KenneySlider component in read-only mode
     - Show "X/Y" text overlay on progress bar
     - Animate fill when progress updates (0.3s smooth transition)
     - Hide progress bar for one-time achievements
     - _Requirements: 9.3_
 
-  - [~] 11.5 Implement achievement unlock animation
+  - [x] 11.5 Implement achievement unlock animation
     - In AchievementCard, implement play_unlock_animation() method
     - Card shakes (0.2s)
     - Overlay fades out (0.3s)
@@ -284,7 +284,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - _Requirements: 9.5_
 
 - [ ] 12. Phase 8: AudioSettingsMenu Overhaul
-  - [~] 12.1 Create KenneySlider component
+  - [x] 12.1 Create KenneySlider component
     - Create `scripts/components/kenney_slider.gd` with class_name KenneySlider extending HSlider
     - Add Background (TextureRect with slide_horizontal_grey.png)
     - Add Fill (TextureRect with slide_horizontal_color.png)
@@ -293,7 +293,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Add @export properties: slider_color, show_value_label, value_suffix
     - _Requirements: 10.1, 10.2_
 
-  - [~] 12.2 Implement KenneySlider animations
+  - [-] 12.2 Implement KenneySlider animations
     - Implement play_handle_animation() for value changes
     - Handle hover: Scale to 1.1 (0.1s)
     - Handle drag: Scale to 1.15 (0.1s)
