@@ -82,8 +82,41 @@ func save_shop_data():
 		save_file.close()
 
 func update_currency_display():
-	"""Update the currency label"""
-	currency_label.text = "Coins: " + str(current_currency)
+	"""Update the currency label with count-up animation"""
+	# Store old value for animation
+	var old_value = 0
+	if currency_label.text.begins_with("Coins: "):
+		var old_text = currency_label.text.replace("Coins: ", "")
+		old_value = int(old_text) if old_text.is_valid_int() else 0
+	
+	# Animate count-up
+	_count_up_with_prefix(currency_label, "Coins: ", old_value, current_currency, 0.5)
+	
+	# Add bounce effect when currency changes
+	if current_currency != old_value:
+		await get_tree().create_timer(0.3).timeout
+		UIAnimationManager.bounce_in(currency_label, 0.2, 1.15)
+
+
+func _count_up_with_prefix(label: Label, prefix: String, from: int, to: int, duration: float):
+	"""Helper function to count up a label value while preserving a prefix"""
+	var tween = create_tween()
+	var counter = {"value": from}
+	
+	tween.tween_property(counter, "value", to, duration).set_ease(Tween.EASE_OUT)
+	
+	# Update label text during animation
+	var update_interval = 0.05  # Update every 50ms
+	var steps = int(duration / update_interval)
+	for i in range(steps + 1):
+		tween.tween_callback(func(): 
+			var progress = float(i) / float(steps)
+			var current_value = lerp(float(from), float(to), progress)
+			label.text = prefix + str(int(current_value))
+		).set_delay(update_interval * i)
+	
+	# Ensure final value is exact
+	tween.tween_callback(func(): label.text = prefix + str(to))
 
 func populate_shop_items():
 	"""Create shop item buttons for each category"""

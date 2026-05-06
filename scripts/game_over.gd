@@ -59,10 +59,15 @@ func show_game_over(final_score: int, currency_earned: int, jumps: int, high_sco
 	# Update continues counter
 	continues_used = continues_used_param
 	
-	# Update labels with game stats
-	final_score_label.text = "Final Score: " + str(final_score)
-	currency_earned_label.text = "Coins Earned: " + str(currency_earned)
-	jumps_label.text = "Successful Jumps: " + str(jumps)
+	# Update labels with game stats using count-up animations
+	_count_up_with_prefix(final_score_label, "Final Score: ", 0, final_score, 0.8)
+	_count_up_with_prefix(currency_earned_label, "Coins Earned: ", 0, currency_earned, 1.0)
+	_count_up_with_prefix(jumps_label, "Successful Jumps: ", 0, jumps, 0.6)
+	
+	# Add bounce effect to currency when it increases
+	if currency_earned > 0:
+		await get_tree().create_timer(0.5).timeout
+		UIAnimationManager.bounce_in(currency_earned_label, 0.2, 1.15)
 	
 	# Handle high score display
 	if is_new_high_score:
@@ -71,7 +76,7 @@ func show_game_over(final_score: int, currency_earned: int, jumps: int, high_sco
 		# Trigger celebration animation for new high score
 		_play_high_score_celebration()
 	else:
-		high_score_label.text = "High Score: " + str(high_score)
+		_count_up_with_prefix(high_score_label, "High Score: ", 0, high_score, 0.8)
 		high_score_label.modulate = Color.WHITE
 	
 	# Update continue button state
@@ -84,6 +89,27 @@ func show_game_over(final_score: int, currency_earned: int, jumps: int, high_sco
 	visible = true
 	
 	print("Game Over screen displayed - Score: ", final_score, " Currency: ", currency_earned, " Continues used: ", continues_used)
+
+
+func _count_up_with_prefix(label: Label, prefix: String, from: int, to: int, duration: float):
+	"""Helper function to count up a label value while preserving a prefix"""
+	var tween = create_tween()
+	var counter = {"value": from}
+	
+	tween.tween_property(counter, "value", to, duration).set_ease(Tween.EASE_OUT)
+	
+	# Update label text during animation
+	var update_interval = 0.05  # Update every 50ms
+	var steps = int(duration / update_interval)
+	for i in range(steps + 1):
+		tween.tween_callback(func(): 
+			var progress = float(i) / float(steps)
+			var current_value = lerp(float(from), float(to), progress)
+			label.text = prefix + str(int(current_value))
+		).set_delay(update_interval * i)
+	
+	# Ensure final value is exact
+	tween.tween_callback(func(): label.text = prefix + str(to))
 
 func hide_game_over():
 	"""Hide the game over screen"""

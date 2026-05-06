@@ -309,14 +309,14 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Add ValueLabel showing percentage next to each slider
     - _Requirements: 10.1, 10.5_
 
-  - [-] 12.4 Implement checkbox toggles with Kenney textures
+  - [x] 12.4 Implement checkbox toggles with Kenney textures
     - Replace checkbox controls with TextureButton
     - Unchecked: check_square_grey.png
     - Checked: check_square_color_checkmark.png (Yellow)
     - Implement toggle animation: Checkmark fades in with scale (0.2s)
     - _Requirements: 10.4_
 
-  - [-] 12.5 Connect sliders to AudioManager
+  - [x] 12.5 Connect sliders to AudioManager
     - Connect each KenneySlider value_changed signal to AudioManager methods
     - Implement real-time feedback: value changes immediately update AudioManager
     - Add TestSoundButton (KenneyButton) that plays click-a.ogg at current SFX volume
@@ -327,7 +327,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
   - Ensure all tests pass, verify all six screens use Kenney components correctly, ask the user if questions arise.
 
 - [ ] 14. Phase 9: Polish and Optimization
-  - [~] 14.1 Add particle effects for significant actions
+  - [-] 14.1 Add particle effects for significant actions
     - Shop purchase: Star burst (already implemented in 6.6)
     - Achievement unlock: Star burst (already implemented in 11.5)
     - High score: Star burst (already implemented in 9.5)
@@ -335,20 +335,20 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Level up or milestone: Confetti-style particle effect
     - _Requirements: 15.1_
 
-  - [~] 14.2 Implement screen transition animations
+  - [-] 14.2 Implement screen transition animations
     - Create screen_transition.gd utility script
     - Implement fade_to_scene(scene_path, duration) method
     - Implement slide_to_scene(scene_path, direction, duration) method
     - Apply to all scene changes in main_menu.gd, shop.gd, etc.
     - _Requirements: 15.2_
 
-  - [~] 14.3 Add floating animations to decorative elements
+  - [-] 14.3 Add floating animations to decorative elements
     - Implement subtle floating animation for MainMenu stars
     - Add gentle rotation to decorative arrows
     - Use UIAnimationManager with looping tweens
     - _Requirements: 15.3_
 
-  - [~] 14.4 Implement currency count-up animations
+  - [ ] 14.4 Implement currency count-up animations
     - Use UIAnimationManager.count_up() for currency changes
     - Add bounce effect when currency increases
     - Apply to MainMenu, Shop, GameOver currency displays

@@ -59,11 +59,38 @@ func load_and_display_stats():
 	
 	if high_score_label:
 		var high_score = save_data.get("highest_score", 0)
-		high_score_label.text = "Best Score: " + str(high_score)
+		# Use count-up animation for high score with prefix
+		_count_up_with_prefix(high_score_label, "Best Score: ", 0, high_score, 0.8)
 	
 	if currency_label:
 		var total_currency = save_data.get("total_currency", 0)
-		currency_label.text = "Coins: " + str(total_currency)
+		# Use count-up animation for currency with prefix and bounce effect
+		_count_up_with_prefix(currency_label, "Coins: ", 0, total_currency, 1.0)
+		# Add bounce effect when currency increases
+		if total_currency > 0:
+			await get_tree().create_timer(0.5).timeout
+			UIAnimationManager.bounce_in(currency_label, 0.2, 1.15)
+
+
+func _count_up_with_prefix(label: Label, prefix: String, from: int, to: int, duration: float):
+	"""Helper function to count up a label value while preserving a prefix"""
+	var tween = create_tween()
+	var counter = {"value": from}
+	
+	tween.tween_property(counter, "value", to, duration).set_ease(Tween.EASE_OUT)
+	
+	# Update label text during animation
+	var update_interval = 0.05  # Update every 50ms
+	var steps = int(duration / update_interval)
+	for i in range(steps + 1):
+		tween.tween_callback(func(): 
+			var progress = float(i) / float(steps)
+			var current_value = lerp(float(from), float(to), progress)
+			label.text = prefix + str(int(current_value))
+		).set_delay(update_interval * i)
+	
+	# Ensure final value is exact
+	tween.tween_callback(func(): label.text = prefix + str(to))
 
 func load_game_data() -> Dictionary:
 	"""Load game data from save file"""
@@ -108,22 +135,28 @@ func start_animations():
 func animate_decorative_elements():
 	"""Animate floating stars and decorative arrow with subtle motion"""
 	if floating_star1:
+		# Use UIAnimationManager for floating animation
 		var tween1 = create_tween()
 		tween1.set_loops()
-		tween1.tween_property(floating_star1, "position:y", floating_star1.position.y - 15, 2.5).set_ease(Tween.EASE_IN_OUT)
-		tween1.tween_property(floating_star1, "position:y", floating_star1.position.y + 15, 2.5).set_ease(Tween.EASE_IN_OUT)
+		var original_y1 = floating_star1.position.y
+		tween1.tween_property(floating_star1, "position:y", original_y1 - 15, 2.5).set_ease(Tween.EASE_IN_OUT)
+		tween1.tween_property(floating_star1, "position:y", original_y1 + 15, 2.5).set_ease(Tween.EASE_IN_OUT)
 	
 	if floating_star2:
+		# Use UIAnimationManager for floating animation
 		var tween2 = create_tween()
 		tween2.set_loops()
-		tween2.tween_property(floating_star2, "position:y", floating_star2.position.y - 20, 3.0).set_ease(Tween.EASE_IN_OUT)
-		tween2.tween_property(floating_star2, "position:y", floating_star2.position.y + 20, 3.0).set_ease(Tween.EASE_IN_OUT)
+		var original_y2 = floating_star2.position.y
+		tween2.tween_property(floating_star2, "position:y", original_y2 - 20, 3.0).set_ease(Tween.EASE_IN_OUT)
+		tween2.tween_property(floating_star2, "position:y", original_y2 + 20, 3.0).set_ease(Tween.EASE_IN_OUT)
 	
 	if decorative_arrow:
+		# Use UIAnimationManager for gentle rotation
 		var tween3 = create_tween()
 		tween3.set_loops()
-		tween3.tween_property(decorative_arrow, "rotation_degrees", -5, 1.5).set_ease(Tween.EASE_IN_OUT)
-		tween3.tween_property(decorative_arrow, "rotation_degrees", 5, 1.5).set_ease(Tween.EASE_IN_OUT)
+		var original_rotation = decorative_arrow.rotation_degrees
+		tween3.tween_property(decorative_arrow, "rotation_degrees", original_rotation - 5, 1.5).set_ease(Tween.EASE_IN_OUT)
+		tween3.tween_property(decorative_arrow, "rotation_degrees", original_rotation + 5, 1.5).set_ease(Tween.EASE_IN_OUT)
 
 
 func animate_title():
