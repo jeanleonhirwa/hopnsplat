@@ -127,6 +127,10 @@ func _ready() -> void:
 	# Store original scale for animations
 	original_scale = scale
 	
+	# Configure TextureButton to scale the texture to fit the button size
+	ignore_texture_size = false
+	stretch_mode = TextureButton.STRETCH_SCALE
+	
 	# Load and cache textures
 	_load_textures()
 	
@@ -154,7 +158,8 @@ func _load_textures() -> void:
 	"""Load and cache all button state textures."""
 	var color_name = COLOR_NAMES[color_pack]
 	var style_name = STYLE_NAMES[button_style]
-	var base_path = "res://assets/ui_packs/%s/Default/" % color_name
+	# Use Double size textures for better quality and proper sizing
+	var base_path = "res://assets/ui_packs/%s/Double/" % color_name
 	
 	# Load normal state texture
 	var normal_path = base_path + style_name + ".png"
@@ -167,7 +172,7 @@ func _load_textures() -> void:
 		texture_cache["pressed"] = normal_texture
 	
 	# Load disabled state texture (use Grey pack variant)
-	var disabled_path = "res://assets/ui_packs/Grey/Default/" + style_name + ".png"
+	var disabled_path = "res://assets/ui_packs/Grey/Double/" + style_name + ".png"
 	var disabled_texture = load_kenney_texture(disabled_path)
 	
 	if disabled_texture:
@@ -229,6 +234,14 @@ func _setup_children() -> void:
 		label_node.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label_node.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		
+		# Style the label with proper font size and color
+		label_node.add_theme_font_size_override("font_size", 20)
+		label_node.add_theme_color_override("font_color", Color.WHITE)
+		label_node.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.5))
+		label_node.add_theme_constant_override("shadow_offset_x", 2)
+		label_node.add_theme_constant_override("shadow_offset_y", 2)
+		
 		add_child(label_node)
 		
 		# Position label
@@ -246,6 +259,10 @@ func _setup_children() -> void:
 			label_node.anchor_top = 0.0
 			label_node.anchor_right = 1.0
 			label_node.anchor_bottom = 1.0
+			label_node.offset_left = 10
+			label_node.offset_top = 0
+			label_node.offset_right = -10
+			label_node.offset_bottom = 0
 
 
 func _validate_touch_target_size() -> void:
