@@ -12,11 +12,18 @@ signal continue_requested
 @onready var continue_button = $GameOverPanel/VBoxContainer/ButtonContainer/ContinueButton
 @onready var restart_button = $GameOverPanel/VBoxContainer/ButtonContainer/RestartButton
 @onready var menu_button = $GameOverPanel/VBoxContainer/ButtonContainer/MenuButton
+@onready var game_over_title = $GameOverPanel/VBoxContainer/GameOverLabel
 
 # Star rating references
 @onready var star1 = $GameOverPanel/VBoxContainer/StarRating/Star1
 @onready var star2 = $GameOverPanel/VBoxContainer/StarRating/Star2
 @onready var star3 = $GameOverPanel/VBoxContainer/StarRating/Star3
+
+# Stat panel references for celebration animation
+@onready var final_score_panel = $GameOverPanel/VBoxContainer/StatsContainer/FinalScorePanel
+@onready var currency_panel = $GameOverPanel/VBoxContainer/StatsContainer/CurrencyPanel
+@onready var jumps_panel = $GameOverPanel/VBoxContainer/StatsContainer/JumpsPanel
+@onready var high_score_panel = $GameOverPanel/VBoxContainer/StatsContainer/HighScorePanel
 
 # Star textures
 var star_filled: Texture2D
@@ -61,6 +68,8 @@ func show_game_over(final_score: int, currency_earned: int, jumps: int, high_sco
 	if is_new_high_score:
 		high_score_label.text = "NEW HIGH SCORE!"
 		high_score_label.modulate = Color.GOLD
+		# Trigger celebration animation for new high score
+		_play_high_score_celebration()
 	else:
 		high_score_label.text = "High Score: " + str(high_score)
 		high_score_label.modulate = Color.WHITE
@@ -278,3 +287,132 @@ func reset_continues():
 	"""Reset continues counter for new game"""
 	continues_used = 0
 	_update_continue_button()
+
+
+func _play_high_score_celebration():
+	"""Play celebration animation for new high score
+	Requirements: 8.4
+	- Title flashes between colors (0.5s loop, 3 times)
+	- Spawn particle burst from title using star textures
+	- All stat panels bounce in sequence
+	- Play celebration sound effect
+	"""
+	print("Playing high score celebration animation")
+	
+	# 1. Title flashes between colors (0.5s loop, 3 times)
+	_animate_title_flash()
+	
+	# 2. Spawn particle burst from title
+	await get_tree().create_timer(0.3).timeout  # Small delay before particles
+	_spawn_celebration_particles()
+	
+	# 3. All stat panels bounce in sequence
+	await get_tree().create_timer(0.2).timeout  # Small delay before bounces
+	_animate_stat_panels_bounce()
+	
+	# 4. Play celebration sound effect
+	var audio_manager = get_node("/root/AudioManager")
+	if audio_manager:
+		audio_manager.play_ui_click()  # Using click sound as celebration sound
+
+
+func _animate_title_flash():
+	"""Animate title flashing between colors"""
+	if not game_over_title:
+		return
+	
+	var ui_anim = get_node("/root/UIAnimationManager")
+	if not ui_anim:
+		return
+	
+	# Flash colors: Gold, Yellow, White, Gold (3 cycles)
+	var flash_colors = [Color.GOLD, Color.YELLOW, Color.WHITE]
+	var flash_duration = 0.5
+	var flash_count = 3
+	
+	for i in range(flash_count):
+		for color in flash_colors:
+			var tween = create_tween()
+			ui_anim.register_tween(tween)
+			tween.tween_property(game_over_title, "modulate", color, flash_duration / flash_colors.size())
+			await tween.finished
+	
+	# Return to gold at the end
+	var final_tween = create_tween()
+	ui_anim.register_tween(final_tween)
+	final_tween.tween_property(game_over_title, "modulate", Color.GOLD, 0.2)
+
+
+func _spawn_celebration_particles():
+	"""Spawn particle burst from title using star textures"""
+	if not game_over_title:
+		return
+	
+	# Create particle system
+	var particles = CPUParticles2D.new()
+	particles.name = "CelebrationParticles"
+	
+	# Position at title center
+	game_over_title.add_child(particles)
+	particles.position = Vector2(game_over_title.size.x / 2, game_over_title.size.y / 2)
+	
+	# Configure particle properties
+	particles.emitting = false
+	particles.amount = 30
+	particles.lifetime = 1.0
+	particles.one_shot = true
+	particles.explosiveness = 1.0
+	particles.randomness = 0.5
+	
+	# Set star texture
+	particles.texture = preload("res://assets/ui_packs/Yellow/Default/star.png")
+	
+	# Emission shape - circle
+	particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
+	particles.emission_sphere_radius = 10.0
+	
+	# Direction and spread
+	particles.direction = Vector2(0, -1)
+	particles.spread = 180.0
+	
+	# Velocity
+	particles.initial_velocity_min = 100.0
+	particles.initial_velocity_max = 200.0
+	
+	# Gravity
+	particles.gravity = Vector2(0, 300)
+	
+	# Scale
+	particles.scale_amount_min = 0.5
+	particles.scale_amount_max = 1.0
+	
+	# Color modulation for variety
+	particles.color = Color.YELLOW
+	
+	# Start emitting
+	particles.emitting = true
+	
+	# Auto-cleanup after lifetime
+	await get_tree().create_timer(particles.lifetime + 0.2).timeout
+	particles.queue_free()
+	
+	print("Celebration particles spawned")
+
+
+func _animate_stat_panels_bounce():
+	"""Animate all stat panels bouncing in sequence"""
+	var ui_anim = get_node("/root/UIAnimationManager")
+	if not ui_anim:
+		return
+	
+	var panels = [final_score_panel, currency_panel, jumps_panel, high_score_panel]
+	var delay_between_bounces = 0.1
+	
+	for i in range(panels.size()):
+		if panels[i]:
+			# Wait for delay
+			await get_tree().create_timer(delay_between_bounces).timeout
+			# Bounce animation
+			ui_anim.bounce_in(panels[i], 0.2, 1.15)
+	
+	print("Stat panels bounce animation complete")

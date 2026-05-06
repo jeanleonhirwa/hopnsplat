@@ -226,7 +226,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Replace MenuButton with KenneyButton (RECTANGLE_GLOSS, Yellow, 350x60px, home icon)
     - _Requirements: 8.3_
 
-  - [~] 9.4 Implement new high score celebration animation
+  - [x] 9.4 Implement new high score celebration animation
     - In game_over.gd _ready(), detect if new high score achieved
     - Title flashes between colors (0.5s loop, 3 times)
     - Spawn particle burst from title using star textures
@@ -234,7 +234,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Play celebration sound effect
     - _Requirements: 8.4_
 
-  - [~] 9.5 Add CelebrationParticles system
+  - [x] 9.5 Add CelebrationParticles system
     - Add CPUParticles2D node to GameOver scene
     - Configure for star texture burst effect
     - Trigger on new high score detection
