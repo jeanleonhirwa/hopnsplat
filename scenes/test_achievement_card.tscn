@@ -1,0 +1,94 @@
+[gd_scene load_steps=3 format=3 uid="uid://test_achievement_card"]
+
+[ext_resource type="PackedScene" uid="uid://d2k8x9y4m5n3p2" path="res://scenes/components/AchievementCard.tscn" id="1_achievement_card"]
+[ext_resource type="Script" path="res://scripts/test_achievement_card.gd" id="2_test_script"]
+
+[node name="TestAchievementCard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_test_script")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.2, 0.2, 0.3, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Title" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Achievement Card Test"
+horizontal_alignment = 1
+
+[node name="Spacer1" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="LockedCard" parent="VBoxContainer" instance=ExtResource("1_achievement_card")]
+layout_mode = 2
+achievement_title = "First Jump"
+achievement_description = "Complete your first jump"
+is_locked = true
+is_progressive = false
+
+[node name="Spacer2" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="UnlockedCard" parent="VBoxContainer" instance=ExtResource("1_achievement_card")]
+layout_mode = 2
+achievement_title = "Jump Master"
+achievement_description = "Complete 100 jumps"
+is_locked = false
+is_progressive = false
+
+[node name="Spacer3" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="ProgressiveCard" parent="VBoxContainer" instance=ExtResource("1_achievement_card")]
+layout_mode = 2
+achievement_title = "Coin Collector"
+achievement_description = "Collect 1000 coins"
+is_locked = true
+is_progressive = true
+current_progress = 350
+max_progress = 1000
+
+[node name="Spacer4" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ButtonContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="UnlockButton" type="Button" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+text = "Unlock First"
+
+[node name="ProgressButton" type="Button" parent="VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(150, 44)
+layout_mode = 2
+text = "Add Progress"

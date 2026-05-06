@@ -244,7 +244,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
   - Ensure all tests pass, verify PauseScreen and GameOver work correctly with entrance animations, ask the user if questions arise.
 
 - [ ] 11. Phase 7: Achievements Screen Overhaul
-  - [~] 11.1 Create AchievementCard reusable component
+  - [x] 11.1 Create AchievementCard reusable component
     - Create `scenes/components/AchievementCard.tscn` with KenneyPanel root
     - Add IconContainer with IconBackground (button_square_depth_gloss.png) and AchievementIcon
     - Add InfoContainer with TitleLabel, DescriptionLabel, ProgressBar (KenneySlider for progressive achievements)
@@ -253,7 +253,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Create `scripts/components/achievement_card.gd` with achievement data properties
     - _Requirements: 9.1, 9.2, 9.4_
 
-  - [~] 11.2 Convert Achievements.tscn to use Kenney components
+  - [-] 11.2 Convert Achievements.tscn to use Kenney components
     - Replace BackButton with KenneyButton (SQUARE_DEPTH_GLOSS, arrow icon)
     - Wrap ProgressLabel in KenneyPanel with star icon
     - Add Divider TextureRect with divider_edges.png

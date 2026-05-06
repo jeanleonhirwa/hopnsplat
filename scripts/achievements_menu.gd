@@ -3,10 +3,13 @@ extends Control
 # Achievements Menu - Display all achievements with progress
 
 @onready var back_button = $VBoxContainer/HeaderContainer/BackButton
-@onready var progress_label = $VBoxContainer/HeaderContainer/ProgressLabel
+@onready var progress_label = $VBoxContainer/HeaderContainer/ProgressPanel/HBoxContainer/ProgressLabel
 @onready var achievements_list = $VBoxContainer/ScrollContainer/AchievementsList
 
 var achievement_system: Node
+
+# Preload AchievementCard scene
+const AchievementCardScene = preload("res://scenes/components/AchievementCard.tscn")
 
 func _ready():
 	"""Initialize achievements menu"""
@@ -36,93 +39,52 @@ func _load_achievements():
 	for child in achievements_list.get_children():
 		child.queue_free()
 	
-	# Create achievement items
+	# Create achievement cards
 	for achievement in achievements:
-		_create_achievement_item(achievement)
+		_create_achievement_card(achievement)
 
-func _create_achievement_item(achievement: Dictionary):
-	"""Create UI item for an achievement"""
-	var item_container = HBoxContainer.new()
-	item_container.custom_minimum_size = Vector2(0, 80)
+func _create_achievement_card(achievement: Dictionary):
+	"""Create AchievementCard for an achievement"""
+	var card = AchievementCardScene.instantiate()
 	
-	# Icon
-	var icon_label = Label.new()
-	icon_label.text = achievement.icon
-	icon_label.custom_minimum_size = Vector2(60, 0)
-	icon_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	icon_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	icon_label.add_theme_font_size_override("font_size", 32)
+	# Set achievement data
+	var icon_texture = _get_achievement_icon(achievement.icon)
+	var is_progressive = achievement.has("target") and achievement.target > 1
+	var max_progress = achievement.target if is_progressive else 1
 	
-	# Content container
-	var content_container = VBoxContainer.new()
-	content_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	card.set_achievement_data(
+		achievement.id,
+		achievement.name,
+		achievement.description,
+		icon_texture,
+		is_progressive,
+		max_progress
+	)
 	
-	# Name label
-	var name_label = Label.new()
-	name_label.text = achievement.name
-	name_label.add_theme_font_size_override("font_size", 18)
-	if achievement.unlocked:
-		name_label.add_theme_color_override("font_color", Color.GOLD)
-	else:
-		name_label.add_theme_color_override("font_color", Color.WHITE)
+	# Set locked/unlocked state
+	card.set_locked(not achievement.unlocked)
 	
-	# Description label
-	var desc_label = Label.new()
-	desc_label.text = achievement.description
-	desc_label.add_theme_font_size_override("font_size", 14)
-	desc_label.add_theme_color_override("font_color", Color.LIGHT_GRAY)
-	desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	# Set progress for progressive achievements
+	if is_progressive:
+		card.set_progress(achievement.progress)
 	
-	# Progress container
-	var progress_container = HBoxContainer.new()
+	# Connect unlock signal
+	card.achievement_unlocked.connect(_on_achievement_unlocked)
 	
-	# Progress bar
-	var progress_bar = ProgressBar.new()
-	progress_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	progress_bar.custom_minimum_size = Vector2(200, 20)
-	progress_bar.max_value = 100
-	progress_bar.value = achievement.progress_percent
-	
-	# Progress text
-	var progress_text = Label.new()
-	if achievement.unlocked:
-		progress_text.text = "UNLOCKED!"
-		progress_text.add_theme_color_override("font_color", Color.GOLD)
-	else:
-		progress_text.text = str(achievement.progress) + "/" + str(achievement.target)
-		progress_text.add_theme_color_override("font_color", Color.WHITE)
-	progress_text.add_theme_font_size_override("font_size", 12)
-	
-	# Reward label
-	var reward_label = Label.new()
-	if achievement.reward > 0:
-		reward_label.text = "🪙 " + str(achievement.reward)
-		reward_label.add_theme_color_override("font_color", Color.YELLOW)
-		reward_label.add_theme_font_size_override("font_size", 12)
-	
-	# Assemble UI
-	progress_container.add_child(progress_bar)
-	progress_container.add_child(progress_text)
-	if achievement.reward > 0:
-		progress_container.add_child(reward_label)
-	
-	content_container.add_child(name_label)
-	content_container.add_child(desc_label)
-	content_container.add_child(progress_container)
-	
-	item_container.add_child(icon_label)
-	item_container.add_child(content_container)
-	
-	# Add separator
-	var separator = HSeparator.new()
-	separator.add_theme_color_override("separator", Color(0.3, 0.3, 0.3, 1.0))
-	
-	achievements_list.add_child(item_container)
-	achievements_list.add_child(separator)
-	
-	# Gray out if locked
-	if not achievement.unlocked:
-		item_container.modulate = Color(0.7, 0.7, 0.7, 1.0)
+	# Add to list
+	achievements_list.add_child(card)
+
+func _get_achievement_icon(icon_emoji: String) -> Texture2D:
+	"""Convert emoji icon to texture (placeholder implementation)"""
+	# For now, use star icon as default
+	# In a full implementation, you would map emojis to specific textures
+	return load("res://assets/ui_packs/Yellow/Default/star.png")
+
+func _on_achievement_unlocked(achievement_id: String):
+	"""Handle achievement unlock event"""
+	print("Achievement unlocked: ", achievement_id)
+	# Refresh the display
+	_load_achievements()
 
 func _on_back_pressed():
 	"""Handle back button press"""

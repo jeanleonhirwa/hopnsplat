@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://b1r8s4sciy7pt"]
+
+[ext_resource type="Script" path="res://scripts/components/achievement_card.gd" id="1_achievement_card"]
+
+[node name="AchievementCard" type="NinePatchRect"]
+custom_minimum_size = Vector2(500, 100)
+offset_right = 500.0
+offset_bottom = 100.0
+script = ExtResource("1_achievement_card")

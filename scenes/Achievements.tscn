@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://ch1d8sro1t0hv"]
+[gd_scene load_steps=7 format=3 uid="uid://ch1d8sro1t0hv"]
 
 [ext_resource type="Script" path="res://scripts/achievements_menu.gd" id="1_achievements_menu"]
+[ext_resource type="Script" path="res://scripts/components/kenney_button.gd" id="2_kenney_button"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/arrow_basic_w.png" id="3_arrow_icon"]
+[ext_resource type="Script" path="res://scripts/components/kenney_panel.gd" id="4_kenney_panel"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Extra/Default/divider_edges.png" id="5_divider"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/star.png" id="6_star_icon"]
 
 [node name="Achievements" type="Control"]
 layout_mode = 3
@@ -34,10 +39,14 @@ grow_vertical = 2
 
 [node name="HeaderContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
+custom_minimum_size = Vector2(0, 60)
 
-[node name="BackButton" type="Button" parent="VBoxContainer/HeaderContainer"]
+[node name="BackButton" type="TextureButton" parent="VBoxContainer/HeaderContainer"]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
-text = "← BACK"
+script = ExtResource("2_kenney_button")
+button_style = 22
+icon_texture = ExtResource("3_arrow_icon")
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer/HeaderContainer"]
 layout_mode = 2
@@ -46,14 +55,44 @@ text = "ACHIEVEMENTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ProgressLabel" type="Label" parent="VBoxContainer/HeaderContainer"]
+[node name="ProgressPanel" type="NinePatchRect" parent="VBoxContainer/HeaderContainer"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+script = ExtResource("4_kenney_panel")
+panel_style = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/HeaderContainer/ProgressPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="StarIcon" type="TextureRect" parent="VBoxContainer/HeaderContainer/ProgressPanel/HBoxContainer"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+texture = ExtResource("6_star_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ProgressLabel" type="Label" parent="VBoxContainer/HeaderContainer/ProgressPanel/HBoxContainer"]
 layout_mode = 2
 text = "0/15"
-horizontal_alignment = 2
+horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="VBoxContainer"]
+[node name="Divider" type="TextureRect" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
+texture = ExtResource("5_divider")
+expand_mode = 1
+stretch_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -62,3 +101,4 @@ size_flags_vertical = 3
 [node name="AchievementsList" type="VBoxContainer" parent="VBoxContainer/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 10
