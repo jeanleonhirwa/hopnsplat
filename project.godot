@@ -32,8 +32,9 @@ ScreenTransition="*res://scripts/screen_transition.gd"
 window/size/viewport_width=540
 window/size/viewport_height=960
 window/size/mode=1
+window/size/window_width_override=540
+window/size/window_height_override=960
 window/stretch/mode="viewport"
-window/stretch/aspect="keep_width"
 window/handheld/orientation=1
 
 [editor_plugins]
