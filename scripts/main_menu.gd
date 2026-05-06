@@ -75,22 +75,15 @@ func load_and_display_stats():
 func _count_up_with_prefix(label: Label, prefix: String, from: int, to: int, duration: float):
 	"""Helper function to count up a label value while preserving a prefix"""
 	var tween = create_tween()
-	var counter = {"value": from}
 	
-	tween.tween_property(counter, "value", to, duration).set_ease(Tween.EASE_OUT)
-	
-	# Update label text during animation
-	var update_interval = 0.05  # Update every 50ms
-	var steps = int(duration / update_interval)
-	for i in range(steps + 1):
-		tween.tween_callback(func(): 
-			var progress = float(i) / float(steps)
-			var current_value = lerp(float(from), float(to), progress)
-			label.text = prefix + str(int(current_value))
-		).set_delay(update_interval * i)
-	
-	# Ensure final value is exact
-	tween.tween_callback(func(): label.text = prefix + str(to))
+	# Use tween_method to interpolate and update the label
+	tween.tween_method(
+		func(value: float):
+			label.text = prefix + str(int(value)),
+		float(from),
+		float(to),
+		duration
+	).set_ease(Tween.EASE_OUT)
 
 func load_game_data() -> Dictionary:
 	"""Load game data from save file"""

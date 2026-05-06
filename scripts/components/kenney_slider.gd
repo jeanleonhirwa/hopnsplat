@@ -233,7 +233,7 @@ func set_slider_value(new_value: float) -> void:
 
 func play_handle_animation() -> void:
 	"""Play a subtle bounce animation on the handle when value changes."""
-	if not handle_rect or disabled:
+	if not handle_rect or not editable:
 		return
 	
 	# Cancel any existing animation
@@ -263,7 +263,7 @@ func _on_drag_started() -> void:
 	"""Handle drag start - scale up handle."""
 	is_dragging = true
 	
-	if not handle_rect or disabled:
+	if not handle_rect or not editable:
 		return
 	
 	# Cancel any existing animation
@@ -279,7 +279,7 @@ func _on_drag_ended(value_changed: bool) -> void:
 	"""Handle drag end - return handle to normal scale."""
 	is_dragging = false
 	
-	if not handle_rect or disabled:
+	if not handle_rect or not editable:
 		return
 	
 	# Cancel any existing animation
@@ -293,7 +293,7 @@ func _on_drag_ended(value_changed: bool) -> void:
 
 func _on_mouse_entered() -> void:
 	"""Handle mouse enter - scale up handle slightly."""
-	if disabled or is_dragging:
+	if not editable or is_dragging:
 		return
 	
 	if not handle_rect:
@@ -310,7 +310,7 @@ func _on_mouse_entered() -> void:
 
 func _on_mouse_exited() -> void:
 	"""Handle mouse exit - return handle to normal scale."""
-	if disabled or is_dragging:
+	if not editable or is_dragging:
 		return
 	
 	if not handle_rect:
