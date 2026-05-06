@@ -293,7 +293,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Add @export properties: slider_color, show_value_label, value_suffix
     - _Requirements: 10.1, 10.2_
 
-  - [-] 12.2 Implement KenneySlider animations
+  - [x] 12.2 Implement KenneySlider animations
     - Implement play_handle_animation() for value changes
     - Handle hover: Scale to 1.1 (0.1s)
     - Handle drag: Scale to 1.15 (0.1s)
@@ -301,7 +301,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Fill bar: Smooth transition (0.2s)
     - _Requirements: 10.3_
 
-  - [~] 12.3 Convert AudioSettingsMenu.tscn to use Kenney components
+  - [x] 12.3 Convert AudioSettingsMenu.tscn to use Kenney components
     - Replace BackButton with KenneyButton (SQUARE_DEPTH_GLOSS, arrow icon)
     - Wrap each volume row in KenneyPanel
     - Add IconPanel with speaker icon for each volume control
@@ -309,14 +309,14 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Add ValueLabel showing percentage next to each slider
     - _Requirements: 10.1, 10.5_
 
-  - [~] 12.4 Implement checkbox toggles with Kenney textures
+  - [-] 12.4 Implement checkbox toggles with Kenney textures
     - Replace checkbox controls with TextureButton
     - Unchecked: check_square_grey.png
     - Checked: check_square_color_checkmark.png (Yellow)
     - Implement toggle animation: Checkmark fades in with scale (0.2s)
     - _Requirements: 10.4_
 
-  - [~] 12.5 Connect sliders to AudioManager
+  - [-] 12.5 Connect sliders to AudioManager
     - Connect each KenneySlider value_changed signal to AudioManager methods
     - Implement real-time feedback: value changes immediately update AudioManager
     - Add TestSoundButton (KenneyButton) that plays click-a.ogg at current SFX volume
