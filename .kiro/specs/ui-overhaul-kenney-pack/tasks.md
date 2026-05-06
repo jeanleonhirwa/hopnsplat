@@ -327,7 +327,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
   - Ensure all tests pass, verify all six screens use Kenney components correctly, ask the user if questions arise.
 
 - [ ] 14. Phase 9: Polish and Optimization
-  - [-] 14.1 Add particle effects for significant actions
+  - [x] 14.1 Add particle effects for significant actions
     - Shop purchase: Star burst (already implemented in 6.6)
     - Achievement unlock: Star burst (already implemented in 11.5)
     - High score: Star burst (already implemented in 9.5)
@@ -335,40 +335,40 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Level up or milestone: Confetti-style particle effect
     - _Requirements: 15.1_
 
-  - [-] 14.2 Implement screen transition animations
+  - [x] 14.2 Implement screen transition animations
     - Create screen_transition.gd utility script
     - Implement fade_to_scene(scene_path, duration) method
     - Implement slide_to_scene(scene_path, direction, duration) method
     - Apply to all scene changes in main_menu.gd, shop.gd, etc.
     - _Requirements: 15.2_
 
-  - [-] 14.3 Add floating animations to decorative elements
+  - [x] 14.3 Add floating animations to decorative elements
     - Implement subtle floating animation for MainMenu stars
     - Add gentle rotation to decorative arrows
     - Use UIAnimationManager with looping tweens
     - _Requirements: 15.3_
 
-  - [ ] 14.4 Implement currency count-up animations
+  - [x] 14.4 Implement currency count-up animations
     - Use UIAnimationManager.count_up() for currency changes
     - Add bounce effect when currency increases
     - Apply to MainMenu, Shop, GameOver currency displays
     - _Requirements: 15.4_
 
-  - [~] 14.5 Validate touch target sizes
+  - [x] 14.5 Validate touch target sizes
     - Create editor tool script to scan all scenes for button sizes
     - Ensure all KenneyButton instances meet 44x44px minimum
     - Add warnings in KenneyButton _ready() for violations
     - Fix any buttons below minimum size
     - _Requirements: 14.1, 2.4_
 
-  - [~] 14.6 Optimize texture atlases and draw calls
+  - [x] 14.6 Optimize texture atlases and draw calls
     - Create texture atlas for Yellow pack button textures
     - Create texture atlas for icon textures
     - Update Theme resource to use atlas textures
     - Measure draw call reduction using Godot profiler
     - _Requirements: 13.2_
 
-  - [~] 14.7 Performance profiling and optimization
+  - [x] 14.7 Performance profiling and optimization
     - Profile all six screens with Godot profiler
     - Verify 60 FPS maintained during animations
     - Check memory usage stays under 50MB for UI
@@ -376,7 +376,7 @@ This implementation plan breaks down the UI overhaul into actionable coding task
     - Document performance metrics
     - _Requirements: 13.1, 13.4, 13.5_
 
-  - [~] 14.8 Accessibility audit
+  - [x] 14.8 Accessibility audit
     - Verify all touch targets meet 44x44px minimum (from 14.5)
     - Check text contrast ratios against Kenney backgrounds
     - Ensure all interactive elements have visible focus indicators
