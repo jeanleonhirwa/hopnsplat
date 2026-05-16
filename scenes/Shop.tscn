@@ -31,19 +31,21 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = -20.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 8
 
 [node name="HeaderContainer" type="HBoxContainer" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 80)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+theme_override_constants/separation = 8
 
 [node name="BackButton" type="TextureButton" parent="VBoxContainer/HeaderContainer"]
-custom_minimum_size = Vector2(60, 60)
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 script = ExtResource("3_kenney_button")
 button_style = 22
@@ -54,13 +56,13 @@ icon_texture = ExtResource("4_arrow_icon")
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 36
-text = "🛒 SHOP"
+theme_override_font_sizes/font_size = 26
+text = "SHOP"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CurrencyPanel" type="NinePatchRect" parent="VBoxContainer/HeaderContainer"]
-custom_minimum_size = Vector2(180, 60)
+custom_minimum_size = Vector2(130, 44)
 layout_mode = 2
 script = ExtResource("5_kenney_panel")
 panel_style = 1
@@ -71,16 +73,17 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = 10.0
-offset_right = -10.0
-offset_bottom = -10.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 6
 alignment = 1
 
 [node name="CoinIcon" type="TextureRect" parent="VBoxContainer/HeaderContainer/CurrencyPanel/HBoxContainer"]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("6_coin_icon")
 expand_mode = 1
@@ -89,15 +92,15 @@ stretch_mode = 5
 [node name="CurrencyLabel" type="Label" parent="VBoxContainer/HeaderContainer/CurrencyPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 0.8, 0, 1)
-theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1, 0.85, 0.1, 1)
+theme_override_font_sizes/font_size = 16
 text = "Coins: 0"
 vertical_alignment = 1
 
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 14
 current_tab = 0
 
 [node name="Player Skins" type="ScrollContainer" parent="VBoxContainer/TabContainer"]

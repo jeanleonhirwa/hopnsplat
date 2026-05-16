@@ -37,48 +37,48 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -200.0
-offset_top = -250.0
+offset_top = -210.0
 offset_right = 200.0
-offset_bottom = 250.0
+offset_bottom = 210.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_kenney_panel")
 panel_style = 1
 semi_transparent = true
-transparency_alpha = 0.85
+transparency_alpha = 0.9
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PausePanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = -20.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="TitleLabel" type="Label" parent="PausePanel/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 22
 text = "GAME PAUSED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Divider1" type="TextureRect" parent="PausePanel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 10)
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 texture = ExtResource("3_divider")
 stretch_mode = 1
 
 [node name="StatsContainer" type="VBoxContainer" parent="PausePanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 6
 
 [node name="ScorePanel" type="NinePatchRect" parent="PausePanel/VBoxContainer/StatsContainer"]
-custom_minimum_size = Vector2(350, 50)
+custom_minimum_size = Vector2(340, 40)
 layout_mode = 2
 script = ExtResource("2_kenney_panel")
 panel_style = 0
@@ -91,16 +91,16 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -10.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="StarIcon" type="TextureRect" parent="PausePanel/VBoxContainer/StatsContainer/ScorePanel/HBoxContainer"]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("4_star")
 expand_mode = 1
@@ -109,13 +109,13 @@ stretch_mode = 5
 [node name="ScoreLabel" type="Label" parent="PausePanel/VBoxContainer/StatsContainer/ScorePanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "Score: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CoinsPanel" type="NinePatchRect" parent="PausePanel/VBoxContainer/StatsContainer"]
-custom_minimum_size = Vector2(350, 50)
+custom_minimum_size = Vector2(340, 40)
 layout_mode = 2
 script = ExtResource("2_kenney_panel")
 panel_style = 0
@@ -128,16 +128,16 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -10.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="CoinIcon" type="TextureRect" parent="PausePanel/VBoxContainer/StatsContainer/CoinsPanel/HBoxContainer"]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("5_coin")
 expand_mode = 1
@@ -146,13 +146,13 @@ stretch_mode = 5
 [node name="CoinsLabel" type="Label" parent="PausePanel/VBoxContainer/StatsContainer/CoinsPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "Coins: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Divider2" type="TextureRect" parent="PausePanel/VBoxContainer"]
-custom_minimum_size = Vector2(0, 10)
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
 texture = ExtResource("3_divider")
 stretch_mode = 1
@@ -160,22 +160,20 @@ stretch_mode = 1
 [node name="ButtonContainer" type="VBoxContainer" parent="PausePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="ResumeButton" type="TextureButton" parent="PausePanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(350, 60)
+custom_minimum_size = Vector2(340, 48)
 layout_mode = 2
-size_flags_vertical = 3
 script = ExtResource("6_kenney_button")
 button_style = 2
-color_pack = 0
+color_pack = 3
 icon_texture = ExtResource("7_icon_play")
 button_text = "RESUME"
 
 [node name="SettingsButton" type="TextureButton" parent="PausePanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(350, 60)
+custom_minimum_size = Vector2(340, 44)
 layout_mode = 2
-size_flags_vertical = 3
 script = ExtResource("6_kenney_button")
 button_style = 1
 color_pack = 0
@@ -183,9 +181,8 @@ icon_texture = ExtResource("8_icon_gear")
 button_text = "SETTINGS"
 
 [node name="RestartButton" type="TextureButton" parent="PausePanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(350, 60)
+custom_minimum_size = Vector2(340, 44)
 layout_mode = 2
-size_flags_vertical = 3
 script = ExtResource("6_kenney_button")
 button_style = 1
 color_pack = 0
@@ -193,9 +190,8 @@ icon_texture = ExtResource("9_icon_repeat")
 button_text = "RESTART"
 
 [node name="MenuButton" type="TextureButton" parent="PausePanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(350, 60)
+custom_minimum_size = Vector2(340, 44)
 layout_mode = 2
-size_flags_vertical = 3
 script = ExtResource("6_kenney_button")
 button_style = 1
 color_pack = 1

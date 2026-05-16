@@ -36,10 +36,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -200.0
-offset_top = -280.0
-offset_right = 200.0
-offset_bottom = 200.0
+offset_left = -210.0
+offset_top = -230.0
+offset_right = 210.0
+offset_bottom = 230.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_kenney_panel")
@@ -51,41 +51,42 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = -20.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="GameOverLabel" type="Label" parent="GameOverPanel/VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="StarRating" type="HBoxContainer" parent="GameOverPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="Star1" type="TextureRect" parent="GameOverPanel/VBoxContainer/StarRating"]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 texture = ExtResource("3_star_icon")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Star2" type="TextureRect" parent="GameOverPanel/VBoxContainer/StarRating"]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 texture = ExtResource("3_star_icon")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Star3" type="TextureRect" parent="GameOverPanel/VBoxContainer/StarRating"]
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(28, 28)
 layout_mode = 2
 texture = ExtResource("3_star_icon")
 expand_mode = 1
@@ -94,10 +95,10 @@ stretch_mode = 5
 [node name="StatsContainer" type="VBoxContainer" parent="GameOverPanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 10
+theme_override_constants/separation = 6
 
 [node name="FinalScorePanel" type="NinePatchRect" parent="GameOverPanel/VBoxContainer/StatsContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("2_kenney_panel")
 panel_style = 1
@@ -109,16 +110,16 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -10.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="StarIcon" type="TextureRect" parent="GameOverPanel/VBoxContainer/StatsContainer/FinalScorePanel/HBoxContainer"]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("3_star_icon")
 expand_mode = 1
@@ -127,12 +128,13 @@ stretch_mode = 5
 [node name="FinalScoreLabel" type="Label" parent="GameOverPanel/VBoxContainer/StatsContainer/FinalScorePanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
 text = "Final Score: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="CurrencyPanel" type="NinePatchRect" parent="GameOverPanel/VBoxContainer/StatsContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("2_kenney_panel")
 panel_style = 1
@@ -144,16 +146,16 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -10.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="CoinIcon" type="TextureRect" parent="GameOverPanel/VBoxContainer/StatsContainer/CurrencyPanel/HBoxContainer"]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("4_coin_icon")
 expand_mode = 1
@@ -162,12 +164,13 @@ stretch_mode = 5
 [node name="CurrencyEarnedLabel" type="Label" parent="GameOverPanel/VBoxContainer/StatsContainer/CurrencyPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
 text = "Coins Earned: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="JumpsPanel" type="NinePatchRect" parent="GameOverPanel/VBoxContainer/StatsContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("2_kenney_panel")
 panel_style = 1
@@ -179,16 +182,16 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -10.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="JumpIcon" type="TextureRect" parent="GameOverPanel/VBoxContainer/StatsContainer/JumpsPanel/HBoxContainer"]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("5_jump_icon")
 expand_mode = 1
@@ -197,12 +200,13 @@ stretch_mode = 5
 [node name="JumpsLabel" type="Label" parent="GameOverPanel/VBoxContainer/StatsContainer/JumpsPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
 text = "Successful Jumps: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="HighScorePanel" type="NinePatchRect" parent="GameOverPanel/VBoxContainer/StatsContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 script = ExtResource("2_kenney_panel")
 panel_style = 1
@@ -214,16 +218,16 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = 10.0
+offset_top = 8.0
 offset_right = -10.0
-offset_bottom = -10.0
+offset_bottom = -8.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 alignment = 1
 
 [node name="HighScoreIcon" type="TextureRect" parent="GameOverPanel/VBoxContainer/StatsContainer/HighScorePanel/HBoxContainer"]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("3_star_icon")
 expand_mode = 1
@@ -232,26 +236,27 @@ stretch_mode = 5
 [node name="HighScoreLabel" type="Label" parent="GameOverPanel/VBoxContainer/StatsContainer/HighScorePanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 15
 text = "High Score: 0"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ButtonContainer" type="VBoxContainer" parent="GameOverPanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 8
 
 [node name="ContinueButton" type="TextureButton" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(350, 80)
+custom_minimum_size = Vector2(360, 48)
 layout_mode = 2
 script = ExtResource("6_kenney_button")
 button_style = 2
-color_pack = 0
+color_pack = 2
 icon_texture = ExtResource("7_tv_icon")
 button_text = "CONTINUE"
 enable_idle_wobble = true
 
 [node name="RestartButton" type="TextureButton" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(350, 60)
+custom_minimum_size = Vector2(360, 44)
 layout_mode = 2
 script = ExtResource("6_kenney_button")
 button_style = 2
@@ -260,10 +265,10 @@ icon_texture = ExtResource("8_repeat_icon")
 button_text = "RESTART"
 
 [node name="MenuButton" type="TextureButton" parent="GameOverPanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(350, 60)
+custom_minimum_size = Vector2(360, 44)
 layout_mode = 2
 script = ExtResource("6_kenney_button")
 button_style = 1
-color_pack = 0
+color_pack = 4
 icon_texture = ExtResource("9_home_icon")
 button_text = "MENU"
