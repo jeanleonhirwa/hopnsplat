@@ -75,10 +75,10 @@ var max_continues: int = 2
 func _ready() -> void:
 	# Get references to UI elements and systems first
 	ui_layer = get_node_or_null("UILayer")
-	score_label = get_node_or_null("UILayer/ScoreLabel")
-	currency_label = get_node_or_null("UILayer/CurrencyLabel")
+	score_label = get_node_or_null("UILayer/TopBar/ScorePanel/ScoreLabel")
+	currency_label = get_node_or_null("UILayer/BottomBar/CurrencyPanel/CurrencyLabel")
 	combo_label = get_node_or_null("UILayer/ComboLabel")
-	pause_button = get_node_or_null("UILayer/PauseButton")
+	pause_button = get_node_or_null("UILayer/TopBar/PauseButton")
 	pause_screen = get_node_or_null("UILayer/PauseScreen")
 	audio_settings_menu = get_node_or_null("UILayer/AudioSettingsMenu")
 	

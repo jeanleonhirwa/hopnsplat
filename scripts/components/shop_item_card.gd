@@ -52,22 +52,22 @@ func _setup_card_ui() -> void:
 	main_container.anchor_top = 0.0
 	main_container.anchor_right = 1.0
 	main_container.anchor_bottom = 1.0
-	main_container.offset_left = 10
-	main_container.offset_top = 10
-	main_container.offset_right = -10
-	main_container.offset_bottom = -10
+	main_container.offset_left = 8
+	main_container.offset_top = 6
+	main_container.offset_right = -8
+	main_container.offset_bottom = -6
 	add_child(main_container)
 	
 	# Create top section (icon + info)
 	var top_section = HBoxContainer.new()
 	top_section.name = "TopSection"
-	top_section.custom_minimum_size = Vector2(0, 80)
+	top_section.custom_minimum_size = Vector2(0, 60)
 	main_container.add_child(top_section)
 	
 	# Item icon
 	item_icon_node = TextureRect.new()
 	item_icon_node.name = "ItemIcon"
-	item_icon_node.custom_minimum_size = Vector2(64, 64)
+	item_icon_node.custom_minimum_size = Vector2(48, 48)
 	item_icon_node.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	item_icon_node.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	if item_icon:
@@ -76,7 +76,7 @@ func _setup_card_ui() -> void:
 	
 	# Add spacer
 	var spacer1 = Control.new()
-	spacer1.custom_minimum_size = Vector2(10, 0)
+	spacer1.custom_minimum_size = Vector2(6, 0)
 	top_section.add_child(spacer1)
 	
 	# Info container (name + description)
@@ -89,7 +89,7 @@ func _setup_card_ui() -> void:
 	item_name_label = Label.new()
 	item_name_label.name = "ItemName"
 	item_name_label.text = item_name
-	item_name_label.add_theme_font_size_override("font_size", 18)
+	item_name_label.add_theme_font_size_override("font_size", 14)
 	item_name_label.add_theme_color_override("font_color", Color.WHITE)
 	info_container.add_child(item_name_label)
 	
@@ -97,7 +97,7 @@ func _setup_card_ui() -> void:
 	item_description_label = Label.new()
 	item_description_label.name = "ItemDescription"
 	item_description_label.text = item_description
-	item_description_label.add_theme_font_size_override("font_size", 12)
+	item_description_label.add_theme_font_size_override("font_size", 10)
 	item_description_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1.0))
 	item_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_container.add_child(item_description_label)
@@ -117,7 +117,7 @@ func _setup_card_ui() -> void:
 	price_panel.name = "PricePanel"
 	price_panel.panel_style = KenneyPanel.PanelStyle.RECTANGLE
 	price_panel.color_pack = KenneyPanel.ColorPack.YELLOW
-	price_panel.custom_minimum_size = Vector2(100, 40)
+	price_panel.custom_minimum_size = Vector2(70, 32)
 	bottom_section.add_child(price_panel)
 	
 	# Price container inside panel
@@ -147,7 +147,7 @@ func _setup_card_ui() -> void:
 	price_label = Label.new()
 	price_label.name = "PriceLabel"
 	price_label.text = str(item_price)
-	price_label.add_theme_font_size_override("font_size", 16)
+	price_label.add_theme_font_size_override("font_size", 13)
 	price_label.add_theme_color_override("font_color", Color.WHITE)
 	price_container.add_child(price_label)
 	
@@ -163,7 +163,7 @@ func _setup_card_ui() -> void:
 	purchase_button.button_style = KenneyButton.ButtonStyle.RECTANGLE_DEPTH_GLOSS
 	purchase_button.color_pack = KenneyButton.ColorPack.YELLOW
 	purchase_button.button_text = "Buy"
-	purchase_button.custom_minimum_size = Vector2(100, 44)
+	purchase_button.custom_minimum_size = Vector2(70, 36)
 	purchase_button.pressed.connect(_on_purchase_button_pressed)
 	bottom_section.add_child(purchase_button)
 	

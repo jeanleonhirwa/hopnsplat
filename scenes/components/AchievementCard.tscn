@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/components/achievement_card.gd" id="1_achievement_card"]
 
 [node name="AchievementCard" type="NinePatchRect"]
-custom_minimum_size = Vector2(500, 100)
-offset_right = 500.0
-offset_bottom = 100.0
+custom_minimum_size = Vector2(0, 80)
+offset_right = 0.0
+offset_bottom = 80.0
 script = ExtResource("1_achievement_card")

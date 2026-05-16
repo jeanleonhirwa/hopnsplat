@@ -55,23 +55,23 @@ func _setup_card_ui() -> void:
 	main_container.anchor_top = 0.0
 	main_container.anchor_right = 1.0
 	main_container.anchor_bottom = 1.0
-	main_container.offset_left = 10
-	main_container.offset_top = 10
-	main_container.offset_right = -10
-	main_container.offset_bottom = -10
+	main_container.offset_left = 8
+	main_container.offset_top = 6
+	main_container.offset_right = -8
+	main_container.offset_bottom = -6
 	add_child(main_container)
 	
 	# Icon Container (left side)
 	icon_container = CenterContainer.new()
 	icon_container.name = "IconContainer"
-	icon_container.custom_minimum_size = Vector2(80, 80)
+	icon_container.custom_minimum_size = Vector2(60, 60)
 	main_container.add_child(icon_container)
 	
 	# Icon Background (button_square_depth_gloss.png)
 	icon_background = TextureRect.new()
 	icon_background.name = "IconBackground"
 	icon_background.texture = load("res://assets/ui_packs/Yellow/Default/button_square_depth_gloss.png")
-	icon_background.custom_minimum_size = Vector2(64, 64)
+	icon_background.custom_minimum_size = Vector2(48, 48)
 	icon_background.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	icon_background.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon_container.add_child(icon_background)
@@ -79,7 +79,7 @@ func _setup_card_ui() -> void:
 	# Achievement Icon (on top of background)
 	achievement_icon_node = TextureRect.new()
 	achievement_icon_node.name = "AchievementIcon"
-	achievement_icon_node.custom_minimum_size = Vector2(48, 48)
+	achievement_icon_node.custom_minimum_size = Vector2(36, 36)
 	achievement_icon_node.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	achievement_icon_node.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	if achievement_icon:
@@ -94,14 +94,14 @@ func _setup_card_ui() -> void:
 	achievement_icon_node.anchor_top = 0.5
 	achievement_icon_node.anchor_right = 0.5
 	achievement_icon_node.anchor_bottom = 0.5
-	achievement_icon_node.offset_left = -24
-	achievement_icon_node.offset_top = -24
-	achievement_icon_node.offset_right = 24
-	achievement_icon_node.offset_bottom = 24
+	achievement_icon_node.offset_left = -18
+	achievement_icon_node.offset_top = -18
+	achievement_icon_node.offset_right = 18
+	achievement_icon_node.offset_bottom = 18
 	
 	# Add spacer
 	var spacer1 = Control.new()
-	spacer1.custom_minimum_size = Vector2(15, 0)
+	spacer1.custom_minimum_size = Vector2(8, 0)
 	main_container.add_child(spacer1)
 	
 	# Info Container (middle section)
@@ -114,7 +114,7 @@ func _setup_card_ui() -> void:
 	title_label = Label.new()
 	title_label.name = "TitleLabel"
 	title_label.text = achievement_title
-	title_label.add_theme_font_size_override("font_size", 18)
+	title_label.add_theme_font_size_override("font_size", 15)
 	title_label.add_theme_color_override("font_color", Color.WHITE)
 	info_container.add_child(title_label)
 	
@@ -159,19 +159,19 @@ func _setup_card_ui() -> void:
 	
 	# Add spacer
 	var spacer2 = Control.new()
-	spacer2.custom_minimum_size = Vector2(15, 0)
+	spacer2.custom_minimum_size = Vector2(8, 0)
 	main_container.add_child(spacer2)
 	
 	# Status Container (right side)
 	status_container = CenterContainer.new()
 	status_container.name = "StatusContainer"
-	status_container.custom_minimum_size = Vector2(48, 48)
+	status_container.custom_minimum_size = Vector2(36, 36)
 	main_container.add_child(status_container)
 	
 	# Status Star (filled or outline based on locked state)
 	status_star = TextureRect.new()
 	status_star.name = "StatusStar"
-	status_star.custom_minimum_size = Vector2(40, 40)
+	status_star.custom_minimum_size = Vector2(28, 28)
 	status_star.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
 	status_star.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	status_container.add_child(status_star)
