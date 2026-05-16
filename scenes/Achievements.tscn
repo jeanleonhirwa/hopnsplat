@@ -88,7 +88,7 @@ stretch_mode = 5
 
 [node name="ProgressLabel" type="Label" parent="VBoxContainer/HeaderContainer/ProgressPanel/HBoxContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 14
 text = "0/15"
 horizontal_alignment = 1

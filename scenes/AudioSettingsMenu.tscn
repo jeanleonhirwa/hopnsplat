@@ -72,7 +72,7 @@ icon_texture = ExtResource("4_arrow_icon")
 [node name="TitleLabel" type="Label" parent="Panel/VBoxContainer/HeaderContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 28
 text = "AUDIO SETTINGS"
 horizontal_alignment = 1
@@ -131,6 +131,7 @@ size_flags_horizontal = 3
 
 [node name="MusicVolumeLabel" type="Label" parent="Panel/VBoxContainer/MusicVolumeRow/HBoxContainer/SliderContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 text = "Music Volume"
 vertical_alignment = 1
 
@@ -202,6 +203,7 @@ size_flags_horizontal = 3
 
 [node name="SFXVolumeLabel" type="Label" parent="Panel/VBoxContainer/SFXVolumeRow/HBoxContainer/SliderContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 text = "SFX Volume"
 vertical_alignment = 1
 
@@ -263,6 +265,7 @@ offset_right = 50.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 text = "Music Enabled"
 vertical_alignment = 1
 
@@ -315,6 +318,7 @@ offset_right = 50.0
 offset_bottom = 11.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 text = "SFX Enabled"
 vertical_alignment = 1
 
