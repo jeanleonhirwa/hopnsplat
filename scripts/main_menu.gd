@@ -19,6 +19,7 @@ var responsive_layout
 @onready var quit_button = $VBoxContainer/BottomButtons/QuitButton
 @onready var high_score_label = $VBoxContainer/StatsPanel/VBoxContainer/HighScoreContainer/HighScoreLabel
 @onready var currency_label = $VBoxContainer/StatsPanel/VBoxContainer/CurrencyContainer/CurrencyLabel
+# Note: StatsPanel inner container is now an HBoxContainer named "VBoxContainer" for path compatibility
 @onready var stats_panel = $VBoxContainer/StatsPanel
 
 # Decorative elements

@@ -37,20 +37,20 @@ grow_vertical = 2
 
 [node name="FloatingStar1" type="TextureRect" parent="BackgroundDecoration"]
 layout_mode = 0
-offset_left = 80.0
-offset_top = 120.0
-offset_right = 120.0
-offset_bottom = 160.0
+offset_left = 60.0
+offset_top = 100.0
+offset_right = 90.0
+offset_bottom = 130.0
 texture = ExtResource("7_star")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="FloatingStar2" type="TextureRect" parent="BackgroundDecoration"]
 layout_mode = 0
-offset_left = 460.0
-offset_top = 700.0
-offset_right = 500.0
-offset_bottom = 740.0
+offset_left = 440.0
+offset_top = 680.0
+offset_right = 470.0
+offset_bottom = 710.0
 texture = ExtResource("7_star")
 expand_mode = 1
 stretch_mode = 5
@@ -82,7 +82,7 @@ grow_vertical = 2
 theme_override_constants/separation = 0
 
 [node name="Spacer0" type="Control" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="VBoxContainer"]
@@ -92,38 +92,42 @@ theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.5)
 theme_override_constants/shadow_offset_x = 3
 theme_override_constants/shadow_offset_y = 3
 theme_override_fonts/font = ExtResource("8_font")
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 38
 text = "HOP N' SPLAT"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Spacer1" type="Control" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 30)
+custom_minimum_size = Vector2(0, 16)
 layout_mode = 2
 
 [node name="StatsPanel" type="NinePatchRect" parent="VBoxContainer"]
-custom_minimum_size = Vector2(420, 75)
+custom_minimum_size = Vector2(460, 60)
 layout_mode = 2
 script = ExtResource("5_kenney_panel")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/StatsPanel"]
+[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer/StatsPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = 12.0
-offset_right = -20.0
-offset_bottom = -12.0
+offset_left = 16.0
+offset_top = 10.0
+offset_right = -16.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 8
+theme_override_constants/separation = 20
+alignment = 1
 
 [node name="HighScoreContainer" type="HBoxContainer" parent="VBoxContainer/StatsPanel/VBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+alignment = 1
 
 [node name="StarIcon" type="TextureRect" parent="VBoxContainer/StatsPanel/VBoxContainer/HighScoreContainer"]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("7_star")
 expand_mode = 1
@@ -131,18 +135,23 @@ stretch_mode = 5
 
 [node name="HighScoreLabel" type="Label" parent="VBoxContainer/StatsPanel/VBoxContainer/HighScoreContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_colors/font_color = Color(1, 0.85, 0.1, 1)
 theme_override_fonts/font = ExtResource("8_font")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "Best: 0"
 vertical_alignment = 1
 
-[node name="CurrencyContainer" type="HBoxContainer" parent="VBoxContainer/StatsPanel/VBoxContainer"]
+[node name="Divider" type="VSeparator" parent="VBoxContainer/StatsPanel/VBoxContainer"]
 layout_mode = 2
 
+[node name="CurrencyContainer" type="HBoxContainer" parent="VBoxContainer/StatsPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+alignment = 1
+
 [node name="CoinIcon" type="TextureRect" parent="VBoxContainer/StatsPanel/VBoxContainer/CurrencyContainer"]
-custom_minimum_size = Vector2(24, 24)
+custom_minimum_size = Vector2(20, 20)
 layout_mode = 2
 texture = ExtResource("7_star")
 expand_mode = 1
@@ -150,24 +159,23 @@ stretch_mode = 5
 
 [node name="CurrencyLabel" type="Label" parent="VBoxContainer/StatsPanel/VBoxContainer/CurrencyContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_colors/font_color = Color(1, 0.85, 0.1, 1)
 theme_override_fonts/font = ExtResource("8_font")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 16
 text = "Coins: 0"
 vertical_alignment = 1
 
 [node name="Spacer2" type="Control" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 50)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="ButtonContainer" type="VBoxContainer" parent="VBoxContainer"]
 custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 12
 
 [node name="PlayButton" type="TextureButton" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(460, 85)
+custom_minimum_size = Vector2(460, 52)
 layout_mode = 2
 script = ExtResource("4_kenney_button")
 button_style = 2
@@ -176,46 +184,42 @@ button_text = "PLAY"
 enable_idle_wobble = true
 
 [node name="ShopButton" type="TextureButton" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(460, 70)
+custom_minimum_size = Vector2(460, 48)
 layout_mode = 2
 script = ExtResource("4_kenney_button")
 button_style = 1
 button_text = "SHOP"
 
 [node name="AchievementsButton" type="TextureButton" parent="VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(460, 70)
+custom_minimum_size = Vector2(460, 48)
 layout_mode = 2
 script = ExtResource("4_kenney_button")
 button_style = 1
 button_text = "ACHIEVEMENTS"
 
 [node name="Spacer3" type="Control" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
+custom_minimum_size = Vector2(0, 24)
 layout_mode = 2
 
 [node name="BottomButtons" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 20
+theme_override_constants/separation = 16
 alignment = 1
 
 [node name="SettingsButton" type="TextureButton" parent="VBoxContainer/BottomButtons"]
-custom_minimum_size = Vector2(220, 60)
+custom_minimum_size = Vector2(222, 48)
 layout_mode = 2
 script = ExtResource("4_kenney_button")
 button_style = 1
 button_text = "SETTINGS"
 
 [node name="QuitButton" type="TextureButton" parent="VBoxContainer/BottomButtons"]
-custom_minimum_size = Vector2(220, 60)
+custom_minimum_size = Vector2(222, 48)
 layout_mode = 2
 script = ExtResource("4_kenney_button")
 button_style = 1
 color_pack = 1
 button_text = "QUIT"
-
-[node name="Spacer4" type="Control" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
 
 [node name="AudioSettingsMenu" parent="." instance=ExtResource("2_audio_settings")]
 visible = false
@@ -228,4 +232,3 @@ layout_mode = 1
 [node name="ButtonHoverSound" type="AudioStreamPlayer" parent="."]
 
 [node name="ButtonClickSound" type="AudioStreamPlayer" parent="."]
-
