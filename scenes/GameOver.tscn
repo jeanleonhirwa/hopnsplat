@@ -61,6 +61,7 @@ theme_override_constants/separation = 8
 
 [node name="GameOverLabel" type="Label" parent="GameOverPanel/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 24
 text = "GAME OVER"
 horizontal_alignment = 1
@@ -128,6 +129,7 @@ stretch_mode = 5
 [node name="FinalScoreLabel" type="Label" parent="GameOverPanel/VBoxContainer/StatsContainer/FinalScorePanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 15
 text = "Final Score: 0"
 horizontal_alignment = 1

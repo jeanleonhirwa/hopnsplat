@@ -90,7 +90,7 @@ func _setup_card_ui() -> void:
 	item_name_label.name = "ItemName"
 	item_name_label.text = item_name
 	item_name_label.add_theme_font_size_override("font_size", 14)
-	item_name_label.add_theme_color_override("font_color", Color.WHITE)
+	item_name_label.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2, 1))
 	info_container.add_child(item_name_label)
 	
 	# Item description
@@ -98,7 +98,7 @@ func _setup_card_ui() -> void:
 	item_description_label.name = "ItemDescription"
 	item_description_label.text = item_description
 	item_description_label.add_theme_font_size_override("font_size", 10)
-	item_description_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1.0))
+	item_description_label.add_theme_color_override("font_color", Color(0.35, 0.35, 0.35, 1.0))
 	item_description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_container.add_child(item_description_label)
 	
@@ -148,7 +148,7 @@ func _setup_card_ui() -> void:
 	price_label.name = "PriceLabel"
 	price_label.text = str(item_price)
 	price_label.add_theme_font_size_override("font_size", 13)
-	price_label.add_theme_color_override("font_color", Color.WHITE)
+	price_label.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2, 1))
 	price_container.add_child(price_label)
 	
 	# Add spacer

@@ -115,7 +115,7 @@ func _setup_card_ui() -> void:
 	title_label.name = "TitleLabel"
 	title_label.text = achievement_title
 	title_label.add_theme_font_size_override("font_size", 15)
-	title_label.add_theme_color_override("font_color", Color.WHITE)
+	title_label.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2, 1))
 	info_container.add_child(title_label)
 	
 	# Description Label
@@ -123,7 +123,7 @@ func _setup_card_ui() -> void:
 	description_label.name = "DescriptionLabel"
 	description_label.text = achievement_description
 	description_label.add_theme_font_size_override("font_size", 12)
-	description_label.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1.0))
+	description_label.add_theme_color_override("font_color", Color(0.35, 0.35, 0.35, 1.0))
 	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	info_container.add_child(description_label)
 	
@@ -150,7 +150,7 @@ func _setup_card_ui() -> void:
 	progress_label.name = "ProgressLabel"
 	progress_label.text = "%d/%d" % [current_progress, max_progress]
 	progress_label.add_theme_font_size_override("font_size", 12)
-	progress_label.add_theme_color_override("font_color", Color.WHITE)
+	progress_label.add_theme_color_override("font_color", Color(0.2, 0.2, 0.2, 1))
 	progress_label.custom_minimum_size = Vector2(60, 0)
 	progress_container.add_child(progress_label)
 	
