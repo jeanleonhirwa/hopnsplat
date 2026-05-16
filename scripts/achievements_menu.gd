@@ -47,7 +47,13 @@ func _create_achievement_card(achievement: Dictionary):
 	"""Create AchievementCard for an achievement"""
 	var card = AchievementCardScene.instantiate()
 	
-	# Set achievement data
+	# Add to list FIRST so _ready() runs and creates UI nodes
+	achievements_list.add_child(card)
+	
+	# Connect unlock signal
+	card.achievement_unlocked.connect(_on_achievement_unlocked)
+	
+	# Now set achievement data (UI nodes exist after _ready)
 	var icon_texture = _get_achievement_icon(achievement.icon)
 	var is_progressive = achievement.has("target") and achievement.target > 1
 	var max_progress = achievement.target if is_progressive else 1
@@ -67,12 +73,6 @@ func _create_achievement_card(achievement: Dictionary):
 	# Set progress for progressive achievements
 	if is_progressive:
 		card.set_progress(achievement.progress)
-	
-	# Connect unlock signal
-	card.achievement_unlocked.connect(_on_achievement_unlocked)
-	
-	# Add to list
-	achievements_list.add_child(card)
 
 func _get_achievement_icon(icon_emoji: String) -> Texture2D:
 	"""Convert emoji icon to texture (placeholder implementation)"""
