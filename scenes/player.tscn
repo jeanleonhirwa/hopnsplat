@@ -55,8 +55,10 @@ animation = &"fly"
 shape = SubResource("CapsuleShape2D_ur7pv")
 
 [node name="JumpSound" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="DangerSound" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="JumpParticles" type="CPUParticles2D" parent="."]
 emitting = false

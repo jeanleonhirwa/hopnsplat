@@ -230,5 +230,7 @@ visible = false
 layout_mode = 1
 
 [node name="ButtonHoverSound" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
 
 [node name="ButtonClickSound" type="AudioStreamPlayer" parent="."]
+bus = &"SFX"
