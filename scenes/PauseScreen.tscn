@@ -62,6 +62,7 @@ theme_override_constants/separation = 8
 
 [node name="TitleLabel" type="Label" parent="PausePanel/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 22
 text = "GAME PAUSED"
 horizontal_alignment = 1
@@ -109,6 +110,7 @@ stretch_mode = 5
 [node name="ScoreLabel" type="Label" parent="PausePanel/VBoxContainer/StatsContainer/ScorePanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 16
 text = "Score: 0"
 horizontal_alignment = 1
@@ -146,6 +148,7 @@ stretch_mode = 5
 [node name="CoinsLabel" type="Label" parent="PausePanel/VBoxContainer/StatsContainer/CoinsPanel/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 16
 text = "Coins: 0"
 horizontal_alignment = 1
