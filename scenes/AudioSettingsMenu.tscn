@@ -145,10 +145,14 @@ size_flags_horizontal = 3
 max_value = 100.0
 step = 1.0
 value = 70.0
-script = ExtResource("6_kenney_slider")
-slider_color = 0
-show_value_label = true
-value_suffix = "%"
+
+[node name="MusicValueLabel" type="Label" parent="Panel/VBoxContainer/MusicVolumeRow/HBoxContainer/SliderContainer/SliderRow"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+text = "70%"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="HSeparator2" type="HSeparator" parent="Panel/VBoxContainer"]
 layout_mode = 2
@@ -217,10 +221,14 @@ size_flags_horizontal = 3
 max_value = 100.0
 step = 1.0
 value = 80.0
-script = ExtResource("6_kenney_slider")
-slider_color = 0
-show_value_label = true
-value_suffix = "%"
+
+[node name="SFXValueLabel" type="Label" parent="Panel/VBoxContainer/SFXVolumeRow/HBoxContainer/SliderContainer/SliderRow"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
+text = "80%"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="HSeparator3" type="HSeparator" parent="Panel/VBoxContainer"]
 layout_mode = 2

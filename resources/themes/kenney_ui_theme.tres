@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://dxqxqxqxqxqxv" path="res://assets/ui_packs/Yellow/Default/slide_horizontal_color.png" id="6_slider_fill"]
 [ext_resource type="FontFile" uid="uid://dxqxqxqxqxqxw" path="res://addons/admob/assets/fonts/arial.ttf" id="7_font"]
 [ext_resource type="Texture2D" uid="uid://dxqxqxqxqxqxy" path="res://assets/ui_packs/Yellow/Default/button_rectangle_flat.png" id="8_tab_inactive"]
+[ext_resource type="Texture2D" uid="uid://crclh62ok4w5x" path="res://assets/ui_packs/Yellow/Default/icon_circle.png" id="9_circle_icon"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_button_normal"]
 texture = ExtResource("1_button_rect_depth")
@@ -40,19 +41,23 @@ texture_margin_top = 10.0
 texture_margin_right = 10.0
 texture_margin_bottom = 10.0
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_slider_bg"]
-texture = ExtResource("5_slider_bg")
-texture_margin_left = 5.0
-texture_margin_top = 5.0
-texture_margin_right = 5.0
-texture_margin_bottom = 5.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_bg"]
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.1, 0.1, 0.1, 0.15)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_slider_fill"]
-texture = ExtResource("6_slider_fill")
-texture_margin_left = 5.0
-texture_margin_top = 5.0
-texture_margin_right = 5.0
-texture_margin_bottom = 5.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_slider_fill"]
+content_margin_top = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.98, 0.75, 0.18, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_tab_selected"]
 texture = ExtResource("1_button_rect_depth")
@@ -129,9 +134,11 @@ HSlider/colors/icon_normal_color = Color(1, 1, 1, 1)
 HSlider/colors/icon_pressed_color = Color(1, 1, 1, 1)
 HSlider/constants/center_grabber = 0
 HSlider/constants/grabber_offset = 0
-HSlider/styles/grabber_area = SubResource("StyleBoxTexture_slider_fill")
-HSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_slider_fill")
-HSlider/styles/slider = SubResource("StyleBoxTexture_slider_bg")
+HSlider/icons/grabber = ExtResource("9_circle_icon")
+HSlider/icons/grabber_highlight = ExtResource("9_circle_icon")
+HSlider/styles/grabber_area = SubResource("StyleBoxFlat_slider_fill")
+HSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_fill")
+HSlider/styles/slider = SubResource("StyleBoxFlat_slider_bg")
 
 VSlider/colors/icon_disabled_color = Color(0.5, 0.5, 0.5, 1)
 VSlider/colors/icon_focus_color = Color(1, 1, 1, 1)
@@ -141,9 +148,11 @@ VSlider/colors/icon_normal_color = Color(1, 1, 1, 1)
 VSlider/colors/icon_pressed_color = Color(1, 1, 1, 1)
 VSlider/constants/center_grabber = 0
 VSlider/constants/grabber_offset = 0
-VSlider/styles/grabber_area = SubResource("StyleBoxTexture_slider_fill")
-VSlider/styles/grabber_area_highlight = SubResource("StyleBoxTexture_slider_fill")
-VSlider/styles/slider = SubResource("StyleBoxTexture_slider_bg")
+VSlider/icons/grabber = ExtResource("9_circle_icon")
+VSlider/icons/grabber_highlight = ExtResource("9_circle_icon")
+VSlider/styles/grabber_area = SubResource("StyleBoxFlat_slider_fill")
+VSlider/styles/grabber_area_highlight = SubResource("StyleBoxFlat_slider_fill")
+VSlider/styles/slider = SubResource("StyleBoxFlat_slider_bg")
 
 TabContainer/colors/font_disabled_color = Color(0.5, 0.5, 0.5, 1)
 TabContainer/colors/font_hovered_color = Color(1, 1, 1, 1)

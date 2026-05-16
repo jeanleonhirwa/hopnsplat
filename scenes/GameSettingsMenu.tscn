@@ -4,10 +4,9 @@
 [ext_resource type="Theme" uid="uid://c8j7xqm5yvn8r" path="res://resources/themes/kenney_ui_theme.tres" id="2_theme"]
 [ext_resource type="Script" path="res://scripts/components/kenney_button.gd" id="3_kenney_button"]
 [ext_resource type="Script" path="res://scripts/components/kenney_panel.gd" id="4_kenney_panel"]
-[ext_resource type="Script" path="res://scripts/components/kenney_slider.gd" id="5_kenney_slider"]
-[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/icon_cross.png" id="6_cross_icon"]
 [ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/check_square_grey.png" id="7_check_unchecked"]
 [ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/check_square_color_checkmark.png" id="8_check_checked"]
+
 
 [node name="GameSettingsMenu" type="Control"]
 process_mode = 3
@@ -92,12 +91,11 @@ theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 text = "Music Volume: 70%"
 
 [node name="MusicSlider" type="HSlider" parent="Panel/VBoxContainer/AudioSection/MusicContainer"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 max_value = 1.0
 step = 0.01
 value = 0.7
-script = ExtResource("5_kenney_slider")
 
 [node name="HBoxContainer1" type="HBoxContainer" parent="Panel/VBoxContainer/AudioSection/MusicContainer"]
 layout_mode = 2
@@ -129,12 +127,11 @@ theme_override_colors/font_color = Color(0.2, 0.2, 0.2, 1)
 text = "SFX Volume: 80%"
 
 [node name="SFXSlider" type="HSlider" parent="Panel/VBoxContainer/AudioSection/SFXContainer"]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 max_value = 1.0
 step = 0.01
 value = 0.8
-script = ExtResource("5_kenney_slider")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="Panel/VBoxContainer/AudioSection/SFXContainer"]
 layout_mode = 2
@@ -171,7 +168,6 @@ script = ExtResource("3_kenney_button")
 button_style = 1
 color_pack = 1
 button_text = "RESET GAME"
-icon_texture = ExtResource("6_cross_icon")
 
 [node name="Divider3" type="TextureRect" parent="Panel/VBoxContainer"]
 custom_minimum_size = Vector2(0, 8)

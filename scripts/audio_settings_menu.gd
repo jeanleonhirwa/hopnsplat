@@ -8,6 +8,8 @@ var audio_manager
 # UI References
 @onready var music_volume_slider: HSlider
 @onready var sfx_volume_slider: HSlider
+@onready var music_value_label: Label
+@onready var sfx_value_label: Label
 @onready var music_toggle_checkbox: TextureButton
 @onready var sfx_toggle_checkbox: TextureButton
 @onready var test_sound_button: TextureButton
@@ -35,6 +37,8 @@ func _ready():
 	# Find UI elements
 	music_volume_slider = get_node_or_null("Panel/VBoxContainer/MusicVolumeRow/HBoxContainer/SliderContainer/SliderRow/MusicVolumeSlider")
 	sfx_volume_slider = get_node_or_null("Panel/VBoxContainer/SFXVolumeRow/HBoxContainer/SliderContainer/SliderRow/SFXVolumeSlider")
+	music_value_label = get_node_or_null("Panel/VBoxContainer/MusicVolumeRow/HBoxContainer/SliderContainer/SliderRow/MusicValueLabel")
+	sfx_value_label = get_node_or_null("Panel/VBoxContainer/SFXVolumeRow/HBoxContainer/SliderContainer/SliderRow/SFXValueLabel")
 	music_toggle_checkbox = get_node_or_null("Panel/VBoxContainer/MusicToggleRow/HBoxContainer/MusicToggleCheckbox")
 	sfx_toggle_checkbox = get_node_or_null("Panel/VBoxContainer/SFXToggleRow/HBoxContainer/SFXToggleCheckbox")
 	test_sound_button = get_node_or_null("Panel/VBoxContainer/TestSoundButton")
@@ -71,14 +75,16 @@ func load_current_settings():
 		return
 		
 	if music_volume_slider:
-		# Convert 0-1 range to 0-100 for display
-		music_volume_slider.value = audio_manager.get_music_volume() * 100
-		print("Set music slider to: ", audio_manager.get_music_volume() * 100)
+		var val = audio_manager.get_music_volume() * 100
+		music_volume_slider.value = val
+		if music_value_label: music_value_label.text = str(int(val)) + "%"
+		print("Set music slider to: ", val)
 	
 	if sfx_volume_slider:
-		# Convert 0-1 range to 0-100 for display
-		sfx_volume_slider.value = audio_manager.get_sfx_volume() * 100
-		print("Set SFX slider to: ", audio_manager.get_sfx_volume() * 100)
+		var val = audio_manager.get_sfx_volume() * 100
+		sfx_volume_slider.value = val
+		if sfx_value_label: sfx_value_label.text = str(int(val)) + "%"
+		print("Set SFX slider to: ", val)
 	
 	if music_toggle_checkbox:
 		music_toggle_checkbox.button_pressed = audio_manager.is_music_enabled()
@@ -93,6 +99,7 @@ func load_current_settings():
 func _on_music_volume_changed(value: float):
 	"""Handle music volume slider change"""
 	print("Music volume changed to: ", value)
+	if music_value_label: music_value_label.text = str(int(value)) + "%"
 	if audio_manager:
 		# Convert 0-100 range to 0-1 for AudioManager
 		audio_manager.set_music_volume(value / 100.0)
@@ -100,6 +107,7 @@ func _on_music_volume_changed(value: float):
 func _on_sfx_volume_changed(value: float):
 	"""Handle SFX volume slider change"""
 	print("SFX volume changed to: ", value)
+	if sfx_value_label: sfx_value_label.text = str(int(value)) + "%"
 	if audio_manager:
 		# Convert 0-100 range to 0-1 for AudioManager
 		audio_manager.set_sfx_volume(value / 100.0)
