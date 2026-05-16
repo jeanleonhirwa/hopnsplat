@@ -7,10 +7,10 @@ extends Control
 @onready var sfx_slider: HSlider
 @onready var music_label: Label
 @onready var sfx_label: Label
-@onready var music_toggle: CheckButton
-@onready var sfx_toggle: CheckButton
-@onready var reset_button: Button
-@onready var close_button: Button
+@onready var music_toggle: TextureButton
+@onready var sfx_toggle: TextureButton
+@onready var reset_button: TextureButton
+@onready var close_button: TextureButton
 @onready var confirmation_dialog: Control
 
 # Managers
