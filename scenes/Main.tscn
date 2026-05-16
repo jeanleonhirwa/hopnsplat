@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bqyxvnhqvg5oa"]
+[gd_scene load_steps=18 format=3 uid="uid://bqyxvnhqvg5oa"]
 
 [ext_resource type="PackedScene" uid="uid://b62i2slq0wiet" path="res://scenes/player.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cq5gys5e4l486" path="res://scripts/platform_spawner.gd" id="2_0bbpv"]
@@ -9,6 +9,14 @@
 [ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4r" path="res://scenes/rising_danger.tscn" id="7_danger"]
 [ext_resource type="PackedScene" uid="uid://bvxm8k2n7qp4s" path="res://scenes/AudioSettingsMenu.tscn" id="8_audio_settings"]
 [ext_resource type="PackedScene" uid="uid://c8k2n7qp4game" path="res://scenes/GameSettingsMenu.tscn" id="9_game_settings"]
+[ext_resource type="Script" path="res://scripts/components/kenney_panel.gd" id="10_kenney_panel"]
+[ext_resource type="Script" path="res://scripts/components/kenney_button.gd" id="11_kenney_button"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Extra/Default/divider_edges.png" id="12_divider"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/star.png" id="13_star"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/icon_circle.png" id="14_coin"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Extra/Default/icon_play_light.png" id="15_icon_play"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Extra/Default/icon_repeat_light.png" id="16_icon_repeat"]
+[ext_resource type="Texture2D" path="res://assets/ui_packs/Yellow/Default/icon_square.png" id="17_icon_home"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qnwvq"]
 size = Vector2(542, 27)
@@ -157,19 +165,23 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.7)
 
-[node name="PausePanel" type="Panel" parent="UILayer/PauseScreen"]
+[node name="PausePanel" type="NinePatchRect" parent="UILayer/PauseScreen"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -190.0
-offset_top = -200.0
-offset_right = 190.0
-offset_bottom = 200.0
+offset_left = -200.0
+offset_top = -210.0
+offset_right = 200.0
+offset_bottom = 210.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("10_kenney_panel")
+panel_style = 1
+semi_transparent = true
+transparency_alpha = 0.9
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UILayer/PauseScreen/PausePanel"]
 layout_mode = 1
@@ -186,61 +198,143 @@ theme_override_constants/separation = 8
 
 [node name="TitleLabel" type="Label" parent="UILayer/PauseScreen/PausePanel/VBoxContainer"]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 22
 text = "GAME PAUSED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HSeparator" type="HSeparator" parent="UILayer/PauseScreen/PausePanel/VBoxContainer"]
+[node name="Divider1" type="TextureRect" parent="UILayer/PauseScreen/PausePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
+texture = ExtResource("12_divider")
+stretch_mode = 1
 
-[node name="ScoreContainer" type="VBoxContainer" parent="UILayer/PauseScreen/PausePanel/VBoxContainer"]
+[node name="StatsContainer" type="VBoxContainer" parent="UILayer/PauseScreen/PausePanel/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 6
 
-[node name="ScoreLabel" type="Label" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ScoreContainer"]
+[node name="ScorePanel" type="NinePatchRect" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/StatsContainer"]
+custom_minimum_size = Vector2(340, 40)
 layout_mode = 2
+script = ExtResource("10_kenney_panel")
+panel_style = 0
+semi_transparent = true
+transparency_alpha = 0.7
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/StatsContainer/ScorePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="StarIcon" type="TextureRect" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/StatsContainer/ScorePanel/HBoxContainer"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("13_star")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="ScoreLabel" type="Label" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/StatsContainer/ScorePanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
 text = "Score: 0"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="CoinsLabel" type="Label" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ScoreContainer"]
+[node name="CoinsPanel" type="NinePatchRect" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/StatsContainer"]
+custom_minimum_size = Vector2(340, 40)
 layout_mode = 2
+script = ExtResource("10_kenney_panel")
+panel_style = 0
+semi_transparent = true
+transparency_alpha = 0.7
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/StatsContainer/CoinsPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = -10.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="CoinIcon" type="TextureRect" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/StatsContainer/CoinsPanel/HBoxContainer"]
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+texture = ExtResource("14_coin")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CoinsLabel" type="Label" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/StatsContainer/CoinsPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 16
 text = "Coins: 0"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="HSeparator2" type="HSeparator" parent="UILayer/PauseScreen/PausePanel/VBoxContainer"]
+[node name="Divider2" type="TextureRect" parent="UILayer/PauseScreen/PausePanel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 8)
 layout_mode = 2
+texture = ExtResource("12_divider")
+stretch_mode = 1
 
 [node name="ButtonContainer" type="VBoxContainer" parent="UILayer/PauseScreen/PausePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 6
+theme_override_constants/separation = 8
 
-[node name="ResumeButton" type="Button" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="ResumeButton" type="TextureButton" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(340, 48)
 layout_mode = 2
-size_flags_vertical = 3
-text = "RESUME"
+script = ExtResource("11_kenney_button")
+button_style = 2
+color_pack = 3
+icon_texture = ExtResource("15_icon_play")
+button_text = "RESUME"
 
-[node name="SettingsButton" type="Button" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="SettingsButton" type="TextureButton" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(340, 44)
 layout_mode = 2
-size_flags_vertical = 3
-text = "SETTINGS"
+script = ExtResource("11_kenney_button")
+button_style = 1
+color_pack = 0
+button_text = "SETTINGS"
 
-[node name="RestartButton" type="Button" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="RestartButton" type="TextureButton" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(340, 44)
 layout_mode = 2
-size_flags_vertical = 3
-text = "RESTART"
+script = ExtResource("11_kenney_button")
+button_style = 1
+color_pack = 0
+icon_texture = ExtResource("16_icon_repeat")
+button_text = "RESTART"
 
-[node name="MenuButton" type="Button" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
-custom_minimum_size = Vector2(0, 40)
+[node name="MenuButton" type="TextureButton" parent="UILayer/PauseScreen/PausePanel/VBoxContainer/ButtonContainer"]
+custom_minimum_size = Vector2(340, 44)
 layout_mode = 2
-size_flags_vertical = 3
-text = "MAIN MENU"
+script = ExtResource("11_kenney_button")
+button_style = 1
+color_pack = 1
+icon_texture = ExtResource("17_icon_home")
+button_text = "MAIN MENU"
 
 [node name="GameSettingsMenu" parent="UILayer" instance=ExtResource("9_game_settings")]
 visible = false

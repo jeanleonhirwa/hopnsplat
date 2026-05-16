@@ -282,8 +282,8 @@ func show_pause_screen():
 		pause_screen.show_pause_screen(current_score, total_currency + session_currency)
 	else:
 		# Fallback to old behavior if method doesn't exist
-		var pause_score_label = pause_screen.get_node("PausePanel/VBoxContainer/ScoreContainer/ScoreLabel")
-		var pause_coins_label = pause_screen.get_node("PausePanel/VBoxContainer/ScoreContainer/CoinsLabel")
+		var pause_score_label = pause_screen.get_node("PausePanel/VBoxContainer/StatsContainer/ScorePanel/HBoxContainer/ScoreLabel")
+		var pause_coins_label = pause_screen.get_node("PausePanel/VBoxContainer/StatsContainer/CoinsPanel/HBoxContainer/CoinsLabel")
 		
 		if pause_score_label:
 			pause_score_label.text = "Score: " + str(current_score)
