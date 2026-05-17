@@ -223,7 +223,7 @@ func _on_purchase_button_pressed() -> void:
 
 # Public API methods
 
-func set_item_data(id: String, item_name_text: String, description: String, price: int, icon: Texture2D) -> void:
+func set_item_data(id: String, item_name_text: String, description: String, price: int, icon: Texture2D, icon_color: Color = Color.WHITE) -> void:
 	"""Set the item data for this card."""
 	item_id = id
 	item_name = item_name_text
@@ -240,6 +240,8 @@ func set_item_data(id: String, item_name_text: String, description: String, pric
 		price_label.text = str(item_price)
 	if item_icon_node:
 		item_icon_node.texture = item_icon
+		if icon_color != Color.WHITE:
+			item_icon_node.modulate = icon_color
 
 
 func set_purchased(purchased: bool) -> void:

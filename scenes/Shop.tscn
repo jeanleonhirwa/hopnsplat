@@ -100,38 +100,155 @@ vertical_alignment = 1
 [node name="TabContainer" type="TabContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_font_sizes/font_size = 14
+theme_override_colors/font_selected_color = Color(0.2, 0.15, 0.05, 1)
+theme_override_colors/font_unselected_color = Color(0.5, 0.5, 0.5, 1)
+theme_override_font_sizes/font_size = 15
 current_tab = 0
 
 [node name="Player Skins" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
 layout_mode = 2
+horizontal_scroll_mode = 0
 metadata/_tab_index = 0
 
-[node name="SkinsGrid" type="GridContainer" parent="VBoxContainer/TabContainer/Player Skins"]
+[node name="SkinsGrid" type="VBoxContainer" parent="VBoxContainer/TabContainer/Player Skins"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 2
+theme_override_constants/separation = 10
 
 [node name="Boost Upgrades" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
+horizontal_scroll_mode = 0
 metadata/_tab_index = 1
 
-[node name="UpgradesGrid" type="GridContainer" parent="VBoxContainer/TabContainer/Boost Upgrades"]
+[node name="UpgradesGrid" type="VBoxContainer" parent="VBoxContainer/TabContainer/Boost Upgrades"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/separation = 10
 
 [node name="Power-ups" type="ScrollContainer" parent="VBoxContainer/TabContainer"]
 visible = false
 layout_mode = 2
+horizontal_scroll_mode = 0
 metadata/_tab_index = 2
 
-[node name="PowerupsGrid" type="GridContainer" parent="VBoxContainer/TabContainer/Power-ups"]
+[node name="PowerupsGrid" type="VBoxContainer" parent="VBoxContainer/TabContainer/Power-ups"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 2
+theme_override_constants/separation = 10
+
+[node name="InsufficientFundsLabel" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -80.0
+offset_right = 120.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.6)
+theme_override_font_sizes/font_size = 18
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+text = "Not enough coins!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ConfirmDialog" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Overlay" type="ColorRect" parent="ConfirmDialog"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="DialogPanel" type="NinePatchRect" parent="ConfirmDialog"]
+custom_minimum_size = Vector2(380, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -190.0
+offset_top = -100.0
+offset_right = 190.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_kenney_panel")
+panel_style = 1
+color_pack = 0
+
+[node name="DialogVBox" type="VBoxContainer" parent="ConfirmDialog/DialogPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="ConfirmDialog/DialogPanel/DialogVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.15, 0.05, 1)
+theme_override_font_sizes/font_size = 20
+text = "Confirm Purchase"
+horizontal_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="ConfirmDialog/DialogPanel/DialogVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.35, 0.35, 0.35, 1)
+theme_override_font_sizes/font_size = 14
+text = "Buy Item Name for 100 coins?"
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="ButtonContainer" type="HBoxContainer" parent="ConfirmDialog/DialogPanel/DialogVBox"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="CancelButton" type="TextureButton" parent="ConfirmDialog/DialogPanel/DialogVBox/ButtonContainer"]
+custom_minimum_size = Vector2(140, 44)
+layout_mode = 2
+script = ExtResource("3_kenney_button")
+button_style = 3
+color_pack = 4
+button_text = "Cancel"
+
+[node name="ConfirmButton" type="TextureButton" parent="ConfirmDialog/DialogPanel/DialogVBox/ButtonContainer"]
+custom_minimum_size = Vector2(140, 44)
+layout_mode = 2
+script = ExtResource("3_kenney_button")
+button_style = 3
+color_pack = 3
+button_text = "Buy!"
 
 [connection signal="pressed" from="VBoxContainer/HeaderContainer/BackButton" to="." method="_on_back_button_pressed"]
+[connection signal="pressed" from="ConfirmDialog/DialogPanel/DialogVBox/ButtonContainer/CancelButton" to="." method="_on_confirm_cancel"]
+[connection signal="pressed" from="ConfirmDialog/DialogPanel/DialogVBox/ButtonContainer/ConfirmButton" to="." method="_on_confirm_buy"]
