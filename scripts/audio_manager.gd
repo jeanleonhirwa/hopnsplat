@@ -143,18 +143,20 @@ func toggle_sfx(enabled: bool):
 	save_audio_settings()
 
 func update_volumes():
-	"""Update audio bus volumes"""
-	# Set music bus volume
-	var music_db = linear_to_db(master_volume * music_volume * (1.0 if music_enabled else 0.0))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), music_db)
+	"""Update audio bus volumes and mute states"""
+	# Set music bus volume and mute
+	var music_idx = AudioServer.get_bus_index("Music")
+	AudioServer.set_bus_volume_db(music_idx, linear_to_db(master_volume * music_volume))
+	AudioServer.set_bus_mute(music_idx, not music_enabled)
 	
-	# Set SFX bus volume
-	var sfx_db = linear_to_db(master_volume * sfx_volume * (1.0 if sfx_enabled else 0.0))
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), sfx_db)
+	# Set SFX bus volume and mute
+	var sfx_idx = AudioServer.get_bus_index("SFX")
+	AudioServer.set_bus_volume_db(sfx_idx, linear_to_db(master_volume * sfx_volume))
+	AudioServer.set_bus_mute(sfx_idx, not sfx_enabled)
 	
 	# Set master bus volume
-	var master_db = linear_to_db(master_volume)
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Master"), master_db)
+	var master_idx = AudioServer.get_bus_index("Master")
+	AudioServer.set_bus_volume_db(master_idx, linear_to_db(master_volume))
 
 func play_sfx(sfx_stream: AudioStream, volume_scale: float = 1.0):
 	"""Play a sound effect"""
