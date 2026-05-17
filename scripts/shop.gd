@@ -161,10 +161,10 @@ func update_currency_display():
 	# Animate count-up
 	_count_up_with_prefix(currency_label, "Coins: ", old_value, current_currency, 0.5)
 	
-	# Add bounce effect when currency changes
-	if current_currency != old_value:
-		await get_tree().create_timer(0.3).timeout
-		UIAnimationManager.bounce_in(currency_label, 0.2, 1.15)
+	# Add pulse effect when currency changes
+	if current_currency > 0:
+		await get_tree().create_timer(0.5).timeout
+		UIAnimationManager.pulse(currency_label, 0.2, 1.15)
 
 
 func _count_up_with_prefix(label: Label, prefix: String, from: int, to: int, duration: float):
@@ -358,9 +358,10 @@ func animate_currency_update(old_value: int, new_value: int) -> void:
 	# Simple count-up animation using our own tween
 	_count_up_with_prefix(currency_label, "Coins: ", old_value, new_value, 0.3)
 	
-	# Add a bounce effect to the currency panel
+	# Add a pulse effect to the currency panel
 	if currency_panel and is_instance_valid(currency_panel):
-		UIAnimationManager.bounce_in(currency_panel, 0.2, 1.05)
+		# Flash red and shake slightly
+		UIAnimationManager.pulse(currency_panel, 0.2, 1.05)
 
 func _purchase_item(item_key: String, price: int) -> bool:
 	"""Purchase an item if player has enough currency"""

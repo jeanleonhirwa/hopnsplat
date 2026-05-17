@@ -64,7 +64,7 @@ func load_and_display_stats():
 		# Add bounce effect when currency increases
 		if total_currency > 0:
 			await get_tree().create_timer(0.5).timeout
-			UIAnimationManager.bounce_in(currency_label, 0.2, 1.15)
+			UIAnimationManager.pulse(currency_label, 0.2, 1.15)
 
 
 func _count_up_with_prefix(label: Label, prefix: String, from: int, to: int, duration: float):

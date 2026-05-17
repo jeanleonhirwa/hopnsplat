@@ -66,6 +66,22 @@ func bounce_in(node: Node, duration: float = 0.15, target_scale: float = 1.1) ->
 	return tween
 
 
+## Pulse animation - scales node up then back down to original size
+## @param node: The node to animate
+## @param duration: Animation duration in seconds (default: 0.2)
+## @param target_scale: Target scale multiplier (default: 1.15 for 115%)
+## @return: The created Tween for further customization
+func pulse(node: Node, duration: float = 0.2, target_scale: float = 1.15) -> Tween:
+	var tween = create_tween()
+	register_tween(tween)
+	
+	var original_scale = node.scale
+	tween.tween_property(node, "scale", original_scale * target_scale, duration * 0.5).set_ease(Tween.EASE_OUT)
+	tween.tween_property(node, "scale", original_scale, duration * 0.5).set_ease(Tween.EASE_IN)
+	
+	return tween
+
+
 ## Squash animation - compresses node for press feedback
 ## @param node: The node to animate
 ## @param duration: Animation duration in seconds (default: 0.1)

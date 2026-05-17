@@ -67,7 +67,7 @@ func show_game_over(final_score: int, currency_earned: int, jumps: int, high_sco
 	# Add bounce effect to currency when it increases
 	if currency_earned > 0:
 		await get_tree().create_timer(0.5).timeout
-		UIAnimationManager.bounce_in(currency_earned_label, 0.2, 1.15)
+		UIAnimationManager.pulse(currency_earned_label, 0.2, 1.15)
 	
 	# Handle high score display
 	if is_new_high_score:
@@ -432,6 +432,6 @@ func _animate_stat_panels_bounce():
 			# Wait for delay
 			await get_tree().create_timer(delay_between_bounces).timeout
 			# Bounce animation
-			ui_anim.bounce_in(panels[i], 0.2, 1.15)
+			ui_anim.pulse(panels[i], 0.2, 1.15)
 	
 	print("Stat panels bounce animation complete")
