@@ -22,13 +22,7 @@ var responsive_layout
 # Note: StatsPanel inner container is now an HBoxContainer named "VBoxContainer" for path compatibility
 @onready var stats_panel = $VBoxContainer/StatsPanel
 
-# Decorative elements
-@onready var floating_star1 = $BackgroundDecoration/FloatingStar1
-@onready var floating_star2 = $BackgroundDecoration/FloatingStar2
-@onready var decorative_arrow = $BackgroundDecoration/DecorativeArrow
-
 # Animation and effects
-@onready var background_animation = $BackgroundDecoration
 @onready var button_hover_sound = $ButtonHoverSound
 @onready var button_click_sound = $ButtonClickSound
 
@@ -119,38 +113,8 @@ func connect_buttons():
 
 func start_animations():
 	"""Start background animations and effects"""
-	# Animate decorative elements with floating motion
-	animate_decorative_elements()
-	
 	# Animate buttons with staggered entrance (Task 5.4)
 	animate_buttons_entrance_staggered()
-
-
-func animate_decorative_elements():
-	"""Animate floating stars and decorative arrow with subtle motion"""
-	if floating_star1:
-		# Use UIAnimationManager for floating animation
-		var tween1 = create_tween()
-		tween1.set_loops()
-		var original_y1 = floating_star1.position.y
-		tween1.tween_property(floating_star1, "position:y", original_y1 - 15, 2.5).set_ease(Tween.EASE_IN_OUT)
-		tween1.tween_property(floating_star1, "position:y", original_y1 + 15, 2.5).set_ease(Tween.EASE_IN_OUT)
-	
-	if floating_star2:
-		# Use UIAnimationManager for floating animation
-		var tween2 = create_tween()
-		tween2.set_loops()
-		var original_y2 = floating_star2.position.y
-		tween2.tween_property(floating_star2, "position:y", original_y2 - 20, 3.0).set_ease(Tween.EASE_IN_OUT)
-		tween2.tween_property(floating_star2, "position:y", original_y2 + 20, 3.0).set_ease(Tween.EASE_IN_OUT)
-	
-	if decorative_arrow:
-		# Use UIAnimationManager for gentle rotation
-		var tween3 = create_tween()
-		tween3.set_loops()
-		var original_rotation = decorative_arrow.rotation_degrees
-		tween3.tween_property(decorative_arrow, "rotation_degrees", original_rotation - 5, 1.5).set_ease(Tween.EASE_IN_OUT)
-		tween3.tween_property(decorative_arrow, "rotation_degrees", original_rotation + 5, 1.5).set_ease(Tween.EASE_IN_OUT)
 
 
 func animate_title():

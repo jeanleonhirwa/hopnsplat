@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bl7gip3unc76i" path="res://assets/ui_packs/Extra/Default/icon_play_light.png" id="6_icon_play"]
 [ext_resource type="Texture2D" uid="uid://c8sesgkv8t1yn" path="res://assets/ui_packs/Yellow/Default/star.png" id="7_star"]
 [ext_resource type="FontFile" uid="uid://kenney_future" path="res://assets/Font/Kenney Future.ttf" id="8_font"]
+[ext_resource type="PackedScene" uid="uid://menubackground" path="res://scenes/MenuBackground.tscn" id="9_menubg"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -18,68 +19,24 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_main_menu")
 
-[node name="Background" type="ColorRect" parent="."]
+
+
+
+[node name="MenuBackground" parent="." instance=ExtResource("9_menubg")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.4, 0.8, 1, 1)
-
-[node name="BackgroundDecoration" type="Control" parent="."]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="FloatingStar1" type="TextureRect" parent="BackgroundDecoration"]
-layout_mode = 0
-offset_left = 60.0
-offset_top = 100.0
-offset_right = 90.0
-offset_bottom = 130.0
-texture = ExtResource("7_star")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="FloatingStar2" type="TextureRect" parent="BackgroundDecoration"]
-layout_mode = 0
-offset_left = 440.0
-offset_top = 680.0
-offset_right = 470.0
-offset_bottom = 710.0
-texture = ExtResource("7_star")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="DecorativeArrow" type="TextureRect" parent="BackgroundDecoration"]
-visible = false
-layout_mode = 0
-offset_left = 450.0
-offset_top = 700.0
-offset_right = 514.0
-offset_bottom = 764.0
-texture = ExtResource("7_star")
-expand_mode = 1
-stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 13
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
 offset_left = -230.0
-offset_top = -420.0
 offset_right = 230.0
-offset_bottom = 420.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
+alignment = 1
 
 [node name="Spacer0" type="Control" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 80)
