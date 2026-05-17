@@ -17,7 +17,7 @@ var ui_layer: CanvasLayer
 var score_label: Label
 var currency_label: Label
 var combo_label: Label
-var pause_button: Button
+var pause_button: TextureButton
 var pause_screen: Control
 var audio_settings_menu: Control
 
