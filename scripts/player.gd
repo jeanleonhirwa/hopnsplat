@@ -442,7 +442,14 @@ func _on_splat_obstacle_hit(_obstacle):
 			print("DEBUG: No danger sound available (shield)")
 		return
 	
-	# No shield - normal damage
+	# Splat armor check
+	if get("splat_armor_upgraded") and randf() < 0.5:
+		print("Splat Armor deflected the hit!")
+		if screen_shake and screen_shake.has_method("light_shake"):
+			screen_shake.light_shake()
+		return
+	
+	# No shield or armor - normal damage
 	print("DEBUG: Playing danger sound for obstacle hit...")
 	if danger_sound:
 		danger_sound.play()

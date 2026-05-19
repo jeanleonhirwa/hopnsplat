@@ -464,9 +464,6 @@ func reset_session():
 	highest_platform_reached = 0.0
 	game_started = false
 	
-	# Apply starting power-ups
-	apply_starting_power_ups()
-	
 	# Reset game over instance continues for new game
 	if game_over_instance:
 		game_over_instance.reset_continues()
@@ -490,6 +487,19 @@ func apply_starting_power_ups():
 	if purchased_items.has("powerups_start_safety"):
 		player.activate_shield()
 		print("Started game with safety first start")
+		
+	# Ice Bomb
+	if purchased_items.has("powerups_ice_bomb") and rising_danger:
+		rising_danger.pause_rising(15.0)
+		print("Ice Bomb activated")
+		
+	# Cannon Launch
+	if purchased_items.has("powerups_cannon_launch"):
+		player.global_position.y -= 1000
+		player.velocity.y = player.jump_force * 2.5
+		if camera:
+			camera.global_position.y = player.global_position.y
+		print("Cannon Launch activated")
 
 func spend_currency(amount: int) -> bool:
 	if total_currency >= amount:
@@ -501,13 +511,26 @@ func spend_currency(amount: int) -> bool:
 	return false
 
 func save_game_data():
-	var save_file = FileAccess.open("user://hopnsplat_save.dat", FileAccess.WRITE)
+	# First read existing data to avoid overwriting purchased_items
+	var existing_data = {}
+	var save_file = FileAccess.open("user://hopnsplat_save.dat", FileAccess.READ)
 	if save_file:
-		var save_data = {
-			"total_currency": total_currency,
-			"highest_score": current_score if current_score > get_highest_score() else get_highest_score()
-		}
-		save_file.store_string(JSON.stringify(save_data))
+		var save_data_text = save_file.get_as_text()
+		save_file.close()
+		var json = JSON.new()
+		if json.parse(save_data_text) == OK:
+			existing_data = json.data
+			
+	# Update existing data with current state
+	existing_data["total_currency"] = total_currency
+	var current_highest = existing_data.get("highest_score", 0)
+	if current_score > current_highest:
+		existing_data["highest_score"] = current_score
+		
+	# Save back to file
+	save_file = FileAccess.open("user://hopnsplat_save.dat", FileAccess.WRITE)
+	if save_file:
+		save_file.store_string(JSON.stringify(existing_data))
 		save_file.close()
 
 func load_game_data():
@@ -605,10 +628,21 @@ func reset_game():
 	if platform_spawner:
 		platform_spawner.clear_platforms()
 	
-	# Reset rising danger
+	# Start rising danger
 	if rising_danger:
-		rising_danger.reset()
+		# Check for lava chill
+		if player and player.get("lava_chill_upgraded"):
+			rising_danger.rise_speed = 12.0 * 0.85
+			rising_danger.max_speed = 45.0 * 0.85
+			rising_danger.current_speed = rising_danger.rise_speed
+		else:
+			rising_danger.rise_speed = 12.0
+			rising_danger.max_speed = 45.0
+			rising_danger.current_speed = rising_danger.rise_speed
 		rising_danger.start_game()
+	
+	# Apply starting power-ups AFTER player position is reset
+	apply_starting_power_ups()
 	
 	# Update UI
 	update_ui()
@@ -664,8 +698,20 @@ func restart_game():
 	
 	# Start rising danger after everything is reset
 	if rising_danger:
+		# Check for lava chill
+		if player and player.get("lava_chill_upgraded"):
+			rising_danger.rise_speed = 12.0 * 0.85
+			rising_danger.max_speed = 45.0 * 0.85
+			rising_danger.current_speed = rising_danger.rise_speed
+		else:
+			rising_danger.rise_speed = 12.0
+			rising_danger.max_speed = 45.0
+			rising_danger.current_speed = rising_danger.rise_speed
 		rising_danger.start_game()
 		print("Rising danger started")
+	
+	# Apply starting power-ups AFTER player position is reset
+	apply_starting_power_ups()
 	
 	# Hide game over screen
 	if game_over_instance:
@@ -771,6 +817,14 @@ func apply_boost_upgrades(purchased_items: Dictionary):
 	if purchased_items.has("upgrades_greedy_grasp"):
 		player.set("magnet_upgraded", true)
 		print("Greedy Grasp upgrade applied")
+		
+	if purchased_items.has("upgrades_splat_armor"):
+		player.set("splat_armor_upgraded", true)
+		print("Splat Armor upgrade applied")
+		
+	if purchased_items.has("upgrades_lava_chill"):
+		player.set("lava_chill_upgraded", true)
+		print("Lava Chill upgrade applied")
 
 func apply_power_ups(purchased_items: Dictionary):
 	"""Apply purchased power-ups"""

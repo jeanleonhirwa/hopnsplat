@@ -42,11 +42,15 @@ var shop_items = {
 		{"id": "spring_boots", "name": "Spring-Loaded Boots", "price": 150, "description": "Jump boost lasts 2x longer", "icon": "res://assets/ui_packs/Yellow/Default/arrow_decorative_n.png"},
 		{"id": "jet_propulsion", "name": "Jet Propulsion", "price": 120, "description": "Speed boost lasts 2x longer", "icon": "res://assets/ui_packs/Yellow/Default/arrow_decorative_e.png"},
 		{"id": "titanium_bubble", "name": "Titanium Bubble", "price": 180, "description": "Shield blocks 2 hits instead of 1", "icon": "res://assets/ui_packs/Yellow/Default/button_round_depth_border.png"},
-		{"id": "greedy_grasp", "name": "Greedy Grasp", "price": 100, "description": "Coin magnet has 2x range", "icon": "res://assets/ui_packs/Yellow/Default/icon_circle.png"}
+		{"id": "greedy_grasp", "name": "Greedy Grasp", "price": 100, "description": "Coin magnet has 2x range", "icon": "res://assets/ui_packs/Yellow/Default/icon_circle.png"},
+		{"id": "splat_armor", "name": "Splat Armor", "price": 250, "description": "50% chance to survive a splat without a shield", "icon": "res://assets/ui_packs/Yellow/Default/icon_outline_square.png"},
+		{"id": "lava_chill", "name": "Lava Chill", "price": 300, "description": "Reduces the speed of rising lava by 15%", "icon": "res://assets/ui_packs/Yellow/Default/star.png"}
 	],
 	"powerups": [
 		{"id": "start_rocket", "name": "Rocket Boost Start", "price": 80, "description": "Start each game with jump boost", "icon": "res://assets/ui_packs/Yellow/Default/arrow_basic_n.png"},
+		{"id": "ice_bomb", "name": "Ice Bomb", "price": 100, "description": "Freezes the lava for the first 15 seconds", "icon": "res://assets/ui_packs/Yellow/Default/icon_circle.png"},
 		{"id": "start_safety", "name": "Safety First Start", "price": 120, "description": "Start each game with shield", "icon": "res://assets/ui_packs/Yellow/Default/icon_outline_square.png"},
+		{"id": "cannon_launch", "name": "Cannon Launch", "price": 150, "description": "Blast 1000 pixels up right at the start", "icon": "res://assets/ui_packs/Yellow/Default/arrow_decorative_n.png"},
 		{"id": "start_midas", "name": "Midas Touch", "price": 250, "description": "Earn 2x coins from jumps", "icon": "res://assets/ui_packs/Yellow/Default/star.png"}
 	]
 }
