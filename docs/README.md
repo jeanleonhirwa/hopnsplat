@@ -33,4 +33,4 @@ For questions or contributions, please refer to the main project repository.
 
 ---
 
-**Last Updated**: 2024
+**Last Updated**: 2026
