@@ -33,21 +33,21 @@ var _insufficient_funds_tween: Tween
 # Item definitions
 var shop_items = {
 	"skins": [
-		{"id": "alien_blue", "name": "Blue Alien", "price": 50, "description": "Cool blue variant", "icon": "res://assets/player/alienPink_stand.png", "color": Color(0.2, 0.5, 1.0)},
-		{"id": "alien_green", "name": "Green Alien", "price": 75, "description": "Nature-loving alien", "icon": "res://assets/player/alienPink_stand.png", "color": Color(0.4, 0.9, 0.4)},
-		{"id": "alien_red", "name": "Red Alien", "price": 100, "description": "Fiery red alien", "icon": "res://assets/player/alienPink_stand.png", "color": Color(1.0, 0.3, 0.3)},
-		{"id": "alien_gold", "name": "Golden Alien", "price": 200, "description": "Legendary golden skin", "icon": "res://assets/player/alienPink_stand.png", "color": Color(1.0, 0.8, 0.1)}
+		{"id": "hopper_aqua", "name": "Aqua Hopper", "price": 50, "description": "Cool blue variant", "icon": "res://assets/player/alienPink_stand.png", "color": Color(0.2, 0.5, 1.0)},
+		{"id": "toad_toxic", "name": "Toxic Toad", "price": 75, "description": "Nature-loving hopper", "icon": "res://assets/player/alienPink_stand.png", "color": Color(0.4, 0.9, 0.4)},
+		{"id": "leaper_lava", "name": "Lava Leaper", "price": 100, "description": "Fiery red jumper", "icon": "res://assets/player/alienPink_stand.png", "color": Color(1.0, 0.3, 0.3)},
+		{"id": "glider_gold", "name": "Golden Glider", "price": 200, "description": "Legendary golden skin", "icon": "res://assets/player/alienPink_stand.png", "color": Color(1.0, 0.8, 0.1)}
 	],
 	"upgrades": [
-		{"id": "jump_duration", "name": "Jump Boost+", "price": 150, "description": "Jump boost lasts 2x longer", "icon": "res://assets/ui_packs/Yellow/Default/arrow_decorative_n.png"},
-		{"id": "speed_duration", "name": "Speed Boost+", "price": 120, "description": "Speed boost lasts 2x longer", "icon": "res://assets/ui_packs/Yellow/Default/arrow_decorative_e.png"},
-		{"id": "shield_extra", "name": "Double Shield", "price": 180, "description": "Shield blocks 2 hits instead of 1", "icon": "res://assets/ui_packs/Yellow/Default/button_round_depth_border.png"},
-		{"id": "magnet_range", "name": "Super Magnet", "price": 100, "description": "Coin magnet has 2x range", "icon": "res://assets/ui_packs/Yellow/Default/icon_circle.png"}
+		{"id": "spring_boots", "name": "Spring-Loaded Boots", "price": 150, "description": "Jump boost lasts 2x longer", "icon": "res://assets/ui_packs/Yellow/Default/arrow_decorative_n.png"},
+		{"id": "jet_propulsion", "name": "Jet Propulsion", "price": 120, "description": "Speed boost lasts 2x longer", "icon": "res://assets/ui_packs/Yellow/Default/arrow_decorative_e.png"},
+		{"id": "titanium_bubble", "name": "Titanium Bubble", "price": 180, "description": "Shield blocks 2 hits instead of 1", "icon": "res://assets/ui_packs/Yellow/Default/button_round_depth_border.png"},
+		{"id": "greedy_grasp", "name": "Greedy Grasp", "price": 100, "description": "Coin magnet has 2x range", "icon": "res://assets/ui_packs/Yellow/Default/icon_circle.png"}
 	],
 	"powerups": [
-		{"id": "start_jump", "name": "Jump Start", "price": 80, "description": "Start each game with jump boost", "icon": "res://assets/ui_packs/Yellow/Default/arrow_basic_n.png"},
-		{"id": "start_shield", "name": "Shield Start", "price": 120, "description": "Start each game with shield", "icon": "res://assets/ui_packs/Yellow/Default/icon_outline_square.png"},
-		{"id": "coin_multiplier", "name": "Coin Luck", "price": 250, "description": "Earn 2x coins from jumps", "icon": "res://assets/ui_packs/Yellow/Default/star.png"}
+		{"id": "start_rocket", "name": "Rocket Boost Start", "price": 80, "description": "Start each game with jump boost", "icon": "res://assets/ui_packs/Yellow/Default/arrow_basic_n.png"},
+		{"id": "start_safety", "name": "Safety First Start", "price": 120, "description": "Start each game with shield", "icon": "res://assets/ui_packs/Yellow/Default/icon_outline_square.png"},
+		{"id": "start_midas", "name": "Midas Touch", "price": 250, "description": "Earn 2x coins from jumps", "icon": "res://assets/ui_packs/Yellow/Default/star.png"}
 	]
 }
 
@@ -101,10 +101,10 @@ func _style_tab_container():
 	panel_style.bg_color = Color(1, 1, 1, 0.15)
 	panel_style.corner_radius_bottom_left = 8
 	panel_style.corner_radius_bottom_right = 8
-	panel_style.content_margin_left = 8
-	panel_style.content_margin_right = 8
-	panel_style.content_margin_top = 10
-	panel_style.content_margin_bottom = 10
+	panel_style.content_margin_left = 12
+	panel_style.content_margin_right = 12
+	panel_style.content_margin_top = 16
+	panel_style.content_margin_bottom = 16
 	
 	tab_container.add_theme_stylebox_override("tab_selected", tab_active)
 	tab_container.add_theme_stylebox_override("tab_unselected", tab_inactive)
@@ -196,7 +196,7 @@ func _create_category_items(category: String, grid: Control):
 		card.item_name = item["name"]
 		card.item_description = item["description"]
 		card.item_price = item["price"]
-		card.custom_minimum_size = Vector2(0, 130)
+		card.custom_minimum_size = Vector2(0, 140)
 		card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		
 		# Check if already purchased

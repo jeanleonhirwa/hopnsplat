@@ -482,14 +482,14 @@ func apply_starting_power_ups():
 		return
 	
 	# Start with jump boost
-	if purchased_items.has("powerups_start_jump"):
+	if purchased_items.has("powerups_start_rocket"):
 		player.activate_jump_boost()
-		print("Started game with jump boost")
+		print("Started game with rocket boost start")
 	
 	# Start with shield
-	if purchased_items.has("powerups_start_shield"):
+	if purchased_items.has("powerups_start_safety"):
 		player.activate_shield()
-		print("Started game with shield")
+		print("Started game with safety first start")
 
 func spend_currency(amount: int) -> bool:
 	if total_currency >= amount:
@@ -737,18 +737,18 @@ func apply_player_skin(purchased_items: Dictionary):
 		return
 	
 	# Check for purchased skins in priority order (most expensive first)
-	if purchased_items.has("skins_alien_gold"):
+	if purchased_items.has("skins_glider_gold"):
 		sprite.modulate = Color.GOLD
-		print("Applied Golden Alien skin")
-	elif purchased_items.has("skins_alien_red"):
+		print("Applied Golden Glider skin")
+	elif purchased_items.has("skins_leaper_lava"):
 		sprite.modulate = Color.RED
-		print("Applied Red Alien skin")
-	elif purchased_items.has("skins_alien_green"):
+		print("Applied Lava Leaper skin")
+	elif purchased_items.has("skins_toad_toxic"):
 		sprite.modulate = Color.GREEN
-		print("Applied Green Alien skin")
-	elif purchased_items.has("skins_alien_blue"):
+		print("Applied Toxic Toad skin")
+	elif purchased_items.has("skins_hopper_aqua"):
 		sprite.modulate = Color.CYAN
-		print("Applied Blue Alien skin")
+		print("Applied Aqua Hopper skin")
 
 func apply_boost_upgrades(purchased_items: Dictionary):
 	"""Apply purchased boost upgrades to player"""
@@ -756,35 +756,35 @@ func apply_boost_upgrades(purchased_items: Dictionary):
 		return
 	
 	# Store upgrade flags in player for boost system to use
-	if purchased_items.has("upgrades_jump_duration"):
+	if purchased_items.has("upgrades_spring_boots"):
 		player.set("jump_boost_upgraded", true)
-		print("Jump boost upgrade applied")
+		print("Spring-Loaded Boots upgrade applied")
 	
-	if purchased_items.has("upgrades_speed_duration"):
+	if purchased_items.has("upgrades_jet_propulsion"):
 		player.set("speed_boost_upgraded", true)
-		print("Speed boost upgrade applied")
+		print("Jet Propulsion upgrade applied")
 	
-	if purchased_items.has("upgrades_shield_extra"):
+	if purchased_items.has("upgrades_titanium_bubble"):
 		player.set("shield_upgraded", true)
-		print("Shield upgrade applied")
+		print("Titanium Bubble upgrade applied")
 	
-	if purchased_items.has("upgrades_magnet_range"):
+	if purchased_items.has("upgrades_greedy_grasp"):
 		player.set("magnet_upgraded", true)
-		print("Magnet upgrade applied")
+		print("Greedy Grasp upgrade applied")
 
 func apply_power_ups(purchased_items: Dictionary):
 	"""Apply purchased power-ups"""
 	# Coin multiplier
-	if purchased_items.has("powerups_coin_multiplier"):
+	if purchased_items.has("powerups_start_midas"):
 		currency_per_jump = 2  # Double coin earning
-		print("Coin multiplier power-up applied")
+		print("Midas Touch power-up applied")
 	
 	# Starting boosts will be handled in reset_session()
-	if purchased_items.has("powerups_start_jump"):
-		print("Jump start power-up available")
+	if purchased_items.has("powerups_start_rocket"):
+		print("Rocket boost start power-up available")
 	
-	if purchased_items.has("powerups_start_shield"):
-		print("Shield start power-up available")
+	if purchased_items.has("powerups_start_safety"):
+		print("Safety first start power-up available")
 
 func _on_restart_requested():
 	"""Handle restart request from game over screen"""
