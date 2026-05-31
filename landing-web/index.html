@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HopNSplat - Jump, Climb, Survive!</title>
+  <meta name="description" content="HopNSplat is an exciting vertical platformer. Jump on platforms, dodge obstacles, and climb as high as you can before the lava catches you!">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #FF6B35;
+      --primary-dark: #E55A2B;
+      --secondary: #FFD166;
+      --accent: #06D6A0;
+      --dark: #1A1A2E;
+      --darker: #0F0F1A;
+      --light: #F8F9FA;
+      --gray: #6C757D;
+      --card-bg: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.08);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--darker);
+      color: #E8E8E8;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    h1,h2,h3,h4 { font-family: 'Fredoka', 'Inter', sans-serif; line-height: 1.2; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(15,15,26,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.3s;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.4rem;
+    }
+    .nav-logo img { width: 36px; height: 36px; }
+    .nav-logo span { color: var(--secondary); }
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a {
+      font-size: 0.95rem; font-weight: 500; color: #B0B0B0;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #fff; }
+    .nav-cta {
+      background: var(--primary); color: #fff !important;
+      padding: 0.55rem 1.4rem; border-radius: 50px;
+      font-weight: 600; font-size: 0.9rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,107,53,0.3); }
+    .nav-hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+    .nav-hamburger span { width: 24px; height: 2px; background: #fff; border-radius: 2px; transition: 0.3s; }
+
+    /* ── Hero Section ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 8rem 2rem 4rem;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,107,53,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(6,214,160,0.1) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 40% at 80% 20%, rgba(255,209,102,0.1) 0%, transparent 50%),
+        linear-gradient(180deg, var(--darker) 0%, #12121F 50%, #0D0D18 100%);
+    }
+
+    /* Floating platforms in hero */
+    .hero-platform {
+      position: absolute; z-index: 1;
+      image-rendering: pixelated;
+      animation: floatPlatform 4s ease-in-out infinite;
+      opacity: 0.35;
+      filter: brightness(0.7);
+    }
+    .hero-platform:nth-child(1) { left: 5%; top: 25%; width: 120px; animation-delay: 0s; }
+    .hero-platform:nth-child(2) { right: 8%; top: 35%; width: 100px; animation-delay: 1.2s; }
+    .hero-platform:nth-child(3) { left: 15%; bottom: 20%; width: 90px; animation-delay: 2.4s; opacity: 0.2; }
+    .hero-platform:nth-child(4) { right: 18%; bottom: 30%; width: 110px; animation-delay: 0.8s; opacity: 0.25; }
+    .hero-platform:nth-child(5) { left: 40%; top: 15%; width: 80px; animation-delay: 1.8s; opacity: 0.15; }
+
+    @keyframes floatPlatform {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    /* Lava glow at bottom */
+    .hero-lava {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 180px; z-index: 1;
+      background: linear-gradient(0deg, rgba(255,60,0,0.25) 0%, rgba(255,107,53,0.08) 40%, transparent 100%);
+      animation: lavaPulse 3s ease-in-out infinite;
+    }
+    @keyframes lavaPulse {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    /* Stars / particles */
+    .hero-stars {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        radial-gradient(2px 2px at 10% 20%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(2px 2px at 30% 60%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 50% 10%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 70% 40%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(2px 2px at 90% 70%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1px 1px at 15% 80%, rgba(255,209,102,0.5), transparent),
+        radial-gradient(1px 1px at 45% 30%, rgba(6,214,160,0.4), transparent),
+        radial-gradient(1px 1px at 75% 85%, rgba(255,107,53,0.4), transparent),
+        radial-gradient(1px 1px at 85% 15%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 25% 45%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1px 1px at 60% 75%, rgba(255,209,102,0.3), transparent),
+        radial-gradient(1px 1px at 5% 55%, rgba(255,255,255,0.3), transparent);
+      animation: twinkle 6s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.6; }
+      100% { opacity: 1; }
+    }
+
+    .hero-content {
+      position: relative; z-index: 10;
+      max-width: 1200px; width: 100%;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-text { }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+      padding: 0.4rem 1rem; border-radius: 50px;
+      font-size: 0.8rem; font-weight: 500; color: var(--secondary);
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(10px);
+    }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+    .hero-title {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #fff 0%, var(--secondary) 50%, var(--primary) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      font-size: clamp(1rem, 2vw, 1.25rem);
+      color: #A0A0B0;
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* Download buttons */
+    .download-group { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      padding: 0.85rem 1.8rem; border-radius: 50px;
+      font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1rem;
+      border: none; cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative; overflow: hidden;
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0; transition: opacity 0.25s;
+    }
+    .btn:hover::after { opacity: 1; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(255,107,53,0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(255,107,53,0.45);
+    }
+    .btn-secondary {
+      background: var(--glass);
+      color: #E8E8E8;
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(10px);
+    }
+    .btn-secondary:hover {
+      transform: translateY(-3px);
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.2);
+    }
+    .btn-accent {
+      background: linear-gradient(135deg, var(--accent), #05B88A);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(6,214,160,0.3);
+    }
+    .btn-accent:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(6,214,160,0.45);
+    }
+    .btn-icon { width: 22px; height: 22px; }
+
+    .hero-stats {
+      display: flex; gap: 2.5rem;
+    }
+    .stat-item { text-align: left; }
+    .stat-value {
+      font-family: 'Fredoka', sans-serif; font-size: 1.8rem; font-weight: 700;
+      color: #fff;
+    }
+    .stat-label { font-size: 0.8rem; color: #888; margin-top: 0.15rem; }
+
+    /* Hero character */
+    .hero-character {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .character-wrapper {
+      position: relative;
+      width: 320px; height: 400px;
+    }
+    .character-glow {
+      position: absolute; inset: -40px;
+      background: radial-gradient(circle, rgba(255,107,53,0.2) 0%, rgba(255,209,102,0.1) 40%, transparent 70%);
+      border-radius: 50%;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+    .character-img {
+      position: absolute;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+    }
+    .character-main {
+      width: 160px; height: auto;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      animation: heroBounce 2.5s ease-in-out infinite;
+      z-index: 3;
+    }
+    @keyframes heroBounce {
+      0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+      50% { transform: translate(-50%, -50%) translateY(-20px); }
+    }
+    .character-ghost-1 {
+      width: 80px; opacity: 0.25;
+      left: -10%; top: 20%;
+      animation: ghostFloat1 4s ease-in-out infinite;
+      z-index: 1;
+    }
+    .character-ghost-2 {
+      width: 70px; opacity: 0.2;
+      right: -5%; bottom: 15%;
+      animation: ghostFloat2 5s ease-in-out infinite;
+      z-index: 1;
+    }
+    @keyframes ghostFloat1 {
+      0%, 100% { transform: translateY(0) rotate(-5deg); }
+      50% { transform: translateY(-25px) rotate(5deg); }
+    }
+    @keyframes ghostFloat2 {
+      0%, 100% { transform: translateY(0) rotate(3deg); }
+      50% { transform: translateY(-15px) rotate(-3deg); }
+    }
+
+    /* Floating score popups */
+    .score-popup {
+      position: absolute;
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .score-popup-1 {
+      top: 10%; right: 5%;
+      font-size: 1.4rem; color: var(--secondary);
+      animation: scoreFloat 3s ease-in-out infinite;
+    }
+    .score-popup-2 {
+      bottom: 25%; left: 0;
+      font-size: 1.1rem; color: var(--accent);
+      animation: scoreFloat 4s ease-in-out infinite 1s;
+    }
+    @keyframes scoreFloat {
+      0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+      50% { transform: translateY(-12px) scale(1.1); opacity: 1; }
+    }
+
+    /* ── Features Section ── */
+    .section {
+      padding: 6rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .section-tag {
+      display: inline-block;
+      font-size: 0.8rem; font-weight: 600;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .section-desc {
+      font-size: 1.1rem;
+      color: #888;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 2rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .feature-icon-orange { background: rgba(255,107,53,0.15); }
+    .feature-icon-yellow { background: rgba(255,209,102,0.15); }
+    .feature-icon-green { background: rgba(6,214,160,0.15); }
+    .feature-icon-blue { background: rgba(59,130,246,0.15); }
+    .feature-icon-purple { background: rgba(139,92,246,0.15); }
+    .feature-icon-pink { background: rgba(236,72,153,0.15); }
+    .feature-title {
+      font-size: 1.15rem; font-weight: 600;
+      color: #fff; margin-bottom: 0.5rem;
+    }
+    .feature-desc {
+      font-size: 0.9rem; color: #888;
+      line-height: 1.6;
+    }
+
+    /* ── Gameplay Section ── */
+    .gameplay {
+      background: linear-gradient(180deg, var(--darker) 0%, #12121F 50%, var(--darker) 100%);
+      padding: 6rem 0;
+    }
+    .gameplay-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+      align-items: center;
+    }
+    .gameplay-visual {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 2rem;
+      overflow: hidden;
+    }
+    .gameplay-phone {
+      position: relative;
+      width: 240px; height: 420px;
+      margin: 0 auto;
+      background: linear-gradient(135deg, #1E1E30, #2A2A45);
+      border-radius: 28px;
+      border: 3px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .phone-notch {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 100px; height: 22px;
+      background: #111;
+      border-radius: 0 0 14px 14px;
+      z-index: 5;
+    }
+    .phone-screen {
+      position: absolute; inset: 8px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    }
+    .phone-platforms {
+      position: absolute; inset: 0;
+    }
+    .phone-plat {
+      position: absolute;
+      height: 12px;
+      border-radius: 4px;
+      image-rendering: pixelated;
+    }
+    .phone-plat-1 { bottom: 18%; left: 10%; width: 40%; background: linear-gradient(90deg, #4ade80, #22c55e); }
+    .phone-plat-2 { bottom: 35%; right: 5%; width: 35%; background: linear-gradient(90deg, #60a5fa, #3b82f6); }
+    .phone-plat-3 { bottom: 52%; left: 20%; width: 45%; background: linear-gradient(90deg, #facc15, #eab308); }
+    .phone-plat-4 { bottom: 68%; right: 15%; width: 30%; background: linear-gradient(90deg, #f87171, #ef4444); }
+    .phone-plat-5 { bottom: 82%; left: 30%; width: 38%; background: linear-gradient(90deg, #a78bfa, #8b5cf6); }
+    .phone-player {
+      position: absolute;
+      bottom: 20%; left: 25%;
+      width: 36px; height: auto;
+      image-rendering: pixelated;
+      animation: phoneBounce 1.5s ease-in-out infinite;
+      z-index: 3;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+    }
+    @keyframes phoneBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-30px); }
+    }
+    .phone-lava {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 30px;
+      background: linear-gradient(0deg, rgba(255,60,0,0.8), rgba(255,107,53,0.3), transparent);
+      animation: phoneLava 2s ease-in-out infinite;
+    }
+    @keyframes phoneLava {
+      0%, 100% { height: 30px; }
+      50% { height: 40px; }
+    }
+    .phone-score {
+      position: absolute; top: 30px; left: 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.75rem; font-weight: 700;
+      color: #fff; z-index: 4;
+    }
+
+    .gameplay-info h2 {
+      font-size: 2.5rem; color: #fff; margin-bottom: 1rem;
+    }
+    .gameplay-info p {
+      color: #888; font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.8;
+    }
+    .gameplay-list {
+      list-style: none; display: flex; flex-direction: column; gap: 1rem;
+    }
+    .gameplay-list li {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      font-size: 0.95rem; color: #B0B0B0;
+    }
+    .gameplay-list-icon {
+      width: 28px; height: 28px; flex-shrink: 0;
+      background: rgba(6,214,160,0.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+    }
+
+    /* ── Download Section ── */
+    .download-section {
+      padding: 6rem 2rem;
+      text-align: center;
+    }
+    .download-section .section-header { margin-bottom: 3rem; }
+    .download-cards {
+      max-width: 900px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    }
+    .download-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      padding: 2.5rem 1.5rem;
+      transition: all 0.3s ease;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 1rem;
+    }
+    .download-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,255,255,0.15);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    }
+    .download-card-icon {
+      width: 64px; height: 64px;
+      border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+    }
+    .download-card-icon-android { background: rgba(6,214,160,0.15); }
+    .download-card-icon-windows { background: rgba(59,130,246,0.15); }
+    .download-card-icon-web { background: rgba(255,107,53,0.15); }
+    .download-card-title {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.3rem; font-weight: 600; color: #fff;
+    }
+    .download-card-desc {
+      font-size: 0.85rem; color: #888; line-height: 1.5;
+    }
+    .download-card .btn { width: 100%; justify-content: center; margin-top: auto; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      text-align: center;
+    }
+    .footer-inner {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'Fredoka', sans-serif; font-weight: 600; font-size: 1.1rem;
+    }
+    .footer-logo img { width: 28px; height: 28px; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a {
+      font-size: 0.85rem; color: #666;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: #fff; }
+    .footer-copy { font-size: 0.8rem; color: #444; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .hero-content { grid-template-columns: 1fr; text-align: center; gap: 2rem; }
+      .hero-subtitle { margin: 0 auto 2rem; }
+      .download-group { justify-content: center; }
+      .hero-stats { justify-content: center; }
+      .character-wrapper { width: 240px; height: 300px; }
+      .character-main { width: 120px; }
+      .character-ghost-1 { width: 60px; }
+      .character-ghost-2 { width: 50px; }
+      .gameplay-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .gameplay-visual { order: -1; }
+      .download-cards { grid-template-columns: 1fr; max-width: 400px; }
+      .nav-links { display: none; }
+      .nav-hamburger { display: flex; }
+      .nav-links.active {
+        display: flex; flex-direction: column;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: rgba(15,15,26,0.95);
+        backdrop-filter: blur(20px);
+        padding: 2rem; gap: 1.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+      }
+    }
+    @media (max-width: 480px) {
+      .hero { padding: 6rem 1rem 3rem; }
+      .hero-stats { flex-direction: column; gap: 1rem; align-items: center; }
+      .download-group { flex-direction: column; align-items: center; }
+      .btn { width: 100%; justify-content: center; }
+      .footer-inner { flex-direction: column; }
+    }
+
+    /* ── Animations ── */
+    .fade-in {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1; transform: translateY(0);
+    }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+    .fade-in-delay-5 { transition-delay: 0.5s; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo">
+      <img src="assets/icon.svg" alt="HopNSplat">
+      Hop<span>NSplat</span>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">Features</a>
+      <a href="#gameplay">Gameplay</a>
+      <a href="#download" class="nav-cta">Download Now</a>
+    </div>
+    <div class="nav-hamburger" id="hamburger" onclick="document.getElementById('navLinks').classList.toggle('active')">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-stars"></div>
+
+    <!-- Floating platforms -->
+    <img src="assets/platforms/tile_2.png" class="hero-platform" alt="">
+    <img src="assets/platforms/tile_2.png" class="hero-platform" alt="">
+    <img src="assets/platforms/tile_2.png" class="hero-platform" alt="">
+    <img src="assets/platforms/tile_2.png" class="hero-platform" alt="">
+    <img src="assets/platforms/tile_2.png" class="hero-platform" alt="">
+
+    <div class="hero-lava"></div>
+
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge fade-in">
+          <span class="hero-badge-dot"></span>
+          Free to Play
+        </div>
+        <h1 class="hero-title fade-in fade-in-delay-1">Jump. Climb. Survive.</h1>
+        <p class="hero-subtitle fade-in fade-in-delay-2">
+          Leap across platforms, dodge obstacles, and climb as high as you can
+          before the rising lava catches you. How far can you go?
+        </p>
+        <div class="download-group fade-in fade-in-delay-3">
+          <a href="#download" class="btn btn-primary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Free
+          </a>
+          <a href="#gameplay" class="btn btn-secondary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Watch Gameplay
+          </a>
+        </div>
+        <div class="hero-stats fade-in fade-in-delay-4">
+          <div class="stat-item">
+            <div class="stat-value">50K+</div>
+            <div class="stat-label">Downloads</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">4.8</div>
+            <div class="stat-label">Rating</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">17</div>
+            <div class="stat-label">Achievements</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-character fade-in fade-in-delay-2">
+        <div class="character-wrapper">
+          <div class="character-glow"></div>
+          <img src="assets/player/alienPink_walk1.png" class="character-img character-ghost-1" alt="">
+          <img src="assets/player/alienPink_climb1.png" class="character-img character-ghost-2" alt="">
+          <img src="assets/player/alienPink_jump.png" class="character-img character-main" alt="HopNSplat Character">
+          <span class="score-popup score-popup-1">+25 pts</span>
+          <span class="score-popup score-popup-2">+3 coins</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section" id="features">
+    <div class="section-header">
+      <div class="section-tag fade-in">Why You'll Love It</div>
+      <h2 class="section-title fade-in fade-in-delay-1">Game Features</h2>
+      <p class="section-desc fade-in fade-in-delay-2">A thrilling vertical platformer packed with exciting mechanics, power-ups, and endless replayability.</p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card fade-in">
+        <div class="feature-icon feature-icon-orange">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h3 class="feature-title">Fast-Paced Action</h3>
+        <p class="feature-desc">Quick reflexes needed! Jump across platforms and dodge obstacles in this heart-pounding vertical climber.</p>
+      </div>
+
+      <div class="feature-card fade-in fade-in-delay-1">
+        <div class="feature-icon feature-icon-yellow">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFD166" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h3 class="feature-title">Power-Up System</h3>
+        <p class="feature-desc">Collect jump boosts, speed boosts, shields, coin magnets, and double points to supercharge your run.</p>
+      </div>
+
+      <div class="feature-card fade-in fade-in-delay-2">
+        <div class="feature-icon feature-icon-green">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06D6A0" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3 class="feature-title">Dynamic Platforms</h3>
+        <p class="feature-desc">Static, moving, and diagonal platforms that get trickier as you climb higher. Every run is unique!</p>
+      </div>
+
+      <div class="feature-card fade-in fade-in-delay-3">
+        <div class="feature-icon feature-icon-blue">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3 class="feature-title">Rising Lava</h3>
+        <p class="feature-desc">The floor is literally lava! A rising danger zone forces you to keep climbing. Don't look down!</p>
+      </div>
+
+      <div class="feature-card fade-in fade-in-delay-4">
+        <div class="feature-icon feature-icon-purple">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <h3 class="feature-title">Shop & Skins</h3>
+        <p class="feature-desc">Earn coins and unlock unique skins, upgrades, and power-ups. Customize your alien and boost your abilities!</p>
+      </div>
+
+      <div class="feature-card fade-in fade-in-delay-5">
+        <div class="feature-icon feature-icon-pink">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <h3 class="feature-title">17 Achievements</h3>
+        <p class="feature-desc">Track your progress with achievements for scores, jumps, combos, and special challenges. Can you unlock them all?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gameplay Section -->
+  <section class="gameplay" id="gameplay">
+    <div class="gameplay-inner">
+      <div class="gameplay-visual fade-in">
+        <div class="gameplay-phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="phone-score">Score: 847</div>
+            <div class="phone-platforms">
+              <div class="phone-plat phone-plat-1"></div>
+              <div class="phone-plat phone-plat-2"></div>
+              <div class="phone-plat phone-plat-3"></div>
+              <div class="phone-plat phone-plat-4"></div>
+              <div class="phone-plat phone-plat-5"></div>
+            </div>
+            <img src="assets/player/alienPink_jump.png" class="phone-player" alt="">
+            <div class="phone-lava"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gameplay-info">
+        <div class="section-tag fade-in">How It Works</div>
+        <h2 class="fade-in fade-in-delay-1">Simple to Learn,<br>Hard to Master</h2>
+        <p class="fade-in fade-in-delay-2">
+          Tap to jump, swipe to move. That's it! But as you climb higher,
+          the challenge intensifies with faster obstacles, trickier platforms,
+          and an ever-rising wall of lava.
+        </p>
+        <ul class="gameplay-list">
+          <li class="fade-in fade-in-delay-3">
+            <span class="gameplay-list-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06D6A0" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span>Tap anywhere to jump between platforms</span>
+          </li>
+          <li class="fade-in fade-in-delay-4">
+            <span class="gameplay-list-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06D6A0" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span>Swipe to control horizontal movement mid-air</span>
+          </li>
+          <li class="fade-in fade-in-delay-5">
+            <span class="gameplay-list-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06D6A0" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span>Collect power-ups to survive longer and score higher</span>
+          </li>
+          <li class="fade-in fade-in-delay-5">
+            <span class="gameplay-list-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#06D6A0" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span>Earn coins to unlock skins, upgrades, and power-ups</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download Section -->
+  <section class="download-section" id="download">
+    <div class="section-header">
+      <div class="section-tag fade-in">Get the Game</div>
+      <h2 class="section-title fade-in fade-in-delay-1">Download & Play</h2>
+      <p class="section-desc fade-in fade-in-delay-2">Available on Android, Windows, and directly in your browser. Jump in wherever you are!</p>
+    </div>
+
+    <div class="download-cards">
+      <div class="download-card fade-in">
+        <div class="download-card-icon download-card-icon-android">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#06D6A0" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <h3 class="download-card-title">Android</h3>
+        <p class="download-card-desc">Download the APK directly. Optimized for mobile touch controls.</p>
+        <a href="hopnsplat.apk" class="btn btn-accent" download>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download APK
+        </a>
+      </div>
+
+      <div class="download-card fade-in fade-in-delay-1">
+        <div class="download-card-icon download-card-icon-windows">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <h3 class="download-card-title">Windows</h3>
+        <p class="download-card-desc">Native desktop build with keyboard controls for precision gameplay.</p>
+        <a href="#" class="btn btn-secondary" onclick="alert('Windows build coming soon!'); return false;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Coming Soon
+        </a>
+      </div>
+
+      <div class="download-card fade-in fade-in-delay-2">
+        <div class="download-card-icon download-card-icon-web">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3 class="download-card-title">Play Online</h3>
+        <p class="download-card-desc">No download needed! Play instantly in your browser on any device.</p>
+        <a href="web-exported/index.html" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Play Now
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="assets/icon.svg" alt="HopNSplat">
+        HopNSplat
+      </div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#gameplay">Gameplay</a>
+        <a href="#download">Download</a>
+      </div>
+      <div class="footer-copy">&copy; 2025 HopNSplat. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- Scroll animation script -->
+  <script>
+    // Intersection Observer for fade-in animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      if (window.scrollY > 50) {
+        navbar.style.background = 'rgba(15,15,26,0.95)';
+      } else {
+        navbar.style.background = 'rgba(15,15,26,0.85)';
+      }
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Close mobile menu if open
+          document.getElementById('navLinks').classList.remove('active');
+        }
+      });
+    });
+  </script>
+
+</body>
+</html>
