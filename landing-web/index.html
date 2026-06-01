@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HopNSplat — Jump, Dodge, Climb! | Vertical Platformer</title>
+  <meta name="description" content="An addictive vertical platformer. Hop between platforms, dodge splat obstacles, and outrun the rising lava. Play online or download for Android and Windows!">
+  <link rel="icon" href="assets/logo.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-logo">HOP N' SPLAT</a>
+      <div class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#how-to-play">How to Play</a>
+        <a href="#download">Download</a>
+        <a href="#" class="btn btn-nav">Play Now</a>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-stars" id="heroStars"></div>
+
+    <!-- Floating Clouds -->
+    <div class="cloud-sprite cloud-1"></div>
+    <div class="cloud-sprite cloud-2"></div>
+    <div class="cloud-sprite cloud-3"></div>
+    <div class="cloud-sprite cloud-4"></div>
+
+    <!-- Platforms -->
+    <div class="platform-el platform-1"></div>
+    <div class="platform-el platform-2"></div>
+    <div class="platform-el platform-3"></div>
+
+    <!-- Coins -->
+    <div class="coin-el coin-1"></div>
+    <div class="coin-el coin-2"></div>
+    <div class="coin-el coin-3"></div>
+
+    <!-- Alien Character -->
+    <div class="alien-character">
+      <img src="assets/alienPink_jump.png" alt="Alien Player">
+    </div>
+
+    <!-- Rocket -->
+    <div class="rocket-element">
+      <img src="assets/rocket.png" alt="Rocket Booster">
+    </div>
+
+    <!-- Hero Content -->
+    <div class="hero-content">
+      <div class="hero-logo-wrap">
+        <div class="hero-logo-glow"></div>
+        <img src="assets/logo.png" alt="HopNSplat — Vertical Platformer" class="hero-logo">
+      </div>
+      <h1 class="hero-title">Jump. Dodge. <span class="text-highlight">Climb!</span></h1>
+      <p class="hero-subtitle">An addictive vertical platformer where you hop between platforms, dodge obstacles, and race to outrun the rising lava!</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-play-hero">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          Play Online
+        </a>
+        <a href="#" class="btn btn-android-hero">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16h-2V8.83l1.88-1.88-1.42-1.42L14.59 7.4A3.96 3.96 0 0012 6.5c-.95 0-1.82.33-2.5.88L7.54 5.53 6.12 6.95 8 8.83V16H6v2h12v-2zM14 16h-4V9.6c.57-.36 1.26-.6 2-.6s1.43.24 2 .6V16zm-3-5.5a1 1 0 100-2 1 1 0 000 2zm2 0a1 1 0 100-2 1 1 0 000 2z"/></svg>
+          Android
+        </a>
+        <a href="#" class="btn btn-windows-hero">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12V6.75l6-1.32v6.48L3 12zm17-9v8.75l-10 .15V5.21L20 3zM3 13l6 .09v6.81l-6-1.15V13zm17 .25V22l-10-1.91V13.1l10 .15z"/></svg>
+          Windows
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES ========== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">GAME FEATURES</span>
+        <h2>Why You'll Love It</h2>
+        <p>Packed with features that keep you coming back for more</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">🚀</div>
+          <h3>Endless Climbing</h3>
+          <p>Jump from platform to platform in an endless vertical world. How high can you reach?</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">🌋</div>
+          <h3>Rising Lava</h3>
+          <p>The lava rises faster every second. Stay ahead or get splatted — every moment counts!</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">🛍️</div>
+          <h3>Power-Up Shop</h3>
+          <p>Unlock skins like Toxic Toad, upgrades like Splat Armor, and power-ups like Ice Bomb!</p>
+        </div>
+        <div class="feature-card" data-animate>
+          <div class="feature-icon">🏆</div>
+          <h3>Achievements</h3>
+          <p>Complete challenges, chase high scores, and earn bragging rights over your friends.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOW TO PLAY ========== -->
+  <section class="how-to-play" id="how-to-play">
+    <div class="container">
+      <div class="section-header section-header--light">
+        <span class="section-badge">SIMPLE TO LEARN</span>
+        <h2>How to Play</h2>
+        <p>Simple controls, impossible to put down</p>
+      </div>
+      <div class="steps-grid">
+        <div class="step-card" data-animate>
+          <div class="step-number">1</div>
+          <h3>Tap to Jump</h3>
+          <p>Tap anywhere on the screen to make your alien hop. Time your jumps to land on platforms safely.</p>
+        </div>
+        <div class="step-card" data-animate>
+          <div class="step-number">2</div>
+          <h3>Climb Higher</h3>
+          <p>Reach higher platforms to earn points. Grab coins, collect power-ups, and chain combos along the way.</p>
+        </div>
+        <div class="step-card" data-animate>
+          <div class="step-number">3</div>
+          <h3>Outrun the Lava</h3>
+          <p>Don't look down! The rising lava gets faster and faster. Stay ahead to survive and set new records!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DOWNLOAD ========== -->
+  <section class="download" id="download">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">GET IT NOW</span>
+        <h2>Start Playing Today</h2>
+        <p>Available on your favorite platform — completely free</p>
+      </div>
+      <div class="download-grid">
+        <div class="download-card" data-animate>
+          <div class="download-icon">🌐</div>
+          <h3>Play Online</h3>
+          <p>Jump right in from your browser. No downloads, no installs — just pure fun.</p>
+          <a href="#" class="btn btn-download btn-download--green">Play Now</a>
+        </div>
+        <div class="download-card download-card--featured" data-animate>
+          <div class="download-badge">MOST POPULAR</div>
+          <div class="download-icon">📱</div>
+          <h3>Android</h3>
+          <p>Take the fun everywhere. Optimized for touchscreens and mobile play.</p>
+          <a href="#" class="btn btn-download btn-download--green">Download APK</a>
+        </div>
+        <div class="download-card" data-animate>
+          <div class="download-icon">💻</div>
+          <h3>Windows</h3>
+          <p>Full desktop experience with keyboard controls and bigger screen.</p>
+          <a href="#" class="btn btn-download btn-download--blue">Download EXE</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">
+          <span class="footer-logo">HOP N' SPLAT</span>
+          <p>An addictive vertical platformer. Jump, dodge, climb — and try not to get splatted!</p>
+        </div>
+        <div class="footer-links-group">
+          <h4>Quick Links</h4>
+          <a href="#features">Features</a>
+          <a href="#how-to-play">How to Play</a>
+          <a href="#download">Download</a>
+        </div>
+        <div class="footer-links-group">
+          <h4>Platforms</h4>
+          <a href="#">Play Online</a>
+          <a href="#">Android APK</a>
+          <a href="#">Windows EXE</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 HopNSplat. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
