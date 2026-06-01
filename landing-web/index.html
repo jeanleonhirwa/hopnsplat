@@ -18,10 +18,11 @@
     <div class="nav-container">
       <a href="#hero" class="nav-logo">HOP N' SPLAT</a>
       <div class="nav-links" id="navLinks">
+        <a href="#gameplay">Gameplay</a>
         <a href="#features">Features</a>
         <a href="#how-to-play">How to Play</a>
         <a href="#download">Download</a>
-        <a href="#" class="btn btn-nav">Play Now</a>
+        <a href="web-exported/index.html" target="_blank" class="btn btn-nav">Play Now</a>
       </div>
       <button class="hamburger" id="hamburger" aria-label="Toggle menu">
         <span></span><span></span><span></span>
@@ -44,74 +45,114 @@
     <div class="platform-el platform-2"></div>
     <div class="platform-el platform-3"></div>
 
-    <!-- Coins -->
-    <div class="coin-el coin-1"></div>
-    <div class="coin-el coin-2"></div>
-    <div class="coin-el coin-3"></div>
-
-    <!-- Alien Character -->
-    <div class="alien-character">
-      <img src="assets/alienPink_jump.png" alt="Alien Player">
+    <!-- Animated Alien -->
+    <div class="alien-container" id="alienContainer">
+      <div class="alien-sprite" id="alienSprite"></div>
+      <div class="alien-shadow"></div>
     </div>
 
-    <!-- Rocket -->
-    <div class="rocket-element">
-      <img src="assets/rocket.png" alt="Rocket Booster">
-    </div>
+    <!-- Rising Lava Effect -->
+    <div class="lava-glow"></div>
 
-    <!-- Hero Content -->
     <div class="hero-content">
-      <div class="hero-logo-wrap">
-        <div class="hero-logo-glow"></div>
-        <img src="assets/logo.png" alt="HopNSplat — Vertical Platformer" class="hero-logo">
-      </div>
-      <h1 class="hero-title">Jump. Dodge. <span class="text-highlight">Climb!</span></h1>
-      <p class="hero-subtitle">An addictive vertical platformer where you hop between platforms, dodge obstacles, and race to outrun the rising lava!</p>
+      <div class="hero-badge">FREE TO PLAY</div>
+      <h1 class="hero-title">
+        <span class="title-hop">HOP</span>
+        <span class="title-n">N'</span>
+        <span class="title-splat">SPLAT</span>
+      </h1>
+      <p class="hero-subtitle">Dodge obstacles. Outrun lava. Climb to glory.</p>
       <div class="hero-buttons">
-        <a href="#" class="btn btn-play-hero">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <a href="web-exported/index.html" target="_blank" class="btn btn-hero btn-play">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
           Play Online
         </a>
-        <a href="#" class="btn btn-android-hero">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16h-2V8.83l1.88-1.88-1.42-1.42L14.59 7.4A3.96 3.96 0 0012 6.5c-.95 0-1.82.33-2.5.88L7.54 5.53 6.12 6.95 8 8.83V16H6v2h12v-2zM14 16h-4V9.6c.57-.36 1.26-.6 2-.6s1.43.24 2 .6V16zm-3-5.5a1 1 0 100-2 1 1 0 000 2zm2 0a1 1 0 100-2 1 1 0 000 2z"/></svg>
-          Android
+        <a href="#download" class="btn btn-hero btn-download-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          Download
         </a>
-        <a href="#" class="btn btn-windows-hero">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12V6.75l6-1.32v6.48L3 12zm17-9v8.75l-10 .15V5.21L20 3zM3 13l6 .09v6.81l-6-1.15V13zm17 .25V22l-10-1.91V13.1l10 .15z"/></svg>
-          Windows
-        </a>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <div class="scroll-mouse">
+        <div class="scroll-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== GAMEPLAY SHOWCASE ========== -->
+  <section class="gameplay" id="gameplay">
+    <div class="gameplay-container">
+      <div class="gameplay-text reveal-left">
+        <h2 class="section-title">See It In Action</h2>
+        <p class="gameplay-desc">Tap to jump. Drag to move. Climb as high as you can before the lava catches up.</p>
+        <div class="gameplay-stats">
+          <div class="stat">
+            <span class="stat-icon">&#9733;</span>
+            <span class="stat-label">4 Obstacle Types</span>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">&#9889;</span>
+            <span class="stat-label">5 Power-ups</span>
+          </div>
+          <div class="stat">
+            <span class="stat-icon">&#127942;</span>
+            <span class="stat-label">17 Achievements</span>
+          </div>
+        </div>
+      </div>
+      <div class="phone-mockup reveal-right">
+        <div class="phone-frame">
+          <div class="phone-speaker"></div>
+          <div class="phone-camera"></div>
+          <div class="phone-screen">
+            <video class="phone-video" id="gameplayVideo" muted loop playsinline preload="metadata">
+              <source src="assets/game-record.mp4" type="video/mp4">
+            </video>
+            <div class="video-play-overlay" id="videoPlayOverlay">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="phone-bottom-bar"></div>
+        </div>
+        <div class="phone-glow"></div>
       </div>
     </div>
   </section>
 
   <!-- ========== FEATURES ========== -->
   <section class="features" id="features">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-badge">GAME FEATURES</span>
-        <h2>Why You'll Love It</h2>
-        <p>Packed with features that keep you coming back for more</p>
-      </div>
+    <div class="features-container">
+      <h2 class="section-title reveal-up">Why You'll Love It</h2>
       <div class="features-grid">
-        <div class="feature-card" data-animate>
-          <div class="feature-icon">🚀</div>
+        <div class="feature-card reveal-up" style="--delay: 0.1s">
+          <div class="feature-icon feature-icon--lava">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
           <h3>Endless Climbing</h3>
-          <p>Jump from platform to platform in an endless vertical world. How high can you reach?</p>
+          <p>Platforms never stop. How high can you go before the lava wins?</p>
         </div>
-        <div class="feature-card" data-animate>
-          <div class="feature-icon">🌋</div>
+        <div class="feature-card reveal-up" style="--delay: 0.2s">
+          <div class="feature-icon feature-icon--danger">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          </div>
           <h3>Rising Lava</h3>
-          <p>The lava rises faster every second. Stay ahead or get splatted — every moment counts!</p>
+          <p>It starts slow. Then it doesn't. Keep climbing or get splatted.</p>
         </div>
-        <div class="feature-card" data-animate>
-          <div class="feature-icon">🛍️</div>
-          <h3>Power-Up Shop</h3>
-          <p>Unlock skins like Toxic Toad, upgrades like Splat Armor, and power-ups like Ice Bomb!</p>
+        <div class="feature-card reveal-up" style="--delay: 0.3s">
+          <div class="feature-icon feature-icon--power">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg>
+          </div>
+          <h3>Power-Ups</h3>
+          <p>Shields, magnets, rocket boosts, and more to help you survive.</p>
         </div>
-        <div class="feature-card" data-animate>
-          <div class="feature-icon">🏆</div>
-          <h3>Achievements</h3>
-          <p>Complete challenges, chase high scores, and earn bragging rights over your friends.</p>
+        <div class="feature-card reveal-up" style="--delay: 0.4s">
+          <div class="feature-icon feature-icon--shop">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <h3>Shop & Skins</h3>
+          <p>Earn coins, unlock skins, upgrade boosts, and customize your run.</p>
         </div>
       </div>
     </div>
@@ -119,27 +160,31 @@
 
   <!-- ========== HOW TO PLAY ========== -->
   <section class="how-to-play" id="how-to-play">
-    <div class="container">
-      <div class="section-header section-header--light">
-        <span class="section-badge">SIMPLE TO LEARN</span>
-        <h2>How to Play</h2>
-        <p>Simple controls, impossible to put down</p>
-      </div>
-      <div class="steps-grid">
-        <div class="step-card" data-animate>
+    <div class="htp-container">
+      <h2 class="section-title reveal-up">How To Play</h2>
+      <div class="steps">
+        <div class="step reveal-up" style="--delay: 0.1s">
           <div class="step-number">1</div>
-          <h3>Tap to Jump</h3>
-          <p>Tap anywhere on the screen to make your alien hop. Time your jumps to land on platforms safely.</p>
+          <div class="step-content">
+            <h3>Tap to Jump</h3>
+            <p>Tap anywhere on screen to jump. Time your jumps to land on platforms.</p>
+          </div>
         </div>
-        <div class="step-card" data-animate>
+        <div class="step-connector reveal-up" style="--delay: 0.2s"></div>
+        <div class="step reveal-up" style="--delay: 0.3s">
           <div class="step-number">2</div>
-          <h3>Climb Higher</h3>
-          <p>Reach higher platforms to earn points. Grab coins, collect power-ups, and chain combos along the way.</p>
+          <div class="step-content">
+            <h3>Climb Higher</h3>
+            <p>Drag left and right to move mid-air. Collect coins and power-ups along the way.</p>
+          </div>
         </div>
-        <div class="step-card" data-animate>
+        <div class="step-connector reveal-up" style="--delay: 0.4s"></div>
+        <div class="step reveal-up" style="--delay: 0.5s">
           <div class="step-number">3</div>
-          <h3>Outrun the Lava</h3>
-          <p>Don't look down! The rising lava gets faster and faster. Stay ahead to survive and set new records!</p>
+          <div class="step-content">
+            <h3>Outrun the Lava</h3>
+            <p>The lava rises. It accelerates. Don't let it catch you. Beat your high score.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -147,31 +192,45 @@
 
   <!-- ========== DOWNLOAD ========== -->
   <section class="download" id="download">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-badge">GET IT NOW</span>
-        <h2>Start Playing Today</h2>
-        <p>Available on your favorite platform — completely free</p>
-      </div>
-      <div class="download-grid">
-        <div class="download-card" data-animate>
-          <div class="download-icon">🌐</div>
+    <div class="download-container">
+      <h2 class="section-title reveal-up">Play Anywhere</h2>
+      <p class="download-subtitle reveal-up">Free on every platform. No ads blocking gameplay.</p>
+      <div class="download-cards">
+        <div class="download-card reveal-up" style="--delay: 0.1s">
+          <div class="download-card-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+          </div>
           <h3>Play Online</h3>
-          <p>Jump right in from your browser. No downloads, no installs — just pure fun.</p>
-          <a href="#" class="btn btn-download btn-download--green">Play Now</a>
+          <p>No download needed. Play right in your browser.</p>
+          <a href="web-exported/index.html" target="_blank" class="btn btn-download-card btn-download-card--green">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Play Now
+          </a>
+          <span class="download-card-badge">Instant</span>
         </div>
-        <div class="download-card download-card--featured" data-animate>
-          <div class="download-badge">MOST POPULAR</div>
-          <div class="download-icon">📱</div>
+        <div class="download-card download-card--featured reveal-up" style="--delay: 0.2s">
+          <div class="download-card-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M18 16h-2V8.83l1.88-1.88-1.42-1.42L14.59 7.4A3.96 3.96 0 0012 6.5c-.95 0-1.82.33-2.5.88L7.54 5.53 6.12 6.95 8 8.83V16H6v2h12v-2zM14 16h-4V9.6c.57-.36 1.26-.6 2-.6s1.43.24 2 .6V16zm-3-5.5a1 1 0 100-2 1 1 0 000 2zm2 0a1 1 0 100-2 1 1 0 000 2z"/></svg>
+          </div>
           <h3>Android</h3>
-          <p>Take the fun everywhere. Optimized for touchscreens and mobile play.</p>
-          <a href="#" class="btn btn-download btn-download--green">Download APK</a>
+          <p>Take the hop on the go. Best mobile experience.</p>
+          <a href="hopnsplat.apk" download class="btn btn-download-card btn-download-card--green">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Download APK
+          </a>
+          <span class="download-card-badge">Most Popular</span>
         </div>
-        <div class="download-card" data-animate>
-          <div class="download-icon">💻</div>
+        <div class="download-card reveal-up" style="--delay: 0.3s">
+          <div class="download-card-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor"><path d="M3 12V6.75l6-1.32v6.48L3 12zm17-9v8.75l-10 .15V5.21L20 3zM3 13l6 .09v6.81l-6-1.15V13zm17 .25V22l-10-1.91V13.1l10 .15z"/></svg>
+          </div>
           <h3>Windows</h3>
-          <p>Full desktop experience with keyboard controls and bigger screen.</p>
-          <a href="#" class="btn btn-download btn-download--blue">Download EXE</a>
+          <p>Full desktop experience with keyboard controls.</p>
+          <a href="hopnsplat-windows.zip" download class="btn btn-download-card btn-download-card--blue">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Download EXE
+          </a>
+          <span class="download-card-badge">46 MB</span>
         </div>
       </div>
     </div>
@@ -179,27 +238,15 @@
 
   <!-- ========== FOOTER ========== -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <span class="footer-logo">HOP N' SPLAT</span>
-          <p>An addictive vertical platformer. Jump, dodge, climb — and try not to get splatted!</p>
-        </div>
-        <div class="footer-links-group">
-          <h4>Quick Links</h4>
-          <a href="#features">Features</a>
-          <a href="#how-to-play">How to Play</a>
-          <a href="#download">Download</a>
-        </div>
-        <div class="footer-links-group">
-          <h4>Platforms</h4>
-          <a href="#">Play Online</a>
-          <a href="#">Android APK</a>
-          <a href="#">Windows EXE</a>
-        </div>
+    <div class="footer-container">
+      <div class="footer-brand">
+        <span class="footer-logo">HOP N' SPLAT</span>
+        <p>A game by CyberWorrior</p>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 HopNSplat. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="web-exported/index.html" target="_blank">Play Online</a>
+        <a href="hopnsplat.apk" download>Android APK</a>
+        <a href="hopnsplat-windows.zip" download>Windows EXE</a>
       </div>
     </div>
   </footer>

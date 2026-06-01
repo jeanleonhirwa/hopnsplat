@@ -1,6 +1,6 @@
 /* ===================================================================
    HopNSplat Landing Page — Scripts
-   Handles navbar, mobile menu, star particles, and scroll animations.
+   Navbar, mobile menu, stars, scroll reveal, video, alien animation.
    =================================================================== */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initMobileMenu();
   initStars();
   initScrollReveal();
+  initVideoPlayer();
+  initParallax();
 });
 
 /* ── Navbar scroll effect ── */
@@ -36,7 +38,6 @@ function initMobileMenu() {
     navLinks.classList.toggle('open');
   });
 
-  // Close menu when a link is clicked
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       hamburger.classList.remove('active');
@@ -50,7 +51,7 @@ function initStars() {
   const container = document.getElementById('heroStars');
   if (!container) return;
 
-  const count = 60;
+  const count = 80;
 
   for (let i = 0; i < count; i++) {
     const star = document.createElement('div');
@@ -58,7 +59,7 @@ function initStars() {
     star.style.left = `${Math.random() * 100}%`;
     star.style.top = `${Math.random() * 100}%`;
 
-    const size = Math.random() * 2.5 + 1;
+    const size = Math.random() * 2.5 + 0.5;
     star.style.width = `${size}px`;
     star.style.height = `${size}px`;
 
@@ -70,26 +71,97 @@ function initStars() {
   }
 }
 
-/* ── Scroll-reveal for [data-animate] elements ── */
+/* ── Scroll Reveal (IntersectionObserver) ── */
 function initScrollReveal() {
-  const elements = document.querySelectorAll('[data-animate]');
-  if (!elements.length) return;
+  const reveals = document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right');
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          // Stagger siblings slightly
-          const siblings = entry.target.parentElement.querySelectorAll('[data-animate]');
-          const idx = Array.from(siblings).indexOf(entry.target);
-          entry.target.style.transitionDelay = `${idx * 0.1}s`;
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.15,
+    rootMargin: '0px 0px -40px 0px'
+  });
+
+  reveals.forEach(el => observer.observe(el));
+}
+
+/* ── Video Player ── */
+function initVideoPlayer() {
+  const video = document.getElementById('gameplayVideo');
+  const overlay = document.getElementById('videoPlayOverlay');
+  if (!video || !overlay) return;
+
+  overlay.addEventListener('click', () => {
+    video.play();
+    overlay.classList.add('hidden');
+  });
+
+  video.addEventListener('pause', () => {
+    overlay.classList.remove('hidden');
+  });
+
+  video.addEventListener('ended', () => {
+    overlay.classList.remove('hidden');
+  });
+
+  // Auto-play when in view, pause when out
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        video.play().catch(() => {});
+        overlay.classList.add('hidden');
+      } else {
+        video.pause();
+      }
+    });
+  }, { threshold: 0.5 });
+
+  observer.observe(video.closest('.phone-mockup'));
+}
+
+/* ── Subtle parallax on hero elements ── */
+function initParallax() {
+  const hero = document.getElementById('hero');
+  if (!hero) return;
+
+  const platforms = hero.querySelectorAll('.platform-el');
+  const clouds = hero.querySelectorAll('.cloud-sprite');
+  const alien = document.getElementById('alienContainer');
+
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        const heroH = hero.offsetHeight;
+
+        if (scrollY < heroH) {
+          const ratio = scrollY / heroH;
+
+          platforms.forEach((p, i) => {
+            const speed = (i + 1) * 0.15;
+            p.style.transform = `translateY(${scrollY * speed}px)`;
+          });
+
+          clouds.forEach((c, i) => {
+            const speed = (i + 1) * 0.08;
+            c.style.transform = `translateY(${scrollY * speed}px)`;
+          });
+
+          if (alien) {
+            alien.style.transform = `translateX(-50%) translateY(${scrollY * 0.2}px)`;
+          }
         }
-      });
-    },
-    { threshold: 0.15 }
-  );
 
-  elements.forEach(el => observer.observe(el));
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
 }
